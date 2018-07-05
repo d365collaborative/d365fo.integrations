@@ -36,11 +36,11 @@ Templates for the settings is avaliable through the following commands
 
 `$dataEntityJson = convertfrom-json $dataentity`
 
-3. Lets find some containing something regarding workers and sort the result
+3. Lets find some something regarding workers and sort the result
 
 `$dataEntityJson.value | where-object name -like '*Worker*' |Sort-Object -Descending -Property name`
 
-Some of the enties returned :
+Some of the entries returned :
 
 |name|kind|url|
 |----|----|---|
@@ -57,6 +57,7 @@ Workers|EntitySet|Workers
 ``$worker = Get-ODataEntity -Configuration $Config -ConfigurationType String -Entity "data/Workers?`$filter=PersonnelNumber eq '4711'" | ConvertFrom-Json`` 
 
 5. Lets find his name, firstname and lastname
+
 ``$worker.value | Select-Object -Property Name,FirstName,LastName``
 
 | Name | FirstName | LastName
