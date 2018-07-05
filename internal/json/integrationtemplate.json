@@ -1,0 +1,16 @@
+{
+    "D365FO" : "https://usnconeboxax1aos.cloud.onebox.dynamics.com",
+    "Authority" : "https://sts.windows.net/YourDomainName",
+    "ClientId" : "ClientID from AppRegistration",
+    "ClientSecret" : "Secret from AppRegistraon",
+    "Action" : "GET OR POST",
+    "Storage" : "Azure OR SMB",
+    "AccountId" : "The storage Account used for Azure",
+    "AccessToken" : "The access token for the storage account",
+    "ContainerName" : "the container name to find the files or a container prefix for getting the files",
+    "Jobs": [
+        {"Job_Id" : "GUID from the recurring datajob","FilePath" : "FileNameSomething.zip"},
+        {"Job_Id" : "GUID from the recurring datajob","FilePath" : "FileNameSomething.xls"}
+    ]
+}
+
