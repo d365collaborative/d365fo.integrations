@@ -108,7 +108,7 @@ Titles | EntitySet | Titles
 2. Lets find it in the metadata and get the EntitySet
 
 ```
-$metaData = Get-ODataEntity -Configuration $Config -Entity "data/$metadata"
+$metaData = Get-ODataEntity -Configuration $Config -Entity 'data/$metadata'
 $xml = New-Object -TypeName System.Xml.XmlDocument
 $xml.LoadXml($metadata)
 $man = New-Object -TypeName System.Xml.XmlNameSpaceManager($xml.NameTable)
