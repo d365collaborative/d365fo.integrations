@@ -12,7 +12,7 @@ function new-batchcontent ($count, $url, $authHeader, $payload)
     
     $data += "Authorization: $authHeader`r`n`r`n"
     
-    $data += "$Payload"
+    $data += "$Payload`r`n"
 
     $data
 }

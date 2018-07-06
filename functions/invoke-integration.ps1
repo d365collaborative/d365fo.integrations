@@ -9,16 +9,13 @@ Long description
 Parameter contains either a string containing json or a filename containing the configuration used for calling D365. 
 Use Get-IntegrationTemplate to get the Format
 
-.PARAMETER ConfigurationType
-Is the Configuration a file or String
-
 .PARAMETER IntegrationType
 ExhaustQueue will run 10 times where all jobs from the configuration failed
 Normal will do a normal run, it will retry the download 5 times if a HTTP 500 is recieved upon the download
 
 .EXAMPLE
 
-Invoke-Integration "\Integration.json"  -ConfigurationType "File" -verbose
+Invoke-Integration "C:\temp\Integration.json"   -verbose
 
 
 
@@ -29,20 +26,17 @@ function Invoke-Integration {
     param(
         [Parameter(Mandatory = $true, Position = 1)]
         [string]$Configuration,
-        [Parameter(Mandatory = $true, Position = 2)]
-        [ValidateSet('File', 'JSON')]
-        [string]$ConfigurationType,
-        [Parameter(Mandatory = $false, Position = 3)]
+        [Parameter(Mandatory = $false, Position = 2)]
         [ValidateSet('Normal', 'ExhaustQueue')]
         [string]$IntegrationType = 'Normal'
     )
 
 
-    if ($ConfigurationType -eq "File") {
-        $config = Get-Content $Configuration | Out-String | ConvertFrom-Json 
+    if (Test-Path $Configuration) {
+        $config = Get-Content $Configuration | Out-String | ConvertFrom-Json -ErrorAction Stop
     }
     else {
-        $config = $Configuration | ConvertFrom-Json 
+        $config = $Configuration | ConvertFrom-Json -ErrorAction Stop
     }
 
     $d365FO = $Config.D365FO

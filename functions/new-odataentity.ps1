@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-Short description
+User for creating new entries with odata integration
 
 .DESCRIPTION
 Long description
@@ -9,60 +9,57 @@ Long description
 Parameter contains either a string containing json or a filename containing the configuration used for calling D365. 
 use Get-ODataTemplate to get format
 
-.PARAMETER ConfigurationType
-Is the Configuration a file or String
-
 .PARAMETER Entity
-Name of the Entity ex. data/CurrencyISOCodes, of the PayLoadType is Files, this one is not used
+Name of the Entity ex. data/CurrencyISOCodes. 
 
 .PARAMETER Payload
-The payload must either be a FilePath, a string containing the JSON, or a Array.
+The payload is either a string containing json or a path to a file
+
+.PARAMETER PayloadFiles
 The Array must be like 
 $arr = 'Entity','FilePathToJson','Entity','FilePathToJson' and so on
-
-.PARAMETER PayLoadType
-Is the Payload either a File, JSON or Files
 
 .EXAMPLE
 $payload = Get-content C:\Integration\DefGroup1.json | out-string
 
-New-ODataEntity "c:\Integration\odataPost.json"  -ConfigurationType "File" -Entity "data/DataManagementDefinitionGroups" -payload $payload -payloadType "JSON" -verbose
+New-ODataEntity "c:\Integration\odataPost.json"  -Entity "data/DataManagementDefinitionGroups" -payload $payload -payloadType "JSON" -verbose
 
 OR
 
-New-ODataEntity "c:\Integration\odataPost.json"  -ConfigurationType "File" -Entity "data/DataManagementDefinitionGroups" -payload C:\Integration\DefGroup1.json -payloadType "File" -verbose
+New-ODataEntity "c:\Integration\odataPost.json"  -Entity "data/DataManagementDefinitionGroups" -payload C:\Integration\DefGroup1.json -payloadType "File" -verbose
 
 OR
 
 $arr = "data/DataManagementDefinitionGroups","C:\Integration\DefGroup1.json","data/DataManagementDefinitionGroups","C:\Integration\DefGroup2.json"
 
-New-ODataEntity "c:\Integration\odataPost.json"  -ConfigurationType "File" -Entity "data/DataManagementDefinitionGroups" -payload $arr -payloadType "Files" -verbose
+New-ODataEntity "c:\Integration\odataPost.json"  -Entity "data/DataManagementDefinitionGroups" -payload $arr -payloadType "Files" -verbose
 
 
 .NOTES
 General notes
 #>
 function New-ODataEntity {
+    [CmdletBinding(DefaultParameterSetName = 'File')]
     param(
-        [Parameter(Mandatory = $true, Position = 1)]
+        [Parameter(Mandatory = $true, Position = 1, ParameterSetName = "File")]
+        [Parameter(Mandatory = $true, Position = 1, ParameterSetName = "Files")]
         [string]$Configuration,
-        [Parameter(Mandatory = $true, Position = 2)]
-        [ValidateSet('File', 'JSON')]
-        [string]$ConfigurationType,
-        [Parameter(Mandatory = $true, Position = 3)]
+        
+        [Parameter(Mandatory = $true, Position = 2, ParameterSetName = "File")]
         [string]$Entity,
-        [Parameter(Mandatory = $true, Position = 4)]
-        [string]$Payload,
-        [Parameter(Mandatory = $true, Position = 2)]
-        [ValidateSet('File', 'JSON','Files')]
-        [string]$PayLoadType
+        
+        [Parameter(Mandatory = $true, Position = 3, ParameterSetName = "Files")]
+        [Array]$PayloadFiles,
+        
+        [Parameter(Mandatory = $true, Position = 3, ParameterSetName = "File")]
+        [string]$Payload
     )
 
-    if ($ConfigurationType -eq "File") {
-        $config = Get-Content $Configuration | Out-String | ConvertFrom-Json 
+    if (Test-Path $Configuration) {
+        $config = Get-Content $Configuration | Out-String | ConvertFrom-Json -ErrorAction Stop
     }
     else {
-        $config = $Configuration | ConvertFrom-Json 
+        $config = $Configuration | ConvertFrom-Json -ErrorAction Stop
     }
 
     $null = add-type -path "$script:PSModuleRoot\internal\dll\Microsoft.IdentityModel.Clients.ActiveDirectory.dll"
@@ -72,10 +69,15 @@ function New-ODataEntity {
     $clientId = $Config.ClientId
     $clientSecret = $Config.ClientSecret
 
-    if($PayLoadType -eq "File")
+
+
+    if($PSCmdlet.ParameterSetName -eq "File")
     {
-        $Payload = Get-Content $Payload
+        if (Test-Path $Configuration) {
+            $Payload = Get-Content $Payload
+        }
         $PayLoadType = "JSON"
+    
     }
 
     $authorizationHeader = New-AuthorizationHeader $authority $clientId $clientSecret $d365FO
@@ -87,7 +89,7 @@ function New-ODataEntity {
         $webRequest =  New-WebRequest "$d365FO/$Entity"  $authorizationHeader "POST"  $Payload  $PayLoadType "application/json;odata.metadata=minimal"
     }
     else {
-        $webRequest = New-WebRequestBatch $d365FO "data/`$batch" $authorizationHeader "POST" $Payload
+        $webRequest = New-WebRequestBatch $d365FO "data/`$batch" $authorizationHeader "POST" $PayloadFiles
     }
 
     Get-IntegrationResponse $webRequest

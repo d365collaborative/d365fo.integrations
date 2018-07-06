@@ -24,13 +24,13 @@ Templates for the settings is avaliable through the following commands
 
 ## OData
 
-### An Example
+### How to Get
 
 *This is based upon the configuration file is loaded into a variable as a string called $Config*
 
 1. Lets get the Data Entities
 
-`$dataEntity = Get-ODataEntity -Configuration $Config -ConfigurationType String -Entity 'data'`
+`$dataEntity = Get-ODataEntity -Configuration $Config -Entity 'data'`
 
 2. Lets convert the result into a json object
 
@@ -54,9 +54,9 @@ Workers|EntitySet|Workers
 
 4. Lets find a worker, lets take 4711, and just convert him to json rightaway
 
-``$worker = Get-ODataEntity -Configuration $Config -ConfigurationType String -Entity "data/Workers?`$filter=PersonnelNumber eq '4711'" | ConvertFrom-Json`` 
+``$worker = Get-ODataEntity -Configuration $Config -Entity "data/Workers?`$filter=PersonnelNumber eq '4711'" | ConvertFrom-Json`` 
 
-5. Lets find his name, firstname and lastname
+1. Lets find his name, firstname and lastname
 
 ``$worker.value | Select-Object -Property Name,FirstName,LastName``
 
@@ -67,7 +67,47 @@ Workers|EntitySet|Workers
 
 
 
+### How to Post
 
+
+1. Lets first find a Entity we can use 
+
+``$dataEntityJson = Get-ODataEntity -Configuration $Config -Entity "data" | convertfrom-json
+$dataEntityJson.value | where-object name -like "*Title*"``
+
+| name |kind | url
+|---- |  ---- | ---
+Titles | EntitySet | Titles
+
+
+1. Lets find it in the metadata and get the EntitySet
+
+``$metaData = Get-ODataEntity -Configuration $Config -Entity "data/`$metadata"
+$xml = New-Object -TypeName System.Xml.XmlDocument
+$xml.LoadXml($metadata)
+$man = New-Object -TypeName System.Xml.XmlNameSpaceManager($xml.NameTable)
+$man.addNameSpace("edm","http://docs.oasis-open.org/odata/ns/edm")
+$xml.SelectSingleNode("//edm:EntitySet[@Name='Titles']",$man) | select-object EntityType``
+
+|EntityType|
+|----|
+|Microsoft.Dynamics.DataEntities.Title|
+
+3.Finding the EntityType 
+
+``$xml.selectSingleNode("//edm:EntityType[@Name='Title']",$man)``
+
+4.Based on the EntityType the design of the json should look like, lets do a batch insert
+
+1. Lets create 2 json files
+
+``'{ "@odata.type": "#Microsoft.Dynamics.DataEntities.Title","TitleId" : "Jedi Initiate"}' | Out-file C:\temp\jediInitiate.json ``
+
+``'{ "@odata.type": "#Microsoft.Dynamics.DataEntities.Title","TitleId" : "Jedi Padawan"}' | Out-file C:\temp\jediPadawn.json``
+
+2. Lets create them them.
+
+New-ODataEntity -Configuration $config -PayloadFiles @("data/Titles","C:\temp\jediPadawan.json","data/Titles","C:\temp\jediInitiate.json")
 
 
 

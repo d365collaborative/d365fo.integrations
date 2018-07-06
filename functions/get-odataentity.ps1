@@ -9,21 +9,18 @@ Function calls the OData service in D365FO, returns a string as the result
 Parameter contains either a string containing json or a filename containing the configuration used for calling D365. 
 use Get-ODataTemplate to get format
 
-.PARAMETER ConfigurationType
-Is the Configuration a file or String
-
 .PARAMETER Entity
 Name of the Entity ex.  data/CurrencyISOCodes or just data for getting every odata service 
 
 .EXAMPLE
 
-Get-ODataEntity ".\ODataConfiguration.json"  -ConfigurationType "File" -Entity "data"
+Get-ODataEntity ".\ODataConfiguration.json"  -Entity "data"
 
-Get-ODataEntity ".\ODataConfiguration.json"  -ConfigurationType "File" -Entity "data/CurrencyISOCodes"
+Get-ODataEntity ".\ODataConfiguration.json"  -Entity "data/CurrencyISOCodes"
 
-Get-ODataEntity ".\ODataConfiguration.json"  -ConfigurationType "File" -Entity "data/CurrencyISOCodes?`$orderby=ISOCurrencyCode"
+Get-ODataEntity ".\ODataConfiguration.json"  -Entity "data/CurrencyISOCodes?`$orderby=ISOCurrencyCode"
 
-Get-ODataEntity ".\ODataConfiguration.json"  -ConfigurationType "File" -Entity "data/CurrencyISOCodes?`$filter=ISOCurrencyCode eq 'DKK'"
+Get-ODataEntity ".\ODataConfiguration.json"  -Entity "data/CurrencyISOCodes?`$filter=ISOCurrencyCode eq 'DKK'"
 
 .NOTES
 General notes
@@ -33,17 +30,14 @@ function Get-ODataEntity {
         [Parameter(Mandatory = $true, Position = 1)]
         [string]$Configuration,
         [Parameter(Mandatory = $true, Position = 2)]
-        [ValidateSet('File', 'String')]
-        [string]$ConfigurationType,
-        [Parameter(Mandatory = $true, Position = 3)]
         [string]$Entity        
     )
 
-    if ($ConfigurationType -eq "File") {
-        $config = Get-Content $Configuration | Out-String | ConvertFrom-Json 
+    if (Test-Path $Configuration) {
+        $config = Get-Content $Configuration | Out-String | ConvertFrom-Json -ErrorAction Stop
     }
     else {
-        $config = $Configuration | ConvertFrom-Json 
+        $config = $Configuration | ConvertFrom-Json -ErrorAction Stop
     }
 
     $null = add-type -path "$script:PSModuleRoot\internal\dll\Microsoft.IdentityModel.Clients.ActiveDirectory.dll"

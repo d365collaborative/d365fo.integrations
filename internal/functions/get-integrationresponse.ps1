@@ -11,7 +11,7 @@ function Get-IntegrationResponse ($WebRequest) {
         $url = $WebRequest.RequestURI.AbsoluteUri
         write-Error $_.Exception.Message
         Write-Error $_.Exception
-        write-Eror $url
+        write-Error $url
 
         throw
         
