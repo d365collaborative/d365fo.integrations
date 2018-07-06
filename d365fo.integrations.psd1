@@ -115,7 +115,7 @@
                 LicenseUri   = "https://opensource.org/licenses/MIT"
     
                 # A URL to the main website for this project.
-                # ProjectUri = ''
+                ProjectUri = 'https://github.com/d365collaborative/d365fo.integrations'
     
                 # A URL to an icon representing this module.
                 # IconUri = ''
