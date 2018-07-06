@@ -65,8 +65,6 @@ Workers|EntitySet|Workers
 |D365 Integration|D365|Integration
 
 
-
-
 ### How to Post
 
 
@@ -80,7 +78,7 @@ $dataEntityJson.value | where-object name -like "*Title*"``
 Titles | EntitySet | Titles
 
 
-1. Lets find it in the metadata and get the EntitySet
+2. Lets find it in the metadata and get the EntitySet
 
 ``$metaData = Get-ODataEntity -Configuration $Config -Entity "data/`$metadata"
 $xml = New-Object -TypeName System.Xml.XmlDocument
@@ -93,23 +91,30 @@ $xml.SelectSingleNode("//edm:EntitySet[@Name='Titles']",$man) | select-object En
 |----|
 |Microsoft.Dynamics.DataEntities.Title|
 
-3.Finding the EntityType 
+3. Finding the EntityType 
 
 ``$xml.selectSingleNode("//edm:EntityType[@Name='Title']",$man)``
 
-4.Based on the EntityType the design of the json should look like, lets do a batch insert
+4. Based on the EntityType the design of the json should look like, lets do a batch insert
 
-1. Lets create 2 json files
+5. Lets create 2 json files
 
 ``'{ "@odata.type": "#Microsoft.Dynamics.DataEntities.Title","TitleId" : "Jedi Initiate"}' | Out-file C:\temp\jediInitiate.json ``
 
 ``'{ "@odata.type": "#Microsoft.Dynamics.DataEntities.Title","TitleId" : "Jedi Padawan"}' | Out-file C:\temp\jediPadawn.json``
 
-2. Lets create them them.
+6. Lets create them.
 
-New-ODataEntity -Configuration $config -PayloadFiles @("data/Titles","C:\temp\jediPadawan.json","data/Titles","C:\temp\jediInitiate.json")
+``New-ODataEntity -Configuration $config -PayloadFiles @("data/Titles","C:\temp\jediPadawan.json","data/Titles","C:\temp\jediInitiate.json")``
 
+7. Lets take a look
 
+``$titles = Get-ODataEntity -Configuration $Config -ConfigurationType String -Entity "data/Titles" | ConvertFrom-Json``
+
+|TitleId
+|-------
+|Jedi Padawan
+|Jedi Initiate
 
 
 
