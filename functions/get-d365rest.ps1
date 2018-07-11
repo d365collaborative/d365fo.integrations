@@ -25,7 +25,7 @@ Get-ODataEntity ".\ODataConfiguration.json"  -Entity "data/CurrencyISOCodes?`$fi
 .NOTES
 General notes
 #>
-function Get-ODataEntity {
+function Get-D365Rest {
     param(
         [Parameter(Mandatory = $true, Position = 1)]
         [string]$Configuration,

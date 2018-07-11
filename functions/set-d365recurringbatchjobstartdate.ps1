@@ -12,7 +12,7 @@ Set-RecurringBatchJobStartDate
 .NOTES
 General notes
 #>
-function Set-RecurringBatchJobStartDate()
+function Set-D365RecurringBatchJobStartDate()
 {
     
     $AOSPath = ""
@@ -43,7 +43,8 @@ function Set-RecurringBatchJobStartDate()
     $sqlCommand.Connection = $sqlConnection
 
     $sqlCommand.Connection.Open()
-    $sqlCommand.CommandText = get-content "$script:PSModuleRoot\internal\sql\set-recurringbatchjobstartdate.sql"
+    $sqlCommand.CommandText = (Get-Content "$script:PSModuleRoot\internal\sql\set-recurringbatchjobstartdate.sql") -join [Environment]::NewLine
+    
     $sqlCommand.ExecuteScalar()
     $sqlCommand.Connection.Close()
     

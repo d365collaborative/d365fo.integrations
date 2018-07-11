@@ -12,7 +12,7 @@
     RootModule = 'd365fo.integrations.psm1'
     
     # Version number of this module.
-    ModuleVersion = '0.0.4'
+    ModuleVersion = '0.0.5'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -66,22 +66,15 @@
     FormatsToProcess = @()
     
     # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-    NestedModules = @('.\functions\Get-IntegrationTemplate.ps1',
-                        '.\functions\Invoke-Integration.ps1',
-                        '.\functions\set-recurringbatchjobstartdate.ps1',
-                        '.\functions\get-odataentity.ps1',
-                        '.\functions\new-odataentity.ps1',
-                        '.\functions\get-odatatemplate.ps1'
-                        
-    )
+    NestedModules = @()
     
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport = @('Get-IntegrationTemplate',
-                            'Invoke-Integration',
-                            'Set-RecurringBatchJobStartDate',
-                            'Get-ODataEntity',
-                            'New-ODataEntity',
-                            'Get-ODataTemplate'
+    FunctionsToExport = @('Get-D365IntegrationTemplate',
+                            'Invoke-D365Integration',
+                            'Set-D365RecurringBatchJobStartDate',
+                            'Get-D365Rest',
+                            'New-D365Rest',
+                            'Get-D365RestTemplate'
                             )
     
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.

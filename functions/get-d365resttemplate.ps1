@@ -11,7 +11,7 @@ Get-IntegrationTemplate | Out-File "C:\Temp\ODataConfiguration.json"
 .NOTES
 General notes
 #>
-function Get-ODataTemplate
+function Get-D365RestTemplate
 {
     $template = [IO.File]::ReadAllText("$script:PSModuleRoot\internal\json\odatatemplate.json")
 

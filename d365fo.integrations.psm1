@@ -26,3 +26,7 @@ if (($PSVersionTable.PSVersion.Major -lt 6) -or ($PSVersionTable.OS -like "*Wind
 foreach ($function in (Get-ChildItem "$script:PSModuleRoot\internal\functions\*.ps1")) {
     . Import-ModuleFile $function.FullName
 }
+# All public functions available within the toolset
+foreach ($function in (Get-ChildItem "$script:PSModuleRoot\functions\*.ps1")) {
+    . Import-ModuleFile $function.FullName
+}

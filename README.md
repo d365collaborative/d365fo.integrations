@@ -8,159 +8,37 @@ Available on Powershellgallery
 install-Module -Name d365fo.integrations
 ```
 
+__List all available commands / functions__
+```
+Get-Command -Module d365fo.integrations
+```
+__Update the module__
+```
+Update-Module -name d365fo.tools
+```
 
 
-*Before the communication works with D365FO, please remember to create the App registration in your Azure Active Directory and register the ClientId under Azure Active Directory Applications*
+_Before the communication works with D365FO, please remember to create the App registration in your Azure Active Directory and register the ClientId under Azure Active Directory Applications_
 
 The module is based upon json settings.
 
-Templates for the settings is avaliable through the following commands
-
-**OData**
-
-```
-Get-OdataTemplate
-```
+The module supports two functions, 
+1. Rest
+2. Recurring Data Jobs
 
 
+_Rest_
 
-**Recurring Data Jobs**
+The Rest functions are
+1. Get-D365RestTemplate
+2. Get-D365Rest
+3. New-D365Rest
 
-```
-Get-IntegrationTemplate
-```
+_Recurring Data Jobs_
 
+The Recurring Data Jobs functions are
+1. Get-D365IntegrationTemplate
+2. New-D36Integration
+3. Set-D365RecurringBatchJobStartDate
 
-## OData
-
-### How to Get
-
-*This is based upon the configuration file is loaded into a variable as a string called $Config*
-
-1. Lets get the Data Entities
-
-```
-$dataEntity = Get-ODataEntity -Configuration $Config -Entity 'data'
-```
-
-
-2. Lets convert the result into a json object
-
-```
-$dataEntityJson = convertfrom-json $dataentity
-```
-
-
-3. Lets find some something regarding workers and sort the result
-
-```
-$dataEntityJson.value | where-object name -like '*Worker*' |Sort-Object -Descending -Property name
-```
-
-
-Some of the entries returned :
-
-|name|kind|url|
-|----|----|---|
-WorkerTrustedPositions|EntitySet|WorkerTrustedPositions
-WorkerTaxRegions|EntitySet|WorkerTaxRegions
-WorkerTaxCodeParameters|EntitySet|WorkerTaxCodeParameters
-WorkerTasks|EntitySet|WorkerTasks
-WorkerSummaries|EntitySet|WorkerSummaries
-WorkerSkills|EntitySet|WorkerSkills
-Workers|EntitySet|Workers
-
-4. Lets find a worker, lets take 4711, and just convert him to json rightaway
-
-```
-$worker = Get-ODataEntity -Configuration $Config -Entity "data/Workers?`$filter=PersonnelNumber eq '4711'" | ConvertFrom-Json`
-```
-
-
-1. Lets find his name, firstname and lastname
-
-```
-$worker.value | Select-Object -Property Name,FirstName,LastName
-```
-
-
-| Name | FirstName | LastName
-|----|---------|--------
-|D365 Integration|D365|Integration
-
-
-### How to Post
-
-
-1. Lets first find a Entity we can use 
-
-```
-$dataEntityJson = Get-ODataEntity -Configuration $Config -Entity "data" | convertfrom-json
-$dataEntityJson.value | where-object name -like "*Title*"
-```
-
-
-| name |kind | url
-|---- |  ---- | ---
-Titles | EntitySet | Titles
-
-
-2. Lets find it in the metadata and get the EntitySet
-
-```
-$metaData = Get-ODataEntity -Configuration $Config -Entity 'data/$metadata'
-$xml = New-Object -TypeName System.Xml.XmlDocument
-$xml.LoadXml($metadata)
-$man = New-Object -TypeName System.Xml.XmlNameSpaceManager($xml.NameTable)
-$man.addNameSpace("edm","http://docs.oasis-open.org/odata/ns/edm")   
-$xml.SelectSingleNode("//edm:EntitySet[@Name='Titles']",$man) | select-object EntityType
-```
-
-
-|EntityType|
-|----|
-|Microsoft.Dynamics.DataEntities.Title|
-
-1. Finding the EntityType 
-
-```
-$xml.selectSingleNode("//edm:EntityType[@Name='Title']",$man)
-```
-
-
-4. Based on the EntityType the design of the json should look like, lets do a batch insert
-
-5. Lets create 2 json files
-
-```
-'{ "@odata.type": "#Microsoft.Dynamics.DataEntities.Title","TitleId" : "Jedi Initiate"}' | Out-file C:\temp\jediInitiate.json 
-```
-
-
-```
-'{ "@odata.type": "#Microsoft.Dynamics.DataEntities.Title","TitleId" : "Jedi Padawan"}' | Out-file C:\temp\jediPadawn.json
-```
-
-
-6. Lets create them.
-
-```
-New-ODataEntity -Configuration $config -PayloadFiles @("data/Titles","C:\temp\jediPadawan.json","data/Titles","C:\temp\jediInitiate.json")
-```
-
-
-7. Lets take a look
-
-```
-$titles = Get-ODataEntity -Configuration $Config -ConfigurationType String -Entity "data/Titles" | ConvertFrom-Json
-```
-
-
-|TitleId
-|-------
-|Jedi Padawan
-|Jedi Initiate
-
-
-
-
+The functionality will be explained on the wiki pages

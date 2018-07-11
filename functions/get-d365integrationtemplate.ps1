@@ -12,7 +12,7 @@ Get-IntegrationTemplate | Out-File "C:\Temp\Integration.json"
 .NOTES
 General notes
 #>
-function Get-IntegrationTemplate
+function Get-D365IntegrationTemplate
 {
     $template = [IO.File]::ReadAllText("$script:PSModuleRoot\internal\json\Integrationtemplate.json")
 

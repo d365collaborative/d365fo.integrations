@@ -38,7 +38,7 @@ New-ODataEntity "c:\Integration\odataPost.json"  -Entity "data/DataManagementDef
 .NOTES
 General notes
 #>
-function New-ODataEntity {
+function New-D365Rest {
     [CmdletBinding(DefaultParameterSetName = 'File')]
     param(
         [Parameter(Mandatory = $true, Position = 1, ParameterSetName = "File")]

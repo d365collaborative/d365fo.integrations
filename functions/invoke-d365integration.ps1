@@ -22,7 +22,7 @@ Invoke-Integration "C:\temp\Integration.json"   -verbose
 .NOTES
 General notes
 #>
-function Invoke-Integration {
+function Invoke-D365Integration {
     param(
         [Parameter(Mandatory = $true, Position = 1)]
         [string]$Configuration,
