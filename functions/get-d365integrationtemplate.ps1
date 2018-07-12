@@ -7,7 +7,7 @@ Command for getting template for integration
 Returns a json configuration, used for integration with D365FO
 
 .EXAMPLE
-Get-IntegrationTemplate | Out-File "C:\Temp\Integration.json"
+Get-D365IntegrationTemplate | Out-File "C:\Temp\Integration.json"
 
 .NOTES
 General notes
