@@ -7,20 +7,20 @@ Function calls the OData service in D365FO, returns a string as the result
 
 .PARAMETER Configuration
 Parameter contains either a string containing json or a filename containing the configuration used for calling D365. 
-use Get-ODataTemplate to get format
+use Get-D365RestTemplate to get format
 
 .PARAMETER Entity
 Name of the Entity ex.  data/CurrencyISOCodes or just data for getting every odata service 
 
 .EXAMPLE
 
-Get-ODataEntity ".\ODataConfiguration.json"  -Entity "data"
+Get-D365Rest ".\ODataConfiguration.json"  -Entity "data"
 
-Get-ODataEntity ".\ODataConfiguration.json"  -Entity "data/CurrencyISOCodes"
+Get-D365Rest ".\ODataConfiguration.json"  -Entity "data/CurrencyISOCodes"
 
-Get-ODataEntity ".\ODataConfiguration.json"  -Entity "data/CurrencyISOCodes?`$orderby=ISOCurrencyCode"
+Get-D365Rest ".\ODataConfiguration.json"  -Entity "data/CurrencyISOCodes?`$orderby=ISOCurrencyCode"
 
-Get-ODataEntity ".\ODataConfiguration.json"  -Entity "data/CurrencyISOCodes?`$filter=ISOCurrencyCode eq 'DKK'"
+Get-D365Rest ".\ODataConfiguration.json"  -Entity "data/CurrencyISOCodes?`$filter=ISOCurrencyCode eq 'DKK'"
 
 .NOTES
 General notes

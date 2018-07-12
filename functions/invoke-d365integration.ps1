@@ -7,7 +7,7 @@ Long description
 
 .PARAMETER Configuration
 Parameter contains either a string containing json or a filename containing the configuration used for calling D365. 
-Use Get-IntegrationTemplate to get the Format
+Use Get-D365IntegrationTemplate to get the Format
 
 .PARAMETER IntegrationType
 ExhaustQueue will run 10 times where all jobs from the configuration failed
@@ -15,7 +15,7 @@ Normal will do a normal run, it will retry the download 5 times if a HTTP 500 is
 
 .EXAMPLE
 
-Invoke-Integration "C:\temp\Integration.json"   -verbose
+Invoke-D365Integration "C:\temp\Integration.json"   -verbose
 
 
 
