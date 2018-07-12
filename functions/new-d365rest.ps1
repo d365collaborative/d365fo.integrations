@@ -7,7 +7,7 @@ Long description
 
 .PARAMETER Configuration
 Parameter contains either a string containing json or a filename containing the configuration used for calling D365. 
-use Get-ODataTemplate to get format
+use Get-D365RestTemplate to get format
 
 .PARAMETER Entity
 Name of the Entity ex. data/CurrencyISOCodes. 
@@ -22,17 +22,17 @@ $arr = 'Entity','FilePathToJson','Entity','FilePathToJson' and so on
 .EXAMPLE
 $payload = Get-content C:\Integration\DefGroup1.json | out-string
 
-New-ODataEntity "c:\Integration\odataPost.json"  -Entity "data/DataManagementDefinitionGroups" -payload $payload -payloadType "JSON" -verbose
+New-D365Rest "c:\Integration\odataPost.json"  -Entity "data/DataManagementDefinitionGroups" -payload $payload -payloadType "JSON" -verbose
 
 OR
 
-New-ODataEntity "c:\Integration\odataPost.json"  -Entity "data/DataManagementDefinitionGroups" -payload C:\Integration\DefGroup1.json -payloadType "File" -verbose
+New-D365Rest "c:\Integration\odataPost.json"  -Entity "data/DataManagementDefinitionGroups" -payload C:\Integration\DefGroup1.json -payloadType "File" -verbose
 
 OR
 
 $arr = "data/DataManagementDefinitionGroups","C:\Integration\DefGroup1.json","data/DataManagementDefinitionGroups","C:\Integration\DefGroup2.json"
 
-New-ODataEntity "c:\Integration\odataPost.json"  -Entity "data/DataManagementDefinitionGroups" -payload $arr -payloadType "Files" -verbose
+New-D365Rest "c:\Integration\odataPost.json"  -Entity "data/DataManagementDefinitionGroups" -payload $arr -payloadType "Files" -verbose
 
 
 .NOTES
