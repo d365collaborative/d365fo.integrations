@@ -7,7 +7,7 @@ Batch jobs used for the recurring datajobs, get a startdate in the past.
 This triggers the batch to execute the job
 
 .EXAMPLE
-Set-RecurringBatchJobStartDate
+Set-D365RecurringBatchJobStartDate
 
 .NOTES
 General notes
