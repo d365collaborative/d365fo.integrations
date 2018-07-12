@@ -6,7 +6,7 @@ Command for getting template for OData
 Returns a json configuration, used for OData with D365FO
 
 .EXAMPLE
-Get-IntegrationTemplate | Out-File "C:\Temp\ODataConfiguration.json"
+Get-D365RestTemplate | Out-File "C:\Temp\ODataConfiguration.json"
 
 .NOTES
 General notes
