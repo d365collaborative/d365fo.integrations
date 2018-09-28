@@ -14,31 +14,37 @@ Get-Command -Module d365fo.integrations
 ```
 __Update the module__
 ```
-Update-Module -name d365fo.tools
+Update-Module -name d365fo.integrations
 ```
-
 
 _Before the communication works with D365FO, please remember to create the App registration in your Azure Active Directory and register the ClientId under Azure Active Directory Applications_
 
-The module is based upon json settings.
-
-The module supports two functions, 
-1. Rest
-2. Recurring Data Jobs
+The module supports two types of integrations 
+1. OData
+2. DMF Recurring Data Jobs
 
 
-_Rest_
+_OData_
 
-The Rest functions are
-1. Get-D365RestTemplate
-2. Get-D365Rest
-3. New-D365Rest
+The OData functions are
+
+1. Import-D365OData
+2. Export-D365OData
 
 _Recurring Data Jobs_
 
 The Recurring Data Jobs functions are
-1. Get-D365IntegrationTemplate
-2. New-D36Integration
-3. Set-D365RecurringBatchJobStartDate
+1. Import-D365DMFPackage
+2. Export-D365DMFPackage
 
-The functionality will be explained on the wiki pages
+
+_Misc_
+
+*A function for restarting batch jobs.*
+1. Set-D365RecurringBatchJobStartDate
+For testing purposes, it is possible to do only monthly occurence and no enddate.
+Execute the function will make D365FO to execute the batchjob
+*A function for storing the must used properties for calling an integration, it can be persistet between sessions*
+2. Set-D365AuthorityConfig
+*A function for retrieving a stored config*
+3. Get-D365AuthorityConfig
