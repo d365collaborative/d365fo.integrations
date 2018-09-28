@@ -1,44 +1,50 @@
-function New-WebRequestBatch ($D365FO, $RequestUrl, $AuthorizationHeader, $Action, $Payloads) {
+function New-WebRequestBatch {
+    param(
+        [Parameter(Mandatory = $true, Position = 1)]
+        [string]$RequestUrl,
+        [Parameter(Mandatory = $true, Position = 2)]
+        [string]$Action,
+        [Parameter(Mandatory = $false, Position = 3)]
+        [Array]$Payload
+        
+    )
 
-    Write-Verbose "New Request $D365FO/$RequestUrl, $Action"        
+    Write-PSFMessage -Level Verbose -Message "New Batch Request $RequestUrl, $Action"        
 
+    $authToken = New-AuthorizationToken
+    if (Test-PSFFunctionInterrupt) {
+        Stop-PSFFunction -StepsUpward 1 -Message "Stopping" 
+        return
+    }
 
-    $idbatch = New-Guid
-    $idbatch = $idbatch.ToString()
-    $idchangeset = New-Guid
-    $idchangeset = $idchangeset.ToString()
+    $idbatch = $(New-Guid).ToString()
+    $idchangeset = $(New-Guid).ToString()
+
     $batchPayload = "--batch_$idbatch"
     $changesetPayload = "--changeset_$idchangeset"
 
-    Write-Verbose "Batch $idBatch"
-    Write-Verbose "Changeset $idchangeset"
-
-    $authHeader = $authorizationHeader.CreateAuthorizationHeader()
-
-    $request = [System.Net.WebRequest]::Create("$D365FO/$requestUrl")
-    $request.Headers["Authorization"] = $authHeader
-    $request.Method = $action
+    $request = [System.Net.WebRequest]::Create("$RequestUrl")
+    $request.Headers["Authorization"] = $authToken
+    $request.Method = $Action
     $request.ContentType = "multipart/mixed; boundary=batch_$idBatch"
 
     $data = "--$batchPayLoad `r`n"
     $data += "Content-Type: multipart/mixed; boundary=changeset_$idchangeset `r`n`r`n"
     $data += "$changeSetPayLoad `r`n"
 
-    if ($PayLoads.Count % 2 -eq 1 ) { throw "PayLoad is not divideable with 2"}
 
-    $payLoadEnumerator = $Payloads.GetEnumerator()
+    $payLoadEnumerator = $PayLoad.GetEnumerator()
     $counter = 0
-    while ($payLoadEnumerator.movenext()) { 
-        
+    while ($payLoadEnumerator.MoveNext()) { 
 
         $counter ++
-        $entity = $payLoadEnumerator.Current
-        $null = $payLoadEnumerator.movenext()
-        $entityFile = $payLoadEnumerator.Current
-        $payload = Get-Content -Path $entityFile
-        $payload = $payload.Trim()
-        $data += New-BatchContent $counter "$D365FO/$entity" $authHeader  $payload
-        if ($PayLoads.Count -eq ($counter * 2)) {
+        $localEntity = $payLoadEnumerator.Current
+        $null = $payLoadEnumerator.MoveNext()
+        $localPayload = $payLoadEnumerator.Current.Trim()
+
+        $data += New-BatchContent  "$Script:D365FOURL/$localEntity" $authToken $LocalPayload $counter
+
+        if ($PayLoad.Count -eq ($counter * 2)) {
             $data += "$changesetPayload--`r`n"
         }
         else {
@@ -49,7 +55,7 @@ function New-WebRequestBatch ($D365FO, $RequestUrl, $AuthorizationHeader, $Actio
     
     $data += "$batchPayload--"
 
-    write-verbose $data
+    Write-PSFMessage -Level VeryVerbose -Message $data -Tag "Webrequest.DATA"
     $request.ContentLength = $data.Length
 
     $stream = $request.GetRequestStream()

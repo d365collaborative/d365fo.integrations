@@ -1,6 +1,12 @@
-function Save-IntegrationResult ($WebRequest, $File, $Config, $StorageContext, $Container) {
+function Save-IntegrationResult {
+    param(
+        [Parameter(Mandatory = $true, Position = 1)]
+        [System.Net.WebRequest]$WebRequest,
+        [Parameter(Mandatory = $true, Position = 2)]
+        [string]$FileName
+    )
 
-    Write-Verbose "Saving to file $File"
+    Write-PSFMessage -Level Verbose -Message "Saving to file $FileName"
 
     $response = $null
     
@@ -9,47 +15,27 @@ function Save-IntegrationResult ($WebRequest, $File, $Config, $StorageContext, $
         $response = $WebRequest.GetResponse()
     }
     catch {
-        $url = $webRequest.RequestURI.AbsoluteUri
-        write-Error $_.Exception.Message
-        Write-Error $_.Exception
-        Write-Error $url
-        throw 
-        #throw "Tried to save result, Unable to invoke $url"
+        Write-PSFMessage -Level Verbose -Message "Error getting response from $($webRequest.RequestURI.AbsoluteUri)" -Exception $_.Exception
+        Stop-PSFFunction -Message "Stopping" -StepsUpward 1gget
+        return
     }
     if ($response.StatusCode -eq [System.Net.HttpStatusCode]::Ok) {
 
         $stream = $response.GetResponseStream()
     
-        if ($config.Storage -eq "azure") {
-    
-            $cloudStorageAccount = [Microsoft.WindowsAzure.Storage.CloudStorageAccount]::Parse($StorageContext.ConnectionString)
-    
-            $blobClient = $cloudStorageAccount.CreateCloudBlobClient()
-    
-            $blobcontainer = $blobClient.GetContainerReference($Container.Name);
-    
-            $blockBlob = $blobcontainer.GetBlockBlobReference($File);
-    
-            $blockBlob.UploadFromStream($stream);
-    
-        }
-        else {
-            
-            $fileStream = [System.IO.File]::Create($File)
-    
-            $stream.CopyTo($fileStream)
-    
-            $fileStream.Close()
-        }
+        $fileStream = [System.IO.File]::Create($FileName)
+
+        $stream.CopyTo($fileStream)
+
+        $fileStream.Close()
         
-            
     }
     else {
-        $statusDescription = $response.StatusDescription
-        throw "Https status code : $statusDescription" 
+        
+        Write-PSFMessage -Level Verbose -Message "Status code not Ok, Description $($response.StatusDescription)"
+        Stop-PSFFunction -Message "Stopping" -StepsUpward 1
+        return 
     }
-    
-   
     
     
 }

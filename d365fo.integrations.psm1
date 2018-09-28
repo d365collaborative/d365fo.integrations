@@ -30,3 +30,9 @@ foreach ($function in (Get-ChildItem "$script:PSModuleRoot\internal\functions\*.
 foreach ($function in (Get-ChildItem "$script:PSModuleRoot\functions\*.ps1")) {
     . Import-ModuleFile $function.FullName
 }
+
+$Script:AuthorityConfig = "d365fo.integrations.Authority."
+
+Write-PSFMessage -Message "Loading type Microsoft.IdentityModel.Clients.ActiveDirectory.dll" -Level Verbose
+
+$null = add-type -path "$script:PSModuleRoot\internal\dll\Microsoft.IdentityModel.Clients.ActiveDirectory.dll"

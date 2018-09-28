@@ -7,20 +7,23 @@ Batch jobs used for the recurring datajobs, get a startdate in the past.
 This triggers the batch to execute the job
 
 .EXAMPLE
-Set-D365RecurringBatchJobStartDate
+Set-RecurringBatchJobStartDate
 
 .NOTES
 General notes
 #>
-function Set-D365RecurringBatchJobStartDate()
-{
+function Set-D365RecurringBatchJobStartDate() {
+    param(
+        [Parameter(Mandatory = $true, Position = 1)]
+        [string]$Name
+    )
     
     $AOSPath = ""
     if (([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
         $AOSPath = (Get-Website -Name "AOSService" | Select-Object -Property "PhysicalPath" ).physicalpath
     }
     else {
-        $AOSPath = [System.Environment]::ExpandEnvironmentVariables("%ServiceDrive%")  +  "\AOSService\webroot"
+        $AOSPath = [System.Environment]::ExpandEnvironmentVariables("%ServiceDrive%") + "\AOSService\webroot"
     }
 
     add-Type -Path "$AOSPath\bin\Microsoft.Dynamics.ApplicationPlatform.Environment.dll"
@@ -32,21 +35,37 @@ function Set-D365RecurringBatchJobStartDate()
     $DatabaseServer = $dataAccess.DbServer
     $DatabaseName = $dataAccess.Database
     $DatabaseUserName = $dataAccess.SqlUser
-    $DatabaseUserPassword = $dataAccess.SqlPwd
-
-
+    [string]$DatabaseUserPassword = $dataAccess.SqlPwd
+    
+    if ($DatabaseUserPassword.Length -gt 128) {
+        Stop-PSFFunction -Message "Function needs to be called as Administrator"
+        return
+    }
 
     $sqlConnection = New-Object System.Data.SqlClient.SqlConnection
-    $sqlConnection.ConnectionString = "Server=$DatabaseServer;Database=$DatabaseName;User=$DatabaseUserName;Password=$DatabaseUserPassword"
 
-    $sqlCommand = New-Object System.Data.SqlClient.SqlCommand
+
+    $sqlConnection.ConnectionString = "Server=$DatabaseServer;Database=$DatabaseName;User=$DatabaseUserName;Password=$DatabaseUserPassword" 
+
+    [System.Data.SqlClient.SqlCommand]  $sqlCommand = New-Object System.Data.SqlClient.SqlCommand
     $sqlCommand.Connection = $sqlConnection
 
     $sqlCommand.Connection.Open()
-    $sqlCommand.CommandText = (Get-Content "$script:PSModuleRoot\internal\sql\set-recurringbatchjobstartdate.sql") -join [Environment]::NewLine
+    $commandText = Get-Content "$script:PSModuleRoot\internal\sql\set-recurringbatchjobstartdate.sql" | out-string
+    $sqlCommand.CommandText = $commandText
+    $null = $sqlCommand.Parameters.AddWithValue("@Name", $Name)
+
+    $reader = $sqlCommand.ExecuteReader()
+
+    if ($reader.HasRows) {
+        while ($reader.Read()) {
+            Write-PSFMessage -Level Verbose -Message $("Batchjob updated '{0}'" -f $reader.GetString(0))
+        }
+    }
     
-    $sqlCommand.ExecuteScalar()
+    Write-PSFMessage -Level Verbose -Message $("Number of batchjob updated '{0}'" -f $reader.RecordsAffected)
+
     $sqlCommand.Connection.Close()
-    
+    $sqlCommand.Dispose();
 }
 

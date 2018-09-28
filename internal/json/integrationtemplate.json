@@ -7,7 +7,8 @@
     "Storage" : "Azure OR SMB",
     "AccountId" : "The storage Account used for Azure",
     "AccessToken" : "The access token for the storage account",
-    "ContainerName" : "the container name to find the files or a container prefix for getting the files",
+    "ContainerName" : "The container name to find the files or a container for getting the files",
+    "ContainerPreFix" : "A Prefix for the container if a new one should be used if it allready exists -Supports UFormat",
     "Jobs": [
         {"Job_Id" : "GUID from the recurring datajob","FilePath" : "FileNameSomething.zip"},
         {"Job_Id" : "GUID from the recurring datajob","FilePath" : "FileNameSomething.xls"}
