@@ -16,7 +16,7 @@ function Invoke-DequeueDataManagement {
         Stop-PSFFunction -Message "Stopping" -StepsUpward 1   
         return
     }
-    $dequeueResponse = Get-IntegrationResponse $webRequest
+    $dequeueResponse = Get-IntegrationResponse -WebRequest $webRequest -ExpectedResult ([System.Net.HttpStatusCode]::Ok) -GetContent 
     
     if (Test-PSFFunctionInterrupt) {
         Stop-PSFFunction -Message "Stopping" -StepsUpward 1   
@@ -67,7 +67,7 @@ function Invoke-DequeueDataManagement {
         return
     }
     
-    $ackResponse = Get-IntegrationResponse $webRequest
+    $ackResponse = Get-IntegrationResponse -WebRequest $webRequest -ExpectedResult ([System.Net.HttpStatusCode]::Ok) -GetContent
     if (Test-PSFFunctionInterrupt) {
         Stop-PSFFunction -Message "Stopping" -StepsUpward 1   
         return

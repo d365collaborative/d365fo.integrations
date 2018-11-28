@@ -76,7 +76,7 @@ function Import-D365OData {
     }
     if (Test-PSFFunctionInterrupt) {return}
     
-    Get-IntegrationResponse $webRequest
+    Get-IntegrationResponse -WebRequest $webRequest -ExpectedResult ([System.Net.HttpStatusCode]::Created) -GetContent
 
 
 }

@@ -55,7 +55,8 @@ function Export-D365OData {
     $webRequest = New-WebRequest "$Script:D365FOUrl/$Entity" "GET" 
     if (Test-PSFFunctionInterrupt) {return}
     
-    Get-IntegrationResponse $webRequest
+    
+    Get-IntegrationResponse -WebRequest $webRequest -ExpectedResult ([System.Net.HttpStatusCode]::Ok) -GetContent
 
     
 

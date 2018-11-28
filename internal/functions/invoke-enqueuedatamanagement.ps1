@@ -19,7 +19,7 @@ function Invoke-EnqueueDataManagement {
     }
 
 
-    $response = Get-IntegrationResponse $webRequest 
+    $response = Get-IntegrationResponse -WebRequest $webRequest -ExpectedResult ([System.Net.HttpStatusCode]::Ok) -GetContent
     if (Test-PSFFunctionInterrupt) {
         Stop-PSFFunction -Message "Stopping" -StepsUpward 1
         return

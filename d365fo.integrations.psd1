@@ -12,7 +12,7 @@
     RootModule             = 'd365fo.integrations.psm1'
     
     # Version number of this module.
-    ModuleVersion          = '0.1.0'
+    ModuleVersion          = '0.1.1'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -78,7 +78,8 @@
         'Export-D365DMFPackage',
         'Get-D365AuthorityConfig',
         'Set-D365AuthorityConfig',
-        'Set-D365RecurringBatchJobStartDate'
+        'Set-D365RecurringBatchJobStartDate',
+        'Remove-D365OData'
     )
     
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
