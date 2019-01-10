@@ -50,17 +50,17 @@ function Import-D365OData {
     )
 
 
-    if ($PayLoad.Count % 2 -eq 1 ) { 
+    if ($PayLoad.Count % 2 -eq 1 ) {
     
         Write-PSFMessage -Level Critical -Message "Payload count is not even $($PayLoad.Count)"
         Stop-PSFFunction -Message "Stopping"
     }
 
     $SessionsVariables = @{
-        D365FOUrl    = $D365FOUrl; 
-        Authority    = $Authority;
-        ClientId     = $ClientId;
-        ClientSecret = $ClientSecret;
+        D365FOUrl    = $D365FOUrl
+        Authority    = $Authority
+        ClientId     = $ClientId
+        ClientSecret = $ClientSecret
     }
 
     Set-AuthoritySession -Values $SessionsVariables

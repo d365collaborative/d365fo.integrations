@@ -10,14 +10,14 @@ function New-WebRequest {
         [Parameter(Mandatory = $false, Position = 4)]
         [string]$DataType,
         [Parameter(Mandatory = $false, Position = 5)]
-        [string]$ContentType        
+        [string]$ContentType
     )
 
 
 
     $authToken = New-AuthorizationToken
     if (Test-PSFFunctionInterrupt) {
-        Stop-PSFFunction -StepsUpward 1 -Message "Stopping" 
+        Stop-PSFFunction -StepsUpward 1 -Message "Stopping"
         return
     }
 
@@ -55,12 +55,12 @@ function New-WebRequest {
                 }
                 Default {
                     Write-PSFMessage -level Verbose -Message "Length $($Payload.Length)"
-                    $request.ContentLength = $Payload.Length
+                    $request.ContentLength = [System.Text.Encoding]::UTF8.GetByteCount($Payload)
                     $stream = $request.GetRequestStream()
                     $streamWriter = new-object System.IO.StreamWriter($stream)
                     $streamWriter.Write([string]$Payload)
                     $streamWriter.Flush()
-                    $streamWriter.Close()    
+                    $streamWriter.Close()
                 }
             }
 
