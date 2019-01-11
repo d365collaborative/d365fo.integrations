@@ -46,7 +46,9 @@ function Import-D365OData {
         [Parameter(Mandatory = $true, Position = 4)]
         [String]$ClientSecret,
         [Parameter(Mandatory = $true, Position = 5)]
-        [array]$Payload
+        [array]$Payload,
+
+        [Switch] $ShowResponse
     )
 
 
@@ -76,7 +78,7 @@ function Import-D365OData {
     }
     if (Test-PSFFunctionInterrupt) {return}
     
-    Get-IntegrationResponse -WebRequest $webRequest -ExpectedResult ([System.Net.HttpStatusCode]::Created) -GetContent
+    Get-IntegrationResponse -WebRequest $webRequest -ExpectedResult ([System.Net.HttpStatusCode]::Created) -GetContent:$ShowResponse
 
 
 }

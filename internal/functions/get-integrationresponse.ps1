@@ -6,7 +6,7 @@ function Get-IntegrationResponse {
         [Parameter(Mandatory = $true, Position = 2)]
         [System.Net.HttpStatusCode]$ExpectedResult,
         [Parameter(Mandatory = $false, Position = 3)]
-        [Switch]$GetContent
+        [Switch] $GetContent
         
     )
 
@@ -27,18 +27,12 @@ function Get-IntegrationResponse {
     if ($response.StatusCode -eq $ExpectedResult) {
 
         Write-PSFMessage -Message "Request Ok $url" -Level Verbose
-        if ($GetContent -eq $true) {
-            $stream = $response.GetResponseStream()
+        $stream = $response.GetResponseStream()
     
-            $streamReader = New-Object System.IO.StreamReader($stream);
+        $streamReader = New-Object System.IO.StreamReader($stream);
         
-            $integrationResponse = $streamReader.ReadToEnd()
-            $streamReader.Close();
-        }
-        else {
-
-            "Request Ok"
-        }
+        $integrationResponse = $streamReader.ReadToEnd()
+        $streamReader.Close();
     }
     else {
         $statusDescription = $response.StatusDescription
@@ -46,5 +40,10 @@ function Get-IntegrationResponse {
         Stop-PSFFunction -StepsUpward 1 -Message "Stopping"
     }
 
-    $integrationResponse
+    if ($GetContent -eq $true) {
+        $integrationResponse
+    }
+    else {
+        "Request Ok"
+    }
 }
