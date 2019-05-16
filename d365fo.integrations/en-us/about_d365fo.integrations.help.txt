@@ -1,0 +1,11 @@
+TOPIC
+	about_d365fo.integrations
+	
+SHORT DESCRIPTION
+	Explains how to use the d365fo.integrations powershell module
+	
+LONG DESCRIPTION
+	<Insert Content here>
+
+KEYWORDS
+	d365fo.integrations
