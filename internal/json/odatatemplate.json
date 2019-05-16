@@ -1,7 +1,0 @@
-{
-    "D365FO" : "https://usnconeboxax1aos.cloud.onebox.dynamics.com",
-    "Authority" : "https://sts.windows.net/YourDomain",
-    "ClientId" : "ClientID from AppRegistration",
-    "ClientSecret" : "Secret from AppRegistraon"
-}
-
