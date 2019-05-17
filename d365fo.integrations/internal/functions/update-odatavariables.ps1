@@ -24,14 +24,14 @@ function Update-ODataVariables {
     
     $configName = (Get-PSFConfig -FullName "d365fo.integrations.active.odata.config.name").Value.ToString().ToLower()
     if (-not ($configName -eq "")) {
-        $broadcastHash = Get-D365ActiveBroadcastMessageConfig -OutputAsHashtable
-        foreach ($item in $broadcastHash.Keys) {
+        $configHash = Get-D365ActiveODataConfig -OutputAsHashtable
+        foreach ($item in $configHash.Keys) {
             if ($item -eq "name") { continue }
             
             $name = "OData" + (Get-Culture).TextInfo.ToTitleCase($item)
         
-            Write-PSFMessage -Level Verbose -Message "$name - $($broadcastHash[$item])" -Target $broadcastHash[$item]
-            Set-Variable -Name $name -Value $broadcastHash[$item] -Scope Script
+            Write-PSFMessage -Level Verbose -Message "$name - $($configHash[$item])" -Target $configHash[$item]
+            Set-Variable -Name $name -Value $configHash[$item] -Scope Script
         }
     }
 }

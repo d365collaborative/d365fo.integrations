@@ -61,7 +61,7 @@ function Set-D365ActiveODataConfig {
         return
     }
 
-    if (-not ((Get-PSFConfig -FullName "d365fo.tools.odata.*.name").Value -contains $Name)) {
+    if (-not ((Get-PSFConfig -FullName "d365fo.integrations.odata.*.name").Value -contains $Name)) {
         $messageString = "An OData configuration with that name <c='em'>doesn't exists</c>."
         Write-PSFMessage -Level Host -Message $messageString
         Stop-PSFFunction -Message "Stopping because an OData message configuration with that name doesn't exists." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>','')))

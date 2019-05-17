@@ -45,7 +45,8 @@
     FunctionsToExport = @(
         'Add-D365ODataConfig'
         ,	'Enable-d365Exception'
-        , 'Get-D365ActiveODataConfig'
+		,   'Get-D365ActiveODataConfig'
+		,	'Get-D365EntityViaOData'
         ,	'Get-D365ODataConfig'
         ,	'Set-D365ActiveODataConfig'
 
