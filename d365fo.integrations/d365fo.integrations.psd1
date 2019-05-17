@@ -1,83 +1,93 @@
 @{
-	# Script module or binary module file associated with this manifest
-	ModuleToProcess = 'd365fo.integrations.psm1'
+    # Script module or binary module file associated with this manifest
+    ModuleToProcess   = 'd365fo.integrations.psm1'
 	
-	# Version number of this module.
-	ModuleVersion = '1.0.0'
+    # Version number of this module.
+    ModuleVersion     = '0.2.0'
 	
-	# ID used to uniquely identify this module
-	GUID = 'd2667b62-1436-42b3-a840-ab6b4a0e5aa0'
+    # ID used to uniquely identify this module
+    GUID              = 'd2667b62-1436-42b3-a840-ab6b4a0e5aa0'
 	
-	# Author of this module
-	Author = 'Motz'
+    # Author of this module
+    Author            = 'Mötz Jensen & Rasmus Andersen'
+
+    # Company or vendor of this module
+    CompanyName       = 'Essence Solutions'
+
+    # Copyright statement for this module
+    Copyright         = '(c) 2018 Mötz Jensen & Rasmus Andersen. All rights reserved.'
+
+    # Description of the functionality provided by this module
+    Description       = 'Tools for working against the OData and DMF endpoint with the D365FO platform'
+
+    # Minimum version of the Windows PowerShell engine required by this module
+    PowerShellVersion = '5.0'
 	
-	# Company or vendor of this module
-	CompanyName = 'MyCompany'
+    # Modules that must be imported into the global environment prior to importing
+    # this module
+    RequiredModules   = @(
+        @{ ModuleName = 'PSFramework'; ModuleVersion = '1.0.13' }
+        , @{ ModuleName = 'Azure.Storage'; ModuleVersion = '4.4.0' }
+        ,	@{ ModuleName = 'PSNotification'; ModuleVersion = '0.5.3' }
+        ,	@{ ModuleName = 'PSOAuthHelper'; ModuleVersion = '0.2.3' }
+    )
 	
-	# Copyright statement for this module
-	Copyright = 'Copyright (c) 2019 Motz'
+    # Assemblies that must be loaded prior to importing this module
+    # RequiredAssemblies = @('bin\d365fo.integrations.dll')
 	
-	# Description of the functionality provided by this module
-	Description = 'Tools for working against the OData and DMF endpoint with the D365FO platform'
+    # Type files (.ps1xml) to be loaded when importing this module
+    # TypesToProcess = @('xml\d365fo.integrations.Types.ps1xml')
 	
-	# Minimum version of the Windows PowerShell engine required by this module
-	PowerShellVersion = '5.0'
+    # Format files (.ps1xml) to be loaded when importing this module
+    # FormatsToProcess = @('xml\d365fo.integrations.Format.ps1xml')
 	
-	# Modules that must be imported into the global environment prior to importing
-	# this module
-	RequiredModules = @(
-		@{ ModuleName='PSFramework'; ModuleVersion='1.0.13' }
-	)
+    # Functions to export from this module
+    FunctionsToExport = @(
+        'Add-D365ODataConfig'
+        ,	'Enable-d365Exception'
+        , 'Get-D365ActiveODataConfig'
+        ,	'Get-D365ODataConfig'
+        ,	'Set-D365ActiveODataConfig'
+
+    )
 	
-	# Assemblies that must be loaded prior to importing this module
-	# RequiredAssemblies = @('bin\d365fo.integrations.dll')
+    # Cmdlets to export from this module
+    CmdletsToExport   = ''
 	
-	# Type files (.ps1xml) to be loaded when importing this module
-	# TypesToProcess = @('xml\d365fo.integrations.Types.ps1xml')
+    # Variables to export from this module
+    VariablesToExport = ''
 	
-	# Format files (.ps1xml) to be loaded when importing this module
-	# FormatsToProcess = @('xml\d365fo.integrations.Format.ps1xml')
+    # Aliases to export from this module
+    AliasesToExport   = ''
 	
-	# Functions to export from this module
-	FunctionsToExport = ''
+    # List of all modules packaged with this module
+    ModuleList        = @()
 	
-	# Cmdlets to export from this module
-	CmdletsToExport = ''
+    # List of all files packaged with this module
+    FileList          = @()
 	
-	# Variables to export from this module
-	VariablesToExport = ''
-	
-	# Aliases to export from this module
-	AliasesToExport = ''
-	
-	# List of all modules packaged with this module
-	ModuleList = @()
-	
-	# List of all files packaged with this module
-	FileList = @()
-	
-	# Private data to pass to the module specified in ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
-	PrivateData = @{
+    # Private data to pass to the module specified in ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
+    PrivateData       = @{
 		
-		#Support for PowerShellGet galleries.
-		PSData = @{
+        #Support for PowerShellGet galleries.
+        PSData = @{
 			
-			# Tags applied to this module. These help with module discovery in online galleries.
-			# Tags = @()
+            # Tags applied to this module. These help with module discovery in online galleries.
+            # Tags = @()
 			
-			# A URL to the license for this module.
-			# LicenseUri = ''
+            # A URL to the license for this module.
+            # LicenseUri = ''
 			
-			# A URL to the main website for this project.
-			# ProjectUri = ''
+            # A URL to the main website for this project.
+            # ProjectUri = ''
 			
-			# A URL to an icon representing this module.
-			# IconUri = ''
+            # A URL to an icon representing this module.
+            # IconUri = ''
 			
-			# ReleaseNotes of this module
-			# ReleaseNotes = ''
+            # ReleaseNotes of this module
+            # ReleaseNotes = ''
 			
-		} # End of PSData hashtable
+        } # End of PSData hashtable
 		
-	} # End of PrivateData hashtable
+    } # End of PrivateData hashtable
 }

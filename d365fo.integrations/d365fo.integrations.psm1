@@ -1,6 +1,8 @@
 $script:ModuleRoot = $PSScriptRoot
 $script:ModuleVersion = (Import-PowerShellDataFile -Path "$($script:ModuleRoot)\d365fo.integrations.psd1").ModuleVersion
 
+Set-PSFFeature -Name PSFramework.InheritEnableException -Value $true -ModuleName 'd365fo.integrations'
+
 # Detect whether at some level dotsourcing was enforced
 $script:doDotSource = Get-PSFConfigValue -FullName d365fo.integrations.Import.DoDotSource -Fallback $false
 if ($d365fo.integrations_dotsourcemodule) { $script:doDotSource = $true }
