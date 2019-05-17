@@ -43,11 +43,14 @@
 	
     # Functions to export from this module
     FunctionsToExport = @(
-        'Add-D365ODataConfig'
-        ,	'Enable-d365Exception'
+        	'Add-D365ODataConfig'
+		,	'Enable-d365Exception'
+		
 		,   'Get-D365ActiveODataConfig'
 		,	'Get-D365EntityViaOData'
-        ,	'Get-D365ODataConfig'
+		,	'Get-D365ODataConfig'
+		,	'Get-D365ODataPublicEntity'
+		
         ,	'Set-D365ActiveODataConfig'
 
     )

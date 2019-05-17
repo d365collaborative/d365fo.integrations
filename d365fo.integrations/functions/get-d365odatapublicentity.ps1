@@ -1,13 +1,9 @@
 ﻿
 
-function Get-D365EntityViaOData {
+function Get-D365ODataPublicEntity {
     [CmdletBinding()]
     [OutputType()]
     param (
-        [Parameter(Mandatory = $true)]
-        [Alias('EntityName')]
-        [string] $Name,
-
         [Parameter(Mandatory = $false)]
         [string] $ODataQuery,
 
@@ -45,7 +41,7 @@ function Get-D365EntityViaOData {
     $headers = New-AuthorizationHeaderBearerToken @headerParms
 
     [System.UriBuilder] $odataEndpoint = $URL
-    $odataEndpoint.Path = "data/$Name"
+    $odataEndpoint.Path = "metadata/PublicEntities"
 
     if (-not ([string]::IsNullOrEmpty($ODataQuery))) {
         $odataEndpoint.Query = "$ODataQuery"
