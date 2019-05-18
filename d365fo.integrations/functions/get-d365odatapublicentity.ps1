@@ -8,6 +8,9 @@ function Get-D365ODataPublicEntity {
         [Parameter(Mandatory = $false, ParameterSetName = "Default")]
         [string] $EntityName,
 
+        [Parameter(Mandatory = $false, ParameterSetName = "NameContains")]
+        [string] $EntityNameContains,
+
         [Parameter(Mandatory = $false, ParameterSetName = "Query")]
         [string] $ODataQuery,
 
@@ -51,7 +54,10 @@ function Get-D365ODataPublicEntity {
         $odataEndpoint.Query = "$ODataQuery"
     }
     elseif(-not ([string]::IsNullOrEmpty($EntityName))) {
-        $odataEndpoint.Query = "`$filter=Name eq '$EntityName' or EntitySetName eq '$EntityName'"
+        $odataEndpoint.Query = "`$filter=tolower(Name) eq tolower('$EntityName') or tolower(EntitySetName) eq tolower('$EntityName')"
+    }
+    elseif(-not ([string]::IsNullOrEmpty($EntityNameContains))) {
+        $odataEndpoint.Query = "`$filter=contains(tolower(Name), tolower('$EntityNameContains')) or contains(tolower(EntitySetName), tolower('$EntityNameContains'))"
     }
 
     try {
