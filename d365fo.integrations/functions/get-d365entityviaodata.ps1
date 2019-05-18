@@ -1,6 +1,6 @@
 ﻿
 
-function Get-D365EntityViaOData {
+function Get-D365ODataEntityData {
     [CmdletBinding()]
     [OutputType()]
     param (

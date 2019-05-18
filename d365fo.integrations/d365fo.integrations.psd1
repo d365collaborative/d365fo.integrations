@@ -47,8 +47,8 @@
 		,	'Enable-d365Exception'
 		
 		,   'Get-D365ActiveODataConfig'
-		,	'Get-D365EntityViaOData'
-		,	'Get-D365ODataConfig'
+        ,	'Get-D365ODataConfig'
+        ,   'Get-D365ODataEntityData'
 		,	'Get-D365ODataPublicEntity'
 		
         ,	'Set-D365ActiveODataConfig'
