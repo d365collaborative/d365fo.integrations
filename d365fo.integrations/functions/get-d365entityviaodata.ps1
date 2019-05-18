@@ -54,15 +54,13 @@ function Get-D365ODataEntityData {
     }
 
     process {
-        
+        $entityName = "$Name$EntitySetName"
+
+        Write-PSFMessage -Level Verbose -Message "Working against $entityName" -Target $entityName
+
         [System.UriBuilder] $odataEndpoint = $URL
         
-        if (-not ([string]::IsNullOrEmpty($Name))) {
-            $odataEndpoint.Path = "data/$Name"
-        }
-        else {
-            $odataEndpoint.Path = "data/$EntitySetName"
-        }
+        $odataEndpoint.Path = "data/$entityName"
 
         if (-not ([string]::IsNullOrEmpty($ODataQuery))) {
             $odataEndpoint.Query = "$ODataQuery"
@@ -77,8 +75,9 @@ function Get-D365ODataEntityData {
             Invoke-RestMethod -Method Get -Uri $odataEndpoint.Uri.AbsoluteUri -Headers $headers -ContentType 'application/json'
         }
         catch {
-            Write-PSFMessage -Level Host -Message "Something went wrong while trying to send a message to the users." -Exception $PSItem.Exception
-            Stop-PSFFunction -Message "Stopping because of errors."
+            $messageString = "Something went wrong while retrieving data from the OData endpoint for the entity: $entityName"
+            Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $entityName
+            Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>',''))) -ErrorRecord $_
             return
         }
     }

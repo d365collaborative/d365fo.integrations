@@ -1,19 +1,19 @@
 ﻿
 <#
     .SYNOPSIS
-        Save a broadcast message config
+        Save an OData config
         
     .DESCRIPTION
-        Adds a broadcast message config to the configuration store
+        Adds an OData config to the configuration store
         
     .PARAMETER Name
-        The logical name of the broadcast configuration you are about to register in the configuration store
+        The logical name of the OData configuration you are about to register in the configuration store
         
     .PARAMETER Tenant
-        Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is connected to, that you want to send a message to
+        Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is connected to, that you want to access through OData
         
     .PARAMETER URL
-        URL / URI for the D365FO environment you want to send a message to
+        URL / URI for the D365FO environment you want to access through OData
         
     .PARAMETER ClientId
         The ClientId obtained from the Azure Portal when you created a Registered Application
@@ -22,28 +22,26 @@
         The ClientSecret obtained from the Azure Portal when you created a Registered Application
         
     .PARAMETER Temporary
-        Instruct the cmdlet to only temporarily add the broadcast message configuration in the configuration store
+        Instruct the cmdlet to only temporarily add the OData configuration in the configuration store
         
     .PARAMETER Force
-        Instruct the cmdlet to overwrite the broadcast message configuration with the same name
+        Instruct the cmdlet to overwrite the OData configuration with the same name
         
     .PARAMETER EnableException
         This parameters disables user-friendly warnings and enables the throwing of exceptions
         This is less user friendly, but allows catching exceptions in calling scripts
         
     .EXAMPLE
-        PS C:\> Add-D365BroadcastMessageConfig -Name "UAT" -Tenant "e674da86-7ee5-40a7-b777-1111111111111" -URL "https://usnconeboxax1aos.cloud.onebox.dynamics.com" -ClientId "dea8d7a9-1602-4429-b138-111111111111" -ClientSecret "Vja/VmdxaLOPR+alkjfsadffelkjlfw234522"
+        PS C:\> Add-D365ODataConfig -Name "UAT" -Tenant "e674da86-7ee5-40a7-b777-1111111111111" -URL "https://usnconeboxax1aos.cloud.onebox.dynamics.com" -ClientId "dea8d7a9-1602-4429-b138-111111111111" -ClientSecret "Vja/VmdxaLOPR+alkjfsadffelkjlfw234522"
         
-        This will create a new broadcast message configuration with the name "UAT".
+        This will create an new OData configuration with the name "UAT".
         It will save "e674da86-7ee5-40a7-b777-1111111111111" as the Azure Active Directory guid.
         It will save "https://usnconeboxax1aos.cloud.onebox.dynamics.com" as the D365FO environment.
         It will save "dea8d7a9-1602-4429-b138-111111111111" as the ClientId.
         It will save "Vja/VmdxaLOPR+alkjfsadffelkjlfw234522" as ClientSecret.
-        It will use the default value "UTC" Time Zone for converting the different time and dates.
-        It will use the default end time which is 60 minutes.
         
     .NOTES
-        Tags: Servicing, Broadcast, Message, Users, Environment, Config, Configuration, ClientId, ClientSecret
+        Tags: Integrations, Integration, Bearer Token, Token, OData, Configuration
         
         Author: Mötz Jensen (@Splaxi)
         
