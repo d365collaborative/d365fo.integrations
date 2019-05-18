@@ -1,10 +1,14 @@
 ﻿
 
 function Get-D365ODataPublicEntity {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = "Default")]
     [OutputType()]
     param (
-        [Parameter(Mandatory = $false)]
+
+        [Parameter(Mandatory = $false, ParameterSetName = "Default")]
+        [string] $EntityName,
+
+        [Parameter(Mandatory = $false, ParameterSetName = "Query")]
         [string] $ODataQuery,
 
         [Parameter(Mandatory = $false)]
@@ -45,6 +49,9 @@ function Get-D365ODataPublicEntity {
 
     if (-not ([string]::IsNullOrEmpty($ODataQuery))) {
         $odataEndpoint.Query = "$ODataQuery"
+    }
+    elseif(-not ([string]::IsNullOrEmpty($EntityName))) {
+        $odataEndpoint.Query = "`$filter=Name eq '$EntityName' or EntitySetName eq '$EntityName'"
     }
 
     try {
