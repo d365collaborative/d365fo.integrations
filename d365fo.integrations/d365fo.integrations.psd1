@@ -52,6 +52,7 @@
         ,	'Get-D365ODataPublicEntity'
         
         ,   'Import-D365ODataEntity'
+        ,   'Import-D365ODataEntityBatchMode'
         
         ,   'Remove-D365ODataEntity'
         ,	'Set-D365ActiveODataConfig'
