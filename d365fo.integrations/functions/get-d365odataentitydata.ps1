@@ -5,7 +5,7 @@ Get data from an Data Entity using OData
 .DESCRIPTION
 Get data from an Data Entity using the OData endpoint of the Dynamics 365 Finance & Operations
 
-.PARAMETER Name
+.PARAMETER EntityName
 Name of the Data Entity you want to work against
 
 The parameter is Case Sensitive, because the OData endpoint in D365FO is Case Sensitive
@@ -54,14 +54,14 @@ Instruct the cmdlet / function to ensure the request against the OData endpoint 
         This is less user friendly, but allows catching exceptions in calling scripts
 
 .EXAMPLE
-PS C:\> Get-D365ODataEntityData -Name CustomersV3 -ODataQuery '$top=1'
+PS C:\> Get-D365ODataEntityData -EntityName CustomersV3 -ODataQuery '$top=1'
 
 This will get Customers from the OData endpoint.
 It will use the CustomerV3 entity, and its EntitySetName / CollectionName "CustomersV3".
 It will get the top 1 results from the list of customers.
 
 .EXAMPLE
-PS C:\> Get-D365ODataEntityData -Name CustomersV3 -ODataQuery '$top=10' -CrossCompany
+PS C:\> Get-D365ODataEntityData -EntityName CustomersV3 -ODataQuery '$top=10' -CrossCompany
 
 This will get Customers from the OData endpoint.
 It will use the CustomerV3 entity, and its EntitySetName / CollectionName "CustomersV3".
@@ -69,7 +69,7 @@ It will get the top 10 results from the list of customers.
 It will make sure to search across all legal entities / companies inside the D365FO environment.
 
 .EXAMPLE
-PS C:\> Get-D365ODataEntityData -Name CustomersV3 -ODataQuery '$top=10&$filter=dataAreaId eq ''Comp1''' -CrossCompany
+PS C:\> Get-D365ODataEntityData -EntityName CustomersV3 -ODataQuery '$top=10&$filter=dataAreaId eq ''Comp1''' -CrossCompany
 
 This will get Customers from the OData endpoint.
 It will use the CustomerV3 entity, and its EntitySetName / CollectionName "CustomersV3".
@@ -101,8 +101,8 @@ function Get-D365ODataEntityData {
     [OutputType()]
     param (
         [Parameter(Mandatory = $true, ParameterSetName = "Specific")]
-        [Alias('EntityName')]
-        [string] $Name,
+        [Alias('Name')]
+        [string] $EntityName,
 
         [Parameter(Mandatory = $true, ParameterSetName = "Default", ValueFromPipelineByPropertyName = $true)]
         [Alias('CollectionName')]
@@ -152,13 +152,13 @@ function Get-D365ODataEntityData {
     }
 
     process {
-        $entityName = "$Name$EntitySetName"
+        $entity = "$EntityName$EntitySetName"
 
-        Write-PSFMessage -Level Verbose -Message "Working against $entityName" -Target $entityName
+        Write-PSFMessage -Level Verbose -Message "Working against $entity" -Target $entity
 
         [System.UriBuilder] $odataEndpoint = $URL
         
-        $odataEndpoint.Path = "data/$entityName"
+        $odataEndpoint.Path = "data/$entity"
 
         if (-not ([string]::IsNullOrEmpty($ODataQuery))) {
             $odataEndpoint.Query = "$ODataQuery"
@@ -173,8 +173,8 @@ function Get-D365ODataEntityData {
             Invoke-RestMethod -Method Get -Uri $odataEndpoint.Uri.AbsoluteUri -Headers $headers -ContentType 'application/json'
         }
         catch {
-            $messageString = "Something went wrong while retrieving data from the OData endpoint for the entity: $entityName"
-            Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $entityName
+            $messageString = "Something went wrong while retrieving data from the OData endpoint for the entity: $entity"
+            Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $entity
             Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>',''))) -ErrorRecord $_
             return
         }

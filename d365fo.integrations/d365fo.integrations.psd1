@@ -49,7 +49,9 @@
 		,   'Get-D365ActiveODataConfig'
         ,	'Get-D365ODataConfig'
         ,   'Get-D365ODataEntityData'
-		,	'Get-D365ODataPublicEntity'
+        ,	'Get-D365ODataPublicEntity'
+        
+        ,   'Import-D365ODataEntity'
 		
         ,	'Set-D365ActiveODataConfig'
 

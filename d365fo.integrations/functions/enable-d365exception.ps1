@@ -9,7 +9,7 @@
         Useful when the module is used in an automated fashion, like inside Azure DevOps pipelines and large PowerShell scripts
 
     .EXAMPLE
-        PS C:\>Enable-d365Exception
+        PS C:\>Enable-D365Exception
 
         This will for the rest of the current PowerShell session make sure that exceptions will be thrown.
         
@@ -19,7 +19,7 @@
         Author: Mötz Jensen (@Splaxi)
 #>
 
-function Enable-d365Exception {
+function Enable-D365Exception {
     [CmdletBinding()]
     param ()
 
