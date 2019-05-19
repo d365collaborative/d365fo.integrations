@@ -52,7 +52,8 @@
         ,	'Get-D365ODataPublicEntity'
         
         ,   'Import-D365ODataEntity'
-		
+        
+        ,   'Remove-D365ODataEntity'
         ,	'Set-D365ActiveODataConfig'
 
     )
