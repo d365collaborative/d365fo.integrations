@@ -1,15 +1,15 @@
 ﻿
 <#
     .SYNOPSIS
-        Get broadcast message configs
+        Get OData configs
         
     .DESCRIPTION
-        Get all broadcast message configuration objects from the configuration store
+        Get all OData configuration objects from the configuration store
         
     .PARAMETER Name
-        The name of the broadcast message configuration you are looking for
+        The name of the OData configuration you are looking for
         
-        Default value is "*" to display all broadcast message configs
+        Default value is "*" to display all OData configs
         
     .PARAMETER OutputAsHashtable
         Instruct the cmdlet to return a hashtable object
@@ -19,23 +19,23 @@
         This is less user friendly, but allows catching exceptions in calling scripts
         
     .EXAMPLE
-        PS C:\> Get-D365BroadcastMessageConfig
+        PS C:\> Get-D365ODataConfig
         
-        This will display all broadcast message configurations on the machine.
+        This will display all OData configurations on the machine.
         
     .EXAMPLE
-        PS C:\> Get-D365BroadcastMessageConfig -OutputAsHashtable
+        PS C:\> Get-D365ODataConfig -OutputAsHashtable
         
-        This will display all broadcast message configurations on the machine.
+        This will display all OData configurations on the machine.
         Every object will be output as a hashtable, for you to utilize as parameters for other cmdlets.
         
     .EXAMPLE
-        PS C:\> Get-D365BroadcastMessageConfig -Name "UAT"
+        PS C:\> Get-D365ODataConfig -Name "UAT"
         
-        This will display the broadcast message configuration that is saved with the name "UAT" on the machine.
+        This will display the OData configuration that is saved with the name "UAT" on the machine.
         
     .NOTES
-        Tags: Servicing, Message, Users, Environment, Config, Configuration, ClientId, ClientSecret
+        Tags: OData, Environment, Config, Configuration, ClientId, ClientSecret
         
         Author: Mötz Jensen (@Splaxi)
         

@@ -1,10 +1,10 @@
 ﻿
 <#
     .SYNOPSIS
-        Get active broadcast message configuration
+        Get the active OData configuration
         
     .DESCRIPTION
-        Get active broadcast message configuration from the configuration store
+        Get the active OData configuration from the configuration store
         
     .PARAMETER OutputAsHashtable
         Instruct the cmdlet to return a hashtable object
@@ -14,12 +14,12 @@
         This is less user friendly, but allows catching exceptions in calling scripts
         
     .EXAMPLE
-        PS C:\> Get-D365ActiveBroadcastMessageConfig
+        PS C:\> Get-D365ActiveODataConfig
         
-        This will get the active broadcast message configuration.
+        This will get the active OData configuration.
         
     .NOTES
-        Tags: Servicing, Message, Users, Environment, Config, Configuration, ClientId, ClientSecret
+        Tags: OData, Environment, Config, Configuration, ClientId, ClientSecret
         
         Author: Mötz Jensen (@Splaxi)
         
