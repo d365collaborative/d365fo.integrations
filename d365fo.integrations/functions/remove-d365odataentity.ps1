@@ -1,27 +1,28 @@
-﻿<#
-.SYNOPSIS
-Import a Data Entity into Dynamics 365 Finance & Operations
-
-.DESCRIPTION
-Imports a Data Entity, defined as a json payload, using the OData endpoint of the Dynamics 365 Finance & Operations
-
-.PARAMETER EntityName
-Name of the Data Entity you want to work against
-
-The parameter is Case Sensitive, because the OData endpoint in D365FO is Case Sensitive
-
-Remember that most Data Entities in a D365FO environment is named by its singular name, but most be retrieve using the plural name
-
-E.g. The version 3 of the customers Data Entity is named CustomerV3, but can only be retrieving using CustomersV3
-
-Look at the Get-D365ODataPublicEntity cmdlet to help you obtain the correct name
-
-.PARAMETER Payload
-The entire string contain the json object that you want to import into the D365FO environment
-
-.PARAMETER CrossCompany
-Instruct the cmdlet / function to ensure the request against the OData endpoint will work across all companies
-
+﻿
+<#
+    .SYNOPSIS
+        Import a Data Entity into Dynamics 365 Finance & Operations
+        
+    .DESCRIPTION
+        Imports a Data Entity, defined as a json payload, using the OData endpoint of the Dynamics 365 Finance & Operations
+        
+    .PARAMETER EntityName
+        Name of the Data Entity you want to work against
+        
+        The parameter is Case Sensitive, because the OData endpoint in D365FO is Case Sensitive
+        
+        Remember that most Data Entities in a D365FO environment is named by its singular name, but most be retrieve using the plural name
+        
+        E.g. The version 3 of the customers Data Entity is named CustomerV3, but can only be retrieving using CustomersV3
+        
+        Look at the Get-D365ODataPublicEntity cmdlet to help you obtain the correct name
+        
+    .PARAMETER Payload
+        The entire string contain the json object that you want to import into the D365FO environment
+        
+    .PARAMETER CrossCompany
+        Instruct the cmdlet / function to ensure the request against the OData endpoint will work across all companies
+        
     .PARAMETER Tenant
         Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is connected to, that you want to access through OData
         
@@ -33,18 +34,18 @@ Instruct the cmdlet / function to ensure the request against the OData endpoint 
         
     .PARAMETER ClientSecret
         The ClientSecret obtained from the Azure Portal when you created a Registered Application
-
+        
     .PARAMETER EnableException
         This parameters disables user-friendly warnings and enables the throwing of exceptions
         This is less user friendly, but allows catching exceptions in calling scripts
-
-.EXAMPLE
-PS C:\> Import-D365ODataEntity -EntityName "ExchangeRates" -Json '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}'
-
-.NOTES
-Tags: OData, Data, Entity, Import, Upload
-
-Author: Mötz Jensen (@Splaxi)
+        
+    .EXAMPLE
+        PS C:\> Import-D365ODataEntity -EntityName "ExchangeRates" -Json '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}'
+        
+    .NOTES
+        Tags: OData, Data, Entity, Import, Upload
+        
+        Author: Mötz Jensen (@Splaxi)
 #>
 
 function Remove-D365ODataEntity {

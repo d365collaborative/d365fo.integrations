@@ -1,4 +1,5 @@
-﻿<#
+﻿
+<#
         
     .SYNOPSIS
         Set the active broadcast message configuration

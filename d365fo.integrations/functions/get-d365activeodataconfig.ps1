@@ -1,4 +1,5 @@
-﻿<#
+﻿
+<#
     .SYNOPSIS
         Get the active OData configuration
         

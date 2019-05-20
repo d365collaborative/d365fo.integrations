@@ -1,4 +1,5 @@
-﻿<#
+﻿
+<#
     .SYNOPSIS
         Get OData configs
         
