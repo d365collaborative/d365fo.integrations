@@ -47,6 +47,9 @@
         }
 
         $headers = New-AuthorizationHeaderBearerToken @headerParms
+
+        $dataBuilder = [System.Text.StringBuilder]::new()
+
     }
 
     process {
@@ -61,9 +64,11 @@
         $request.Method = "POST"
         $request.ContentType = "multipart/mixed; boundary=batch_$idBatch"
 
-        $data = "--$batchPayLoad {0}" -f [System.Environment]::NewLine
-        $data += "Content-Type: multipart/mixed; boundary=changeset_$idchangeset {0}{0}" -f [System.Environment]::NewLine
-        $data += "$changeSetPayLoad {0}" -f [System.Environment]::NewLine
+        $dataBuilder.Clear()
+
+        $null = $dataBuilder.AppendLine("--$batchPayLoad ") #Space is important!
+        $null = $dataBuilder.AppendLine("Content-Type: multipart/mixed; boundary=changeset_$idchangeset {0}" -f [System.Environment]::NewLine)
+        $null = $dataBuilder.AppendLine("$changeSetPayLoad ") #Space is important!
 
         $localEntity = $EntityName
         $payLoadEnumerator = $PayLoad.GetEnumerator()
@@ -75,18 +80,18 @@
             $counter ++
             $localPayload = $payLoadEnumerator.Current.Trim()
 
-            $data += New-BatchContent  "$URL/data/$localEntity" $bearer $LocalPayload $counter
+            $null = $dataBuilder.Append((New-BatchContent -Url "$URL/data/$localEntity" -AuthToken $bearer -Payload $LocalPayload -Count $counter))
 
             if ($PayLoad.Count -eq $counter) {
-                $data += "$changesetPayload--{0}" -f [System.Environment]::NewLine
+                $null = $dataBuilder.AppendLine("$changesetPayload--")
             }
             else {
-                $data += "$changesetPayload{0}" -f [System.Environment]::NewLine
+                $null = $dataBuilder.AppendLine("$changesetPayload")
             }
         }
     
-    
-        $data += "$batchPayload--"
+        $null = $dataBuilder.Append("$batchPayload--")
+        $data = $dataBuilder.ToString()
 
         Write-PSFMessage -Level VeryVerbose -Message $data -Tag "Webrequest.DATA"
         

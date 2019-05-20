@@ -15,7 +15,8 @@
     
     $null = $dataBuilder.AppendLine("Content-Type: application/http")
     $null = $dataBuilder.AppendLine("Content-Transfer-Encoding: binary")
-    $null = $dataBuilder.AppendLine("Content-ID: $Count{0}" -f [System.Environment]::NewLine)
+    $null = $dataBuilder.AppendLine("Content-ID: $Count")
+    $null = $dataBuilder.AppendLine("") #On purpose!
     $null = $dataBuilder.AppendLine("POST $Url HTTP/1.1")
     
     $null = $dataBuilder.AppendLine("OData-Version: 4.0")
@@ -23,7 +24,8 @@
 
     $null = $dataBuilder.AppendLine("Content-Type: application/json;odata.metadata=minimal")
     
-    $null = $dataBuilder.AppendLine("Authorization: $AuthToken{0}" -f [System.Environment]::NewLine)
+    $null = $dataBuilder.AppendLine("Authorization: $AuthToken")
+    $null = $dataBuilder.AppendLine("") #On purpose!
     
     $null = $dataBuilder.AppendLine("$Payload")
 
