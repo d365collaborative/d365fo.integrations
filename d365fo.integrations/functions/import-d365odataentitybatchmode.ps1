@@ -61,9 +61,9 @@
         $request.Method = "POST"
         $request.ContentType = "multipart/mixed; boundary=batch_$idBatch"
 
-        $data = "--$batchPayLoad `r`n"
-        $data += "Content-Type: multipart/mixed; boundary=changeset_$idchangeset `r`n`r`n"
-        $data += "$changeSetPayLoad `r`n"
+        $data = "--$batchPayLoad {0}" -f [System.Environment]::NewLine
+        $data += "Content-Type: multipart/mixed; boundary=changeset_$idchangeset {0}{0}" -f [System.Environment]::NewLine
+        $data += "$changeSetPayLoad {0}" -f [System.Environment]::NewLine
 
         $localEntity = $EntityName
         $payLoadEnumerator = $PayLoad.GetEnumerator()
@@ -75,13 +75,13 @@
             $counter ++
             $localPayload = $payLoadEnumerator.Current.Trim()
 
-            $data += New-BatchContent  "$Script:D365FOURL/data/$localEntity" $bearer $LocalPayload $counter
+            $data += New-BatchContent  "$URL/data/$localEntity" $bearer $LocalPayload $counter
 
             if ($PayLoad.Count -eq $counter) {
-                $data += "$changesetPayload--`r`n"
+                $data += "$changesetPayload--{0}" -f [System.Environment]::NewLine
             }
             else {
-                $data += "$changesetPayload`r`n"
+                $data += "$changesetPayload{0}" -f [System.Environment]::NewLine
             }
         }
     

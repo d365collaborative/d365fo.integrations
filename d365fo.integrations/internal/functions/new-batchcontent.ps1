@@ -1,4 +1,4 @@
-﻿function new-batchcontent {
+﻿function New-BatchContent {
     param(
         
         [Parameter(Mandatory = $true, Position = 1)]
@@ -11,21 +11,21 @@
         [string]$Count
     )
 
-
-
-    $data = "Content-Type: application/http`r`n"
-    $data += "Content-Transfer-Encoding: binary`r`n"
-    $data += "Content-ID: $Count`r`n`r`n"
-    $data += "POST $Url HTTP/1.1`r`n"
+    $dataBuilder = [System.Text.StringBuilder]::new()
     
-    $data += "OData-Version: 4.0`r`n"
-    $data += "OData-MaxVersion: 4.0`r`n"
+    $data = "Content-Type: application/http{0}" -f [System.Environment]::NewLine
+    $data += "Content-Transfer-Encoding: binary{0}" -f [System.Environment]::NewLine
+    $data += "Content-ID: $Count{0}{0}" -f [System.Environment]::NewLine
+    $data += "POST $Url HTTP/1.1{0}" -f [System.Environment]::NewLine
+    
+    $data += "OData-Version: 4.0{0}" -f [System.Environment]::NewLine
+    $data += "OData-MaxVersion: 4.0{0}" -f [System.Environment]::NewLine
 
-    $data += "Content-Type: application/json;odata.metadata=minimal`r`n"
+    $data += "Content-Type: application/json;odata.metadata=minimal{0}" -f [System.Environment]::NewLine
     
-    $data += "Authorization: $AuthToken`r`n`r`n"
+    $data += "Authorization: $AuthToken{0}{0}" -f [System.Environment]::NewLine
     
-    $data += "$Payload`r`n"
+    $data += "$Payload" + [System.Environment]::NewLine
 
     $data
 }
