@@ -22,7 +22,14 @@ function Update-ODataVariables {
     [OutputType()]
     param ( )
     
-    $configName = (Get-PSFConfig -FullName "d365fo.integrations.active.odata.config.name").Value.ToString().ToLower()
+    $configName = (Get-PSFConfig -FullName "d365fo.integrations.active.odata.config.name").Value
+
+    if (([string]::IsNullOrEmpty($configName))) {
+        return
+    }
+
+    $configName = $configName.ToString().ToLower()
+    
     if (-not ($configName -eq "")) {
         $configHash = Get-D365ActiveODataConfig -OutputAsHashtable
         foreach ($item in $configHash.Keys) {
