@@ -17,11 +17,11 @@
         
         Look at the Get-D365ODataPublicEntity cmdlet to help you obtain the correct name
         
-.PARAMETER EntityKey
-The key that will select the desired Data Entity uniquely across the OData endpoint
-
-The key would most likely be made up from multiple values, but can also be a single value
-
+    .PARAMETER EntityKey
+        The key that will select the desired Data Entity uniquely across the OData endpoint
+        
+        The key would most likely be made up from multiple values, but can also be a single value
+        
     .PARAMETER Payload
         The entire string contain the json object that you want to import into the D365FO environment
         
