@@ -1,4 +1,4 @@
-<#
+﻿<#
 This file loads the strings documents from the respective language folders.
 This allows localizing messages and errors.
 Load psd1 language files for each language you wish to support.
