@@ -67,7 +67,7 @@
 
 function Import-D365ODataEntityBatchMode {
     [CmdletBinding()]
-    [OutputType()]
+    [OutputType('System.String')]
     param (
         [Parameter(Mandatory = $true)]
         [string] $EntityName,
@@ -147,7 +147,7 @@ function Import-D365ODataEntityBatchMode {
             $counter ++
             $localPayload = $payLoadEnumerator.Current.Trim()
 
-            $null = $dataBuilder.Append((New-BatchContent -Url "$URL/data/$localEntity" -AuthToken $bearer -Payload $LocalPayload -Count $counter))
+            $null = $dataBuilder.Append((New-BatchContent -Url "$URL/data/$localEntity" -AuthenticationToken $bearer -Payload $LocalPayload -Count $counter))
 
             if ($PayLoad.Count -eq $counter) {
                 $null = $dataBuilder.AppendLine("$changesetPayload--")
