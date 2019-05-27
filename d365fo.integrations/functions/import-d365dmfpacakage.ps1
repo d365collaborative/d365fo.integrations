@@ -15,7 +15,7 @@
 
         [Parameter(Mandatory = $false)]
         [Alias('URI')]
-        [string] $URL = $Script:ODataUrl,
+        [string] $Url = $Script:ODataUrl,
 
         [Parameter(Mandatory = $false)]
         [string] $ClientId = $Script:ODataClientId,
@@ -29,7 +29,7 @@
 
     begin {
         $bearerParms = @{
-            Resource     = $URL
+            Resource     = $Url
             ClientId     = $ClientId
             ClientSecret = $ClientSecret
         }
@@ -38,17 +38,12 @@
 
         $bearer = Invoke-ClientCredentialsGrant @bearerParms | Get-BearerToken
 
-        $headerParms = @{
-            URL         = $URL
-            BearerToken = $bearer
-        }
-
-        $requestUrl = "$URL/api/connector/enqueue/$JobId"
+        $requestUrl = "$Url/api/connector/enqueue/$JobId"
     }
 
     process {
 
-        $request = New-WebRequest -RequestUrl $requestUrl -Action "POST" -AuthenticationToken $bearer -ContentType "application/zip"
+        $request = New-WebRequest -Url $requestUrl -Action "POST" -AuthenticationToken $bearer -ContentType "application/zip"
 
         Add-WebrequestContentFromFile -Request $request -Path $Path
 

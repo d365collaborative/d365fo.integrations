@@ -1,6 +1,6 @@
 ﻿function Export-D365DmfPackage {
     [CmdletBinding()]
-    [OutputType()]
+    [OutputType('System.String')]
     param (
         [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
         [Alias('File')]
@@ -14,8 +14,8 @@
         [string] $Tenant = $Script:ODataTenant,
 
         [Parameter(Mandatory = $false)]
-        [Alias('URI')]
-        [string] $URL = $Script:ODataUrl,
+        [Alias('Uri')]
+        [string] $Url = $Script:ODataUrl,
 
         [Parameter(Mandatory = $false)]
         [string] $ClientId = $Script:ODataClientId,
@@ -29,7 +29,7 @@
 
     begin {
         $bearerParms = @{
-            Resource     = $URL
+            Resource     = $Url
             ClientId     = $ClientId
             ClientSecret = $ClientSecret
         }
@@ -38,18 +38,11 @@
 
         $bearer = Invoke-ClientCredentialsGrant @bearerParms | Get-BearerToken
 
-        $headerParms = @{
-            URL         = $URL
-            BearerToken = $bearer
-        }
-
-
-        $requestUrl = "$URL/api/connector/dequeue/$JobId"
-
+        $requestUrl = "$Url/api/connector/dequeue/$JobId"
     }
 
     process {
-        $request = New-WebRequest -RequestUrl $requestUrl -Action "GET" -AuthenticationToken $bearer
+        $request = New-WebRequest -Url $requestUrl -Action "GET" -AuthenticationToken $bearer
 
         try {
             $response = $request.GetResponse()
