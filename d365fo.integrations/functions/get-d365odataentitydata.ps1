@@ -41,7 +41,7 @@
     .PARAMETER Tenant
         Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is connected to, that you want to access through OData
         
-    .PARAMETER URL
+    .PARAMETER Url
         URL / URI for the D365FO environment you want to access through OData
         
     .PARAMETER ClientId

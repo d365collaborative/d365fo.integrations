@@ -6,7 +6,7 @@
     .DESCRIPTION
         Create a valid batch content that can be used in a HTTP batch request
         
-    .PARAMETER URL
+    .PARAMETER Url
         URL / URI that the batch content should be valid for
         
         Normally the final URL / URI for the OData endpoint that the content is to be imported into
