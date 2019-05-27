@@ -43,14 +43,12 @@
             BearerToken = $bearer
         }
 
-        $headers = New-AuthorizationHeaderBearerToken @headerParms
 
         $requestUrl = "$URL/api/connector/dequeue/$JobId"
 
     }
 
     process {
-
         $request = New-WebRequest -RequestUrl $requestUrl -Action "GET" -AuthenticationToken $bearer
 
         try {
@@ -63,6 +61,8 @@
             $integrationResponse = $streamReader.ReadToEnd()
             #$streamReader.Flush();
             $streamReader.Close();
+
+            $integrationResponse
         }
         catch {
             $messageString = "Something went wrong while importing data through the OData endpoint for the entity: $EntityName"

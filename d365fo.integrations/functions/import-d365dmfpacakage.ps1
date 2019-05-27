@@ -43,10 +43,7 @@
             BearerToken = $bearer
         }
 
-        $headers = New-AuthorizationHeaderBearerToken @headerParms
-
         $requestUrl = "$URL/api/connector/enqueue/$JobId"
-
     }
 
     process {

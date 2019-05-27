@@ -1,4 +1,5 @@
 ﻿function New-WebRequest {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
 
     param(
         [Parameter(Mandatory = $true)]
