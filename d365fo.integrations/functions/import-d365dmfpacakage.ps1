@@ -45,7 +45,7 @@
 
         $request = New-WebRequest -Url $requestUrl -Action "POST" -AuthenticationToken $bearer -ContentType "application/zip"
 
-        Add-WebrequestContentFromFile -Request $request -Path $Path
+        Add-WebRequestContentFromFile -Request $request -Path $Path
 
         try {
             $response = $request.GetResponse()
