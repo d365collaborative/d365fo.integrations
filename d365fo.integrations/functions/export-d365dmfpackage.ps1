@@ -12,10 +12,10 @@ Path where you want the cmdlet to save the exported file to
 JobId of the DMF job you want to export from
 
     .PARAMETER Tenant
-        Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is connected to, that you want to access through OData
-        
-    .PARAMETER Url
-        URL / URI for the D365FO environment you want to access through OData
+        Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is connected to, that you want to access through DMF
+    
+        .PARAMETER Url
+        URL / URI for the D365FO environment you want to access through DMF
         
     .PARAMETER ClientId
         The ClientId obtained from the Azure Portal when you created a Registered Application
@@ -46,8 +46,6 @@ PS C:\> Export-D365DmfPackage -Path "c:\temp\d365fo.tools\dmfpackage.zip" -JobId
         It will use "https://usnconeboxax1aos.cloud.onebox.dynamics.com" as the base D365FO environment url.
         It will use "dea8d7a9-1602-4429-b138-111111111111" as the ClientId.
         It will use "Vja/VmdxaLOPR+alkjfsadffelkjlfw234522" as ClientSecret.
-        
-        It will use the default OData configuration details that are stored in the configuration store.
 
             .LINK
     Add-D365ODataConfig

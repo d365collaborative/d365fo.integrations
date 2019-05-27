@@ -45,12 +45,14 @@
     FunctionsToExport = @(
         	'Add-D365ODataConfig'
 		,	'Enable-d365Exception'
+		,	'Export-D365DmfPackage'
 		
 		,   'Get-D365ActiveODataConfig'
         ,	'Get-D365ODataConfig'
         ,   'Get-D365ODataEntityData'
         ,	'Get-D365ODataPublicEntity'
         
+        ,   'Import-D365DmfPackage'
         ,   'Import-D365ODataEntity'
         ,   'Import-D365ODataEntityBatchMode'
         
