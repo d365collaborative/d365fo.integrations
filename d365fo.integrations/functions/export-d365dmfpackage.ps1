@@ -1,4 +1,70 @@
-﻿function Export-D365DmfPackage {
+﻿<#
+.SYNOPSIS
+Export a DMF package from Dynamics 365 Finance & Operations
+
+.DESCRIPTION
+Exports a DMF package from the DMF endpoint of the Dynamics 365 Finance & Operations
+
+.PARAMETER Path
+Path where you want the cmdlet to save the exported file to
+
+.PARAMETER JobId
+JobId of the DMF job you want to export from
+
+    .PARAMETER Tenant
+        Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is connected to, that you want to access through OData
+        
+    .PARAMETER Url
+        URL / URI for the D365FO environment you want to access through OData
+        
+    .PARAMETER ClientId
+        The ClientId obtained from the Azure Portal when you created a Registered Application
+        
+    .PARAMETER ClientSecret
+        The ClientSecret obtained from the Azure Portal when you created a Registered Application
+
+    .PARAMETER EnableException
+        This parameters disables user-friendly warnings and enables the throwing of exceptions
+        This is less user friendly, but allows catching exceptions in calling scripts
+
+        .EXAMPLE
+PS C:\> Export-D365DmfPackage -Path "c:\temp\d365fo.tools\dmfpackage.zip" -JobId "123456789"
+
+This will export a package from the 123456789 job through the DMF endpoint.
+        It will use "c:\temp\d365fo.tools\dmfpackage.zip" as the location to save the file.
+        It will use "123456789" as the jobid parameter passed to the DMF endpoint.
+
+        It will use the default OData configuration details that are stored in the configuration store.
+
+.EXAMPLE
+PS C:\> Export-D365DmfPackage -Path "c:\temp\d365fo.tools\dmfpackage.zip" -JobId "123456789" -Tenant "e674da86-7ee5-40a7-b777-1111111111111" -Url "https://usnconeboxax1aos.cloud.onebox.dynamics.com" -ClientId "dea8d7a9-1602-4429-b138-111111111111" -ClientSecret "Vja/VmdxaLOPR+alkjfsadffelkjlfw234522"
+
+        This will export a package from the 123456789 job through the DMF endpoint.
+        It will use "c:\temp\d365fo.tools\dmfpackage.zip" as the location to save the file.
+        It will use "123456789" as the jobid parameter passed to the DMF endpoint.
+        It will use "e674da86-7ee5-40a7-b777-1111111111111" as the Azure Active Directory guid.
+        It will use "https://usnconeboxax1aos.cloud.onebox.dynamics.com" as the base D365FO environment url.
+        It will use "dea8d7a9-1602-4429-b138-111111111111" as the ClientId.
+        It will use "Vja/VmdxaLOPR+alkjfsadffelkjlfw234522" as ClientSecret.
+        
+        It will use the default OData configuration details that are stored in the configuration store.
+
+            .LINK
+    Add-D365ODataConfig
+
+    .LINK
+    Get-D365ActiveODataConfig
+
+    .LINK
+    Set-D365ActiveODataConfig
+    
+.NOTES
+Tags: Export, Download, DMF, Package, Packages, JobId
+
+Author: Mötz Jensen (@Splaxi)
+#>
+
+function Export-D365DmfPackage {
     [CmdletBinding()]
     [OutputType('System.String')]
     param (
