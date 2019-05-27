@@ -23,6 +23,12 @@
     .EXAMPLE
         PS C:\> New-BatchContent -Url "https://usnconeboxax1aos.cloud.onebox.dynamics.com/data/ExchangeRates" -AuthenticationToken "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOi....." -Payload '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}' -Count 1
         
+        This will create a new batch content string.
+        It will use "https://usnconeboxax1aos.cloud.onebox.dynamics.com/data/ExchangeRates" as the endpoint for the content.
+        It will use the "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOi....." as the bearer token for the endpoint.
+        It will use '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}' as the payload that needs to be included in the batch content.
+        Iw will use 1 as the counter in the batch content number sequence.
+
     .NOTES
         Tags: OData, Data Entity, Batchmode, Batch, Batch Content, Multiple
         
