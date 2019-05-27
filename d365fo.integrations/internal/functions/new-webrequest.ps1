@@ -34,7 +34,7 @@ Author: Mötz Jensen (@Splaxi)
 function New-WebRequest {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
     [CmdletBinding()]
-    [OutputType('System.Net.WebRequest')]
+    [OutputType([System.Net.WebRequest])]
     param(
         [Parameter(Mandatory = $true)]
         [string] $Url,
