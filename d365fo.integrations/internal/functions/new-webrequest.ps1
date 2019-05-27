@@ -18,15 +18,23 @@ The token value that should be used to authenticate against the URL / URI endpoi
 HTTP valid content type value that the cmdlet should use while building the request
 
 .EXAMPLE
-PS C:\> New-WebRequest -Url api/connector/dequeue/123456789 -Action "GET" -AuthenticationToken ""
+PS C:\> New-WebRequest -Url "https://usnconeboxax1aos.cloud.onebox.dynamics.com/api/connector/dequeue/123456789" -Action "GET" -AuthenticationToken "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOi....."
+
+This will create a new webrequest.
+It will use the "https://usnconeboxax1aos.cloud.onebox.dynamics.com/api/connector/dequeue/123456789" as the webrequest endpoint address.
+It will use the "Get" as HTTP Action.
+It will use the "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOi....." as the bearer token for the HTTP Authorization header.
 
 .NOTES
-General notes
+Tags: Request, DMF, Package, Packages
+
+Author: Mötz Jensen (@Splaxi)
 #>
 
 function New-WebRequest {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
-
+    [CmdletBinding()]
+    [OutputType()]
     param(
         [Parameter(Mandatory = $true)]
         [string] $Url,
@@ -41,9 +49,9 @@ function New-WebRequest {
         [string] $ContentType
     )
 
-    Write-PSFMessage -Level Verbose -Message "New Request $RequestUrl, $Action, $AuthenticationToken, $ContentType "
+    Write-PSFMessage -Level Verbose -Message "New Request $Url, $Action, $AuthenticationToken, $ContentType "
     
-    $request = [System.Net.WebRequest]::Create($RequestUrl)
+    $request = [System.Net.WebRequest]::Create($Url)
     $request.Headers["Authorization"] = $AuthenticationToken
     $request.Method = $Action
 
