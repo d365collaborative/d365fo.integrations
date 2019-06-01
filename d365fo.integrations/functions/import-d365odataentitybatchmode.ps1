@@ -99,14 +99,13 @@ function Import-D365ODataEntityBatchMode {
 
     begin {
         $bearerParms = @{
-            Resource     = $URL
+            Url     = $Url
             ClientId     = $ClientId
             ClientSecret = $ClientSecret
+            Tenant = $Tenant
         }
 
-        $bearerParms.AuthProviderUri = "https://login.microsoftonline.com/$Tenant/oauth2/token"
-
-        $bearer = Invoke-ClientCredentialsGrant @bearerParms | Get-BearerToken
+        $bearer = New-BearerToken @bearerParms
 
         $headerParms = @{
             URL         = $URL

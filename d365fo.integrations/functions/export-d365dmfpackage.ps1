@@ -66,7 +66,7 @@ function Export-D365DmfPackage {
     [CmdletBinding()]
     [OutputType('System.String')]
     param (
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(Mandatory = $true)]
         [Alias('File')]
         [string] $Path,
 
@@ -93,15 +93,14 @@ function Export-D365DmfPackage {
 
     begin {
         $bearerParms = @{
-            Resource     = $Url
+            Url     = $Url
             ClientId     = $ClientId
             ClientSecret = $ClientSecret
+            Tenant = $Tenant
         }
 
-        $bearerParms.AuthProviderUri = "https://login.microsoftonline.com/$Tenant/oauth2/token"
-
-        $bearer = Invoke-ClientCredentialsGrant @bearerParms | Get-BearerToken
-
+        $bearer = New-BearerToken @bearerParms
+        
         $requestUrl = "$Url/api/connector/dequeue/$JobId"
     }
 

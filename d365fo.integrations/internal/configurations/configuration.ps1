@@ -13,3 +13,5 @@ Set-PSFConfig -Module 'd365fo.integrations' -Name 'Example.Setting' -Value 10 -I
 
 Set-PSFConfig -Module 'd365fo.integrations' -Name 'Import.DoDotSource' -Value $false -Initialize -Validation 'bool' -Description "Whether the module files should be dotsourced on import. By default, the files of this module are read as string value and invoked, which is faster but worse on debugging."
 Set-PSFConfig -Module 'd365fo.integrations' -Name 'Import.IndividualFiles' -Value $false -Initialize -Validation 'bool' -Description "Whether the module files should be imported individually. During the module build, all module code is compiled into few files, which are imported instead by default. Loading the compiled versions is faster, using the individual files is easier for debugging and testing out adjustments."
+
+Set-PSFConfig -FullName "d365fo.integrations.azure.tenant.oauth.token" -Value "https://login.microsoftonline.com/{0}/oauth2/token" -Initialize -Description "URI / URL for the Azure Active Directory OAuth 2.0 endpoint for tokens, prepped for the tenant value to be inserted."

@@ -93,14 +93,13 @@ function Import-D365DmfPackage {
 
     begin {
         $bearerParms = @{
-            Resource     = $Url
+            Url     = $Url
             ClientId     = $ClientId
             ClientSecret = $ClientSecret
+            Tenant = $Tenant
         }
 
-        $bearerParms.AuthProviderUri = "https://login.microsoftonline.com/$Tenant/oauth2/token"
-
-        $bearer = Invoke-ClientCredentialsGrant @bearerParms | Get-BearerToken
+        $bearer = New-BearerToken @bearerParms
 
         $requestUrl = "$Url/api/connector/enqueue/$JobId"
     }
