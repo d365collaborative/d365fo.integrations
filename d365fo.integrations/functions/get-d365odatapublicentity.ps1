@@ -87,6 +87,18 @@
         It will use the search string "customer" to search for any entity in their singular & plural name contains that search term.
         It will utilize the OData Query capabilities to filter for Data Entities that are "IsReadOnly = $true".
         
+    .EXAMPLE
+        PS C:\> Get-D365ODataPublicEntity -EntityName CustomersV3 | Get-D365ODataEntityKey | Format-List
+
+        This will extract all the relevant key fields from the Data Entity.
+        The "CustomersV3" value is used to get the desired Data Entity.
+        The output from Get-D365ODataPublicEntity is piped into Get-D365ODataEntityKey.
+        All key fields will be extracted and displayed.
+        The output will be formatted as a list.
+
+    .LINK
+        Get-D365ODataEntityKey
+
     .NOTES
         The OData standard is using the $ (dollar sign) for many functions and features, which in PowerShell is normally used for variables.
         
