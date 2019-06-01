@@ -53,6 +53,14 @@
         This parameters disables user-friendly warnings and enables the throwing of exceptions
         This is less user friendly, but allows catching exceptions in calling scripts
         
+    .PARAMETER RawOutput
+        Instructs the cmdlet to include the outer structure of the response received from OData endpoint
+
+        The output will still be a PSCustomObject
+
+    .PARAMETER RawJsonOutput
+        Instructs the cmdlet to convert the output to a Json string
+
     .EXAMPLE
         PS C:\> Get-D365ODataPublicEntity -EntityName customersv3
         
@@ -126,7 +134,11 @@ function Get-D365ODataPublicEntity {
         [Parameter(Mandatory = $false)]
         [string] $ClientSecret = $Script:ODataClientSecret,
 
-        [switch] $EnableException
+        [switch] $EnableException,
+
+        [switch] $RawOutput,
+        
+        [switch] $RawJsonOutput
 
     )
 
@@ -172,7 +184,17 @@ function Get-D365ODataPublicEntity {
 
         try {
             Write-PSFMessage -Level Verbose -Message "Executing http request against the OData endpoint." -Target $($odataEndpoint.Uri.AbsoluteUri)
-            Invoke-RestMethod -Method Get -Uri $odataEndpoint.Uri.AbsoluteUri -Headers $headers -ContentType 'application/json'
+            $res = Invoke-RestMethod -Method Get -Uri $odataEndpoint.Uri.AbsoluteUri -Headers $headers -ContentType 'application/json'
+
+            if(-not ($RawOutput)) {
+                $res = $res.Value
+            }
+
+            if($RawJsonOutput) {
+                $res | ConvertTo-Json
+            }else {
+                $res
+            }
         }
         catch {
             $messageString = "Something went wrong while searching for the entity: $searchEntityName"
