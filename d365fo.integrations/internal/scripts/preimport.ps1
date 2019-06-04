@@ -2,3 +2,5 @@
 
 # Load the strings used in messages
 . Import-ModuleFile -Path "$($script:ModuleRoot)\internal\scripts\strings.ps1"
+
+$Script:TimeSignals = @{}
