@@ -28,7 +28,7 @@
         It will use the "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOi....." as the bearer token for the endpoint.
         It will use '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}' as the payload that needs to be included in the batch content.
         Iw will use 1 as the counter in the batch content number sequence.
-
+        
     .NOTES
         Tags: OData, Data Entity, Batchmode, Batch, Batch Content, Multiple
         

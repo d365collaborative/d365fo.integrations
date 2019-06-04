@@ -55,12 +55,12 @@
         
     .PARAMETER RawOutput
         Instructs the cmdlet to include the outer structure of the response received from OData endpoint
-
+        
         The output will still be a PSCustomObject
-
+        
     .PARAMETER RawJsonOutput
         Instructs the cmdlet to convert the output to a Json string
-
+        
     .EXAMPLE
         PS C:\> Get-D365ODataPublicEntity -EntityName customersv3
         
@@ -89,16 +89,16 @@
         
     .EXAMPLE
         PS C:\> Get-D365ODataPublicEntity -EntityName CustomersV3 | Get-D365ODataEntityKey | Format-List
-
+        
         This will extract all the relevant key fields from the Data Entity.
         The "CustomersV3" value is used to get the desired Data Entity.
         The output from Get-D365ODataPublicEntity is piped into Get-D365ODataEntityKey.
         All key fields will be extracted and displayed.
         The output will be formatted as a list.
-
+        
     .LINK
         Get-D365ODataEntityKey
-
+        
     .NOTES
         The OData standard is using the $ (dollar sign) for many functions and features, which in PowerShell is normally used for variables.
         

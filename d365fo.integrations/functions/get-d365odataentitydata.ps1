@@ -62,7 +62,7 @@
         It will get the top 1 results from the list of customers.
         
         It will use the default OData configuration details that are stored in the configuration store.
-
+        
     .EXAMPLE
         PS C:\> Get-D365ODataEntityData -EntityName CustomersV3 -ODataQuery '$top=10' -CrossCompany
         
@@ -72,7 +72,7 @@
         It will make sure to search across all legal entities / companies inside the D365FO environment.
         
         It will use the default OData configuration details that are stored in the configuration store.
-
+        
     .EXAMPLE
         PS C:\> Get-D365ODataEntityData -EntityName CustomersV3 -ODataQuery '$top=10&$filter=dataAreaId eq ''Comp1''' -CrossCompany
         
@@ -83,16 +83,16 @@
         It will search the customers inside the "Comp1" legal entity / company.
         
         It will use the default OData configuration details that are stored in the configuration store.
-
+        
     .LINK
-    Add-D365ODataConfig
-
+        Add-D365ODataConfig
+        
     .LINK
-    Get-D365ActiveODataConfig
-
+        Get-D365ActiveODataConfig
+        
     .LINK
-    Set-D365ActiveODataConfig
-
+        Set-D365ActiveODataConfig
+        
     .NOTES
         The OData standard is using the $ (dollar sign) for many functions and features, which in PowerShell is normally used for variables.
         

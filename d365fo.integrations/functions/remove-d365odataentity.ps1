@@ -21,8 +21,8 @@
         The key that will select the desired Data Entity uniquely across the OData endpoint
         
         The key would most likely be made up from multiple values, but can also be a single value
-
-        .PARAMETER CrossCompany
+        
+    .PARAMETER CrossCompany
         Instruct the cmdlet / function to ensure the request against the OData endpoint will work across all companies
         
     .PARAMETER Tenant
@@ -47,9 +47,9 @@
         This will remove a Data Entity from the D365FO environment through OData.
         It will use the ExchangeRate entity, and its EntitySetName / CollectionName "ExchangeRates".
         It will use the "RateTypeName='TEST'","FromCurrency='DKK'","ToCurrency='EUR'","StartDate=2019-01-13T12:00:00Z" as the unique key for the entity.
-
+        
         It will use the default OData configuration details that are stored in the configuration store.
-
+        
     .NOTES
         Tags: OData, Data, Entity, Import, Upload
         

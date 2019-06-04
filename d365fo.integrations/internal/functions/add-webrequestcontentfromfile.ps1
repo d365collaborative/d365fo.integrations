@@ -1,32 +1,33 @@
-﻿<#
-.SYNOPSIS
-Add content from file to a Web Request
-
-.DESCRIPTION
-Read the content from a file and put it into the Web Request object
-
-.PARAMETER Request
-The Web Request object that you want to add the content of the file to
-
-.PARAMETER Path
-Path to the file you want to add to the Web Request object
-
-.EXAMPLE
-PS C:\> $request = New-WebRequest -Url "https://usnconeboxax1aos.cloud.onebox.dynamics.com/api/connector/enqueue/123456789" -Action "POST" -AuthenticationToken "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOi....."
-PS C:\> Add-WebRequestContentFromFile -Request $request -Path "c:\temp\d365fo.tools\dmfpackage.zip"
-
-This will add the file content to the Web Request.
-It will create a new Web Request object.
-It will use the "c:\temp\d365fo.tools\dmfpackage.zip" path to read the file content.
-
-.LINK
-New-WebRequest
-
-.NOTES
-Tags: Request, DMF, Package, Packages
-
-Author: Mötz Jensen (@Splaxi)
-
+﻿
+<#
+    .SYNOPSIS
+        Add content from file to a Web Request
+        
+    .DESCRIPTION
+        Read the content from a file and put it into the Web Request object
+        
+    .PARAMETER Request
+        The Web Request object that you want to add the content of the file to
+        
+    .PARAMETER Path
+        Path to the file you want to add to the Web Request object
+        
+    .EXAMPLE
+        PS C:\> $request = New-WebRequest -Url "https://usnconeboxax1aos.cloud.onebox.dynamics.com/api/connector/enqueue/123456789" -Action "POST" -AuthenticationToken "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOi....."
+        PS C:\> Add-WebRequestContentFromFile -Request $request -Path "c:\temp\d365fo.tools\dmfpackage.zip"
+        
+        This will add the file content to the Web Request.
+        It will create a new Web Request object.
+        It will use the "c:\temp\d365fo.tools\dmfpackage.zip" path to read the file content.
+        
+    .LINK
+        New-WebRequest
+        
+    .NOTES
+        Tags: Request, DMF, Package, Packages
+        
+        Author: Mötz Jensen (@Splaxi)
+        
 #>
 
 function Add-WebRequestContentFromFile {
