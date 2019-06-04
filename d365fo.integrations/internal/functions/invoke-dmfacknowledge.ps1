@@ -1,22 +1,26 @@
-﻿function Get-DmfPackageDetails {
+﻿
+function Invoke-DmfAcknowledge {
     [CmdletBinding()]
-    [OutputType('System.String')]
+    [OutputType()]
     param (
         [Parameter(Mandatory = $true)]
         [String] $JobId,
 
         [Parameter(Mandatory = $true)]
+        [string] $JsonMessage,
+
+        [Parameter(Mandatory = $true)]
         [string] $AuthenticationToken,
 
         [Parameter(Mandatory = $true)]
-        [string] $Url,
-
-        [switch] $EnableException
+        [string] $Url
     )
 
-    $requestUrl = "$Url/api/connector/dequeue/$JobId"
+    $requestUrl = "$Url/api/connector/ack/$JobId"
 
-    $request = New-WebRequest -Url $requestUrl -Action "GET" -AuthenticationToken $AuthenticationToken
+    $request = New-WebRequest -Url $requestUrl -Action "POST" -AuthenticationToken $AuthenticationToken -ContentType "application/json"
+
+    Add-WebRequestContent -Request $request -Payload $JsonMessage
 
     try {
         $response = $request.GetResponse()

@@ -23,7 +23,7 @@
         ClientSecret = $ClientSecret
     }
 
-    $azureUri = Get-PSFConfigValue -FullName "d365fo.integrations.azure.tenant.oauth.token"
+    $azureUri = $Script:AzureTenantOauthToken
     
     $bearerParms.AuthProviderUri = $azureUri -f $Tenant
 

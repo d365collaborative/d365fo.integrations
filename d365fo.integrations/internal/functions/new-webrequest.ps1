@@ -49,7 +49,7 @@ function New-WebRequest {
         [string] $ContentType
     )
 
-    Write-PSFMessage -Level Verbose -Message "New Request $Url, $Action, $AuthenticationToken, $ContentType "
+    Write-PSFMessage -Level Debug -Message "New Request $Url, $Action, $AuthenticationToken, $ContentType "
     
     $request = [System.Net.WebRequest]::Create($Url)
     $request.Headers["Authorization"] = $AuthenticationToken

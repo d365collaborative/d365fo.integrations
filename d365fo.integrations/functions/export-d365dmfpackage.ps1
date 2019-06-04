@@ -93,38 +93,44 @@ function Export-D365DmfPackage {
 
     begin {
         $bearerParms = @{
-            Url     = $Url
+            Url          = $Url
             ClientId     = $ClientId
             ClientSecret = $ClientSecret
-            Tenant = $Tenant
+            Tenant       = $Tenant
         }
 
         $bearer = New-BearerToken @bearerParms
-        
-        $requestUrl = "$Url/api/connector/dequeue/$JobId"
     }
 
     process {
-        $request = New-WebRequest -Url $requestUrl -Action "GET" -AuthenticationToken $bearer
-
-        try {
-            $response = $request.GetResponse()
-            
-            $stream = $response.GetResponseStream()
-    
-            $streamReader = New-Object System.IO.StreamReader($stream);
-        
-            $integrationResponse = $streamReader.ReadToEnd()
-            #$streamReader.Flush();
-            $streamReader.Close();
-
-            $integrationResponse
+        $dmfParms = @{
+            JobId               = $JobId
+            Url                 = $Url
+            AuthenticationToken = $bearer
         }
-        catch {
-            $messageString = "Something went wrong while importing data through the OData endpoint for the entity: $EntityName"
-            Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $EntityName
+
+        $dmfDetails = Get-DmfPackageDetails @dmfParms
+        
+        if (Test-PSFFunctionInterrupt) { return }
+
+    	if ([string]::IsNullOrWhiteSpace($dmfDetails)) {
+            $messageString = "There was no file ready to be downloaded."
+            Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception
             Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>', ''))) -ErrorRecord $_
             return
         }
+
+        $dmfDetailsJson = $dmfDetails | ConvertFrom-Json
+
+        if ($VerbosePreference -ne [System.Management.Automation.ActionPreference]::SilentlyContinue) {
+            $dmfDetailsJson
+        }
+
+        $dmfDetailsJson | Get-DmfFile -Path $Path -AuthenticationToken $bearer
+
+        Invoke-DmfAcknowledge -JsonMessage $dmfDetails @dmfParms
+
+        if (Test-PSFFunctionInterrupt) { return }
+
     }
 }
