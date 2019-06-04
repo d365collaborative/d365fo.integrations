@@ -21,6 +21,11 @@
     .EXAMPLE
         PS C:\> Get-DmfFile -Path "c:\temp\d365fo.tools\dmfpackage.zip" -AuthenticationToken "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOi....." -DownloadLocation "https://usnconeboxax1aos.cloud.onebox.dynamics.com/api/connector/download/%7Bb0b5401e-56ca-4dc8-b566-84389a001236%7D?correlation-id=5acd8121-d4e1-4cf8-b31f-9713de3e3627&blob=c5fbcc38-4f1e-4a81-af27-e6684d9fc217"
         
+        This will download the DMF Package from D365FO.
+It will use "c:\temp\d365fo.tools\dmfpackage.zip" as the location to save the file.
+It will use the "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOi....." as the bearer token for the endpoint.
+It will use "https://usnconeboxax1aos.cloud.onebox.dynamics.com/api/connector/download/%7Bb0b5401e-56ca-4dc8-b566-84389a001236%7D?correlation-id=5acd8121-d4e1-4cf8-b31f-9713de3e3627&blob=c5fbcc38-4f1e-4a81-af27-e6684d9fc217" as the request URL / URI to download the DMF Package from.
+
     .NOTES
         Tags: Download, DMF, Package, Packages
         
