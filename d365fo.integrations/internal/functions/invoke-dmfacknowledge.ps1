@@ -1,7 +1,7 @@
 ﻿
 function Invoke-DmfAcknowledge {
     [CmdletBinding()]
-    [OutputType()]
+    [OutputType('System.String')]
     param (
         [Parameter(Mandatory = $true)]
         [String] $JobId,

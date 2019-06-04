@@ -1,4 +1,5 @@
 ﻿function Get-DmfPackageDetails {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
     [CmdletBinding()]
     [OutputType('System.String')]
     param (
