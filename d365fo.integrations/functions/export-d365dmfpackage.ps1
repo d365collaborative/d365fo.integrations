@@ -103,6 +103,8 @@ function Export-D365DmfPackage {
     }
 
     process {
+        Invoke-TimeSignal -Start
+
         $dmfParms = @{
             JobId               = $JobId
             Url                 = $Url
@@ -132,5 +134,6 @@ function Export-D365DmfPackage {
 
         if (Test-PSFFunctionInterrupt) { return }
 
+        Invoke-TimeSignal -End
     }
 }

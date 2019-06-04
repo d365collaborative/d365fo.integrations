@@ -178,6 +178,8 @@ function Get-D365ODataPublicEntity {
     }
 
     process {
+        Invoke-TimeSignal -Start
+
         $odataEndpoint.Query = ""
         
         if (-not ([string]::IsNullOrEmpty($EntityName))) {
@@ -213,5 +215,7 @@ function Get-D365ODataPublicEntity {
             Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>',''))) -ErrorRecord $_
             return
         }
+
+        Invoke-TimeSignal -End
     }
 }

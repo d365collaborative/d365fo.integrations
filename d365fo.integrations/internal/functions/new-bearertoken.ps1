@@ -17,6 +17,9 @@
 
     )
 
+    Invoke-TimeSignal -Start
+
+    Write-PSFMessage -Level Verbose -Message "Building request for fetching the bearer token." -Target $Var
     $bearerParms = @{
         Resource     = $Url
         ClientId     = $ClientId
@@ -27,5 +30,9 @@
     
     $bearerParms.AuthProviderUri = $azureUri -f $Tenant
 
+    Write-PSFMessage -Level Verbose -Message "Fetching the bearer token." -Target ($bearerParms -join ", ")
+
     Invoke-ClientCredentialsGrant @bearerParms | Get-BearerToken
+
+    Invoke-TimeSignal -End
 }

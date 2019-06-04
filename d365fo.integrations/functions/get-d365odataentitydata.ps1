@@ -165,6 +165,8 @@ function Get-D365ODataEntityData {
     }
 
     process {
+        Invoke-TimeSignal -Start
+
         $entity = "$EntityName$EntitySetName"
 
         Write-PSFMessage -Level Verbose -Message "Working against $entity" -Target $entity
@@ -191,5 +193,7 @@ function Get-D365ODataEntityData {
             Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>',''))) -ErrorRecord $_
             return
         }
+
+        Invoke-TimeSignal -End
     }
 }

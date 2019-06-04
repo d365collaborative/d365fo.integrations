@@ -105,6 +105,7 @@ function Import-D365DmfPackage {
     }
 
     process {
+        Invoke-TimeSignal -Start
 
         $request = New-WebRequest -Url $requestUrl -Action "POST" -AuthenticationToken $bearer -ContentType "application/zip"
 
@@ -121,5 +122,7 @@ function Import-D365DmfPackage {
             Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>', ''))) -ErrorRecord $_
             return
         }
+
+        Invoke-TimeSignal -End
     }
 }

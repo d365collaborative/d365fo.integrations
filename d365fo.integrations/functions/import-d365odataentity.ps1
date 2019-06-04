@@ -97,10 +97,10 @@ function Import-D365ODataEntity {
 
     begin {
         $bearerParms = @{
-            Url     = $Url
+            Url          = $Url
             ClientId     = $ClientId
             ClientSecret = $ClientSecret
-            Tenant = $Tenant
+            Tenant       = $Tenant
         }
 
         $bearer = New-BearerToken @bearerParms
@@ -114,7 +114,7 @@ function Import-D365ODataEntity {
     }
 
     process {
-
+        Invoke-TimeSignal -Start
 
         Write-PSFMessage -Level Verbose -Message "Working against $EntityName" -Target $entityName
         
@@ -125,13 +125,14 @@ function Import-D365ODataEntity {
         try {
             Write-PSFMessage -Level Verbose -Message "Executing http request against the OData endpoint." -Target $($odataEndpoint.Uri.AbsoluteUri)
             Invoke-RestMethod -Method POST -Uri $odataEndpoint.Uri.AbsoluteUri -Headers $headers -ContentType 'application/json' -Body $Payload
-    }
-    catch {
-        $messageString = "Something went wrong while importing data through the OData endpoint for the entity: $EntityName"
-        Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $EntityName
-        Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>',''))) -ErrorRecord $_
-        return
-    }
+        }
+        catch {
+            $messageString = "Something went wrong while importing data through the OData endpoint for the entity: $EntityName"
+            Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $EntityName
+            Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>', ''))) -ErrorRecord $_
+            return
+        }
 
+        Invoke-TimeSignal -End
     }
 }

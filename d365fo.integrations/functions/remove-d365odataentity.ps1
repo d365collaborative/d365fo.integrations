@@ -107,6 +107,8 @@ function Remove-D365ODataEntity {
     }
 
     process {
+        Invoke-TimeSignal -Start
+
         $keyBuilder = [System.Text.StringBuilder]::new()
 
         $null = $keyBuilder.Append("(")
@@ -137,6 +139,7 @@ function Remove-D365ODataEntity {
             Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($messageString)) -ErrorRecord $_
             return
         }
-
+        
+        Invoke-TimeSignal -End
     }
 }

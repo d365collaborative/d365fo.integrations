@@ -119,6 +119,8 @@ function Import-D365ODataEntityBatchMode {
     }
 
     process {
+        Invoke-TimeSignal -Start
+
         $idbatch = $(New-Guid).ToString()
         $idchangeset = $(New-Guid).ToString()
     
@@ -180,5 +182,7 @@ function Import-D365ODataEntityBatchMode {
         $streamReader.Close();
 
         $integrationResponse
+
+        Invoke-TimeSignal -End
     }
 }
