@@ -6,7 +6,7 @@
     .DESCRIPTION
         Read the content from a file and put it into the Web Request object
         
-    .PARAMETER Request
+    .PARAMETER WebRequest
         The Web Request object that you want to add the content of the file to
         
     .PARAMETER Path
@@ -14,7 +14,7 @@
         
     .EXAMPLE
         PS C:\> $request = New-WebRequest -Url "https://usnconeboxax1aos.cloud.onebox.dynamics.com/api/connector/enqueue/123456789" -Action "POST" -AuthenticationToken "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOi....."
-        PS C:\> Add-WebRequestContentFromFile -Request $request -Path "c:\temp\d365fo.tools\dmfpackage.zip"
+        PS C:\> Add-WebRequestContentFromFile -WebRequest $request -Path "c:\temp\d365fo.tools\dmfpackage.zip"
         
         This will add the file content to the Web Request.
         It will create a new Web Request object.
@@ -35,7 +35,7 @@ function Add-WebRequestContentFromFile {
     [OutputType()]
     param (
         [Parameter(Mandatory = $true)]
-        [System.Net.WebRequest] $Request,
+        [System.Net.WebRequest] $WebRequest,
 
         [Parameter(Mandatory = $true)]
         [string] $Path
@@ -47,15 +47,17 @@ function Add-WebRequestContentFromFile {
     try {
     
         $fileStream = New-Object System.IO.FileStream($Path, [System.IO.FileMode]::Open)
-        Write-PSFMessage -level Verbose -Message "Length $($fileStream.Length)"
-        $request.ContentLength = $fileStream.Length
-        $stream = $request.GetRequestStream()
+        
+        Write-PSFMessage -Level Debug -Message "Length $($fileStream.Length)"
+        
+        $WebRequest.ContentLength = $fileStream.Length
+        $stream = $WebRequest.GetRequestStream()
         $fileStream.CopyTo($stream)
         $fileStream.Flush()
         $fileStream.Close()
     }
     catch {
-        Write-PSFMessage -Level Critical -Message "Exception while creating WebRequest $RequestUrl" -Exception $_.Exception
+        Write-PSFMessage -Level Critical -Message "Exception while adding the file content to the WebRequest" -Exception $_.Exception
         Stop-PSFFunction -Message "Stopping" -StepsUpward 1
     }
 }

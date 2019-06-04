@@ -110,7 +110,7 @@ function Import-D365DmfPackage {
 
         $request = New-WebRequest -Url $requestUrl -Action "POST" -AuthenticationToken $bearer -ContentType "application/zip"
 
-        Add-WebRequestContentFromFile -Request $request -Path $Path
+        Add-WebRequestContentFromFile -WebRequest $request -Path $Path
 
         try {
             $response = $request.GetResponse()

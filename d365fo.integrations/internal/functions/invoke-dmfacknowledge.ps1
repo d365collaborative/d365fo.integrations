@@ -20,7 +20,7 @@ function Invoke-DmfAcknowledge {
 
     $request = New-WebRequest -Url $requestUrl -Action "POST" -AuthenticationToken $AuthenticationToken -ContentType "application/json"
 
-    Add-WebRequestContent -Request $request -Payload $JsonMessage
+    Add-WebRequestContent -WebRequest $request -Payload $JsonMessage
 
     try {
         $response = $request.GetResponse()

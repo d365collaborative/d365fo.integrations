@@ -6,7 +6,7 @@
     .DESCRIPTION
         Add the payload as content into the Web Request object
         
-    .PARAMETER Request
+    .PARAMETER WebRequest
         The Web Request object that you want to add the content to
         
     .PARAMETER Payload
@@ -14,7 +14,7 @@
         
     .EXAMPLE
         PS C:\> $request = New-WebRequest -Url "https://usnconeboxax1aos.cloud.onebox.dynamics.com/api/connector/ack/123456789" -Action "POST" -AuthenticationToken "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOi....."
-        PS C:\> Add-WebRequestContentFromFile -Request $request -Payload '{"CorrelationId": "5acd8121-d4e1-4cf8-b31f-9713de3e3627", "PopReceipt": "AgAAAAMAAAAAAAAA3XpSEQ0b1QE=", "DownloadLocation": "https://usnconeboxax1aos.cloud.onebox.dynamics.com/api/connector/download/%7Bb0b5401e-56ca-4dc8-b566-84389a001236%7D?correlation-id=5acd8121-d4e1-4cf8-b31f-9713de3e3627&blob=c5fbcc38-4f1e-4a81-af27-e6684d9fc217", "IsDownLoadFileExist": True, "FileDownLoadErrorMessage": ""}'
+        PS C:\> Add-WebRequestContentFromFile -WebRequest $request -Payload '{"CorrelationId": "5acd8121-d4e1-4cf8-b31f-9713de3e3627", "PopReceipt": "AgAAAAMAAAAAAAAA3XpSEQ0b1QE=", "DownloadLocation": "https://usnconeboxax1aos.cloud.onebox.dynamics.com/api/connector/download/%7Bb0b5401e-56ca-4dc8-b566-84389a001236%7D?correlation-id=5acd8121-d4e1-4cf8-b31f-9713de3e3627&blob=c5fbcc38-4f1e-4a81-af27-e6684d9fc217", "IsDownLoadFileExist": True, "FileDownLoadErrorMessage": ""}'
         
         This will add the payload content to the Web Request.
         It will create a new Web Request object.
@@ -35,15 +35,15 @@ function Add-WebRequestContent {
     [OutputType()]
     param (
         [Parameter(Mandatory = $true)]
-        [System.Net.WebRequest] $Request,
+        [System.Net.WebRequest] $WebRequest,
         
         [Parameter(Mandatory = $true)]
         [string] $Payload
     )
 
     try {
-        $Request.ContentLength = [System.Text.Encoding]::UTF8.GetByteCount($Payload)
-        $stream = $Request.GetRequestStream()
+        $WebRequest.ContentLength = [System.Text.Encoding]::UTF8.GetByteCount($Payload)
+        $stream = $WebRequest.GetRequestStream()
         $streamWriter = new-object System.IO.StreamWriter($stream)
         $streamWriter.Write([string]$Payload)
         $streamWriter.Flush()
