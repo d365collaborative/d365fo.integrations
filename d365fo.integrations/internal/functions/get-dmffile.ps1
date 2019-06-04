@@ -1,4 +1,30 @@
-﻿function Get-DmfFile {
+﻿<#
+.SYNOPSIS
+Short description
+
+.DESCRIPTION
+Long description
+
+.PARAMETER DownloadLocation
+Parameter description
+
+.PARAMETER Path
+Parameter description
+
+.PARAMETER AuthenticationToken
+Parameter description
+
+.PARAMETER Retries
+Parameter description
+
+.EXAMPLE
+An example
+
+.NOTES
+General notes
+#>
+
+function Get-DmfFile {
     [CmdletBinding()]
     [OutputType()]
     param (

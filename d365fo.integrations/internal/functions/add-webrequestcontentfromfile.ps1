@@ -1,6 +1,6 @@
 ﻿<#
 .SYNOPSIS
-Add content from file to Web Request
+Add content from file to a Web Request
 
 .DESCRIPTION
 Read the content from a file and put it into the Web Request object
