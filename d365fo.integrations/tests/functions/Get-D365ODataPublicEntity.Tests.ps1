@@ -127,24 +127,50 @@
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
 		}
+		It 'Should have the expected parameter RawOutput' {
+			$parameter = (Get-Command Get-D365ODataPublicEntity).Parameters['RawOutput']
+			$parameter.Name | Should -Be 'RawOutput'
+			$parameter.ParameterType.ToString() | Should -Be System.Management.Automation.SwitchParameter
+			$parameter.IsDynamic | Should -Be $False
+			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
+			$parameter.ParameterSets.Keys | Should -Contain '__AllParameterSets'
+			$parameter.ParameterSets['__AllParameterSets'].IsMandatory | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be -2147483648
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipeline | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
+		}
+		It 'Should have the expected parameter RawJsonOutput' {
+			$parameter = (Get-Command Get-D365ODataPublicEntity).Parameters['RawJsonOutput']
+			$parameter.Name | Should -Be 'RawJsonOutput'
+			$parameter.ParameterType.ToString() | Should -Be System.Management.Automation.SwitchParameter
+			$parameter.IsDynamic | Should -Be $False
+			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
+			$parameter.ParameterSets.Keys | Should -Contain '__AllParameterSets'
+			$parameter.ParameterSets['__AllParameterSets'].IsMandatory | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be -2147483648
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipeline | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
+		}
 	}
 	
 	Describe "Testing parameterset Default" {
 		<#
 		Default -
-		Default -EntityName -ODataQuery -Tenant -URL -ClientId -ClientSecret -EnableException
+		Default -EntityName -ODataQuery -Tenant -URL -ClientId -ClientSecret -EnableException -RawOutput -RawJsonOutput
 		#>
 	}
  	Describe "Testing parameterset NameContains" {
 		<#
 		NameContains -EntityNameContains
-		NameContains -EntityNameContains -ODataQuery -Tenant -URL -ClientId -ClientSecret -EnableException
+		NameContains -EntityNameContains -ODataQuery -Tenant -URL -ClientId -ClientSecret -EnableException -RawOutput -RawJsonOutput
 		#>
 	}
  	Describe "Testing parameterset Query" {
 		<#
 		Query -ODataQuery
-		Query -ODataQuery -Tenant -URL -ClientId -ClientSecret -EnableException
+		Query -ODataQuery -Tenant -URL -ClientId -ClientSecret -EnableException -RawOutput -RawJsonOutput
 		#>
 	}
 
