@@ -50,13 +50,19 @@ function Get-DmfPackageDetails {
         [switch] $EnableException
     )
 
+    Write-PSFMessage -Level Verbose -Message "Building request for the DMF Package dequeue endpoint." -Target $JobId
+
     $requestUrl = "$Url/api/connector/dequeue/$JobId"
 
     $request = New-WebRequest -Url $requestUrl -Action "GET" -AuthenticationToken $AuthenticationToken
 
     try {
+        Write-PSFMessage -Level Verbose -Message "Executing the DMF Package dequeue request against the DMF endpoint."
+
         $response = $request.GetResponse()
-            
+        
+        Write-PSFMessage -Level Verbose -Message "Parsing the response received from the DMF Package dequeue request."
+
         $stream = $response.GetResponseStream()
     
         $streamReader = New-Object System.IO.StreamReader($stream)

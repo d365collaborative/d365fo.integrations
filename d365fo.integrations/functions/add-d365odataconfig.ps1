@@ -91,6 +91,8 @@ function Add-D365ODataConfig {
         [switch] $EnableException
     )
 
+    Write-PSFMessage -Level Verbose -Message "Testing if configuration with the name already exists or not." -Target $configurationValue
+
     if (((Get-PSFConfig -FullName "d365fo.integrations.odata.*.name").Value -contains $Name) -and (-not $Force)) {
         $messageString = "An OData configuration with <c='em'>$Name</c> as name <c='em'>already exists</c>. If you want to <c='em'>overwrite</c> the current configuration, please supply the <c='em'>-Force</c> parameter."
         Write-PSFMessage -Level Host -Message $messageString
@@ -125,7 +127,9 @@ function Add-D365ODataConfig {
         }
 
         Write-PSFMessage -Level Verbose -Message "Setting $fullConfigName to $configurationValue" -Target $configurationValue
+        
         Set-PSFConfig -FullName $fullConfigName -Value $configurationValue
+        
         if (-not $Temporary) { Register-PSFConfig -FullName $fullConfigName -Scope UserDefault }
     }
 }

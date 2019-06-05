@@ -23,5 +23,7 @@ function Enable-D365Exception {
     [CmdletBinding()]
     param ()
 
+    Write-PSFMessage -Level Verbose -Message "Enabling exception across the entire module." -Target $configurationValue
+
     $PSDefaultParameterValues['*:EnableException'] = $true
 }
