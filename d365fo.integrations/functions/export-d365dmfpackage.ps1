@@ -112,7 +112,7 @@ function Export-D365DmfPackage {
             AuthenticationToken = $bearer
         }
 
-        $dmfDetails = Get-DmfPackageDetails @dmfParms
+        $dmfDetails = Get-DmfDequeuePackageDetails @dmfParms -EnableException:$EnableException
         
         if (Test-PSFFunctionInterrupt) { return }
 

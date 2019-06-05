@@ -1,10 +1,10 @@
 ﻿
 <#
     .SYNOPSIS
-        Get DMF Package details
+        Get DMF Dequeue Package details
         
     .DESCRIPTION
-        Get all the needed details about a DMF package, so you can download it from the Dynamics 365 for Finance & Operations
+        Get all the needed details about a DMF package, so you can download (dequeue) it from the Dynamics 365 for Finance & Operations environment
         
     .PARAMETER JobId
         The GUID from the recurring data job
@@ -20,7 +20,7 @@
         This is less user friendly, but allows catching exceptions in calling scripts
         
     .EXAMPLE
-        PS C:\> Get-DmfPackageDetails -JobId "db5e719a-8db3-4fe5-9c78-7be479ce85a2" -Url "https://usnconeboxax1aos.cloud.onebox.dynamics.com" -AuthenticationToken "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOi....."
+        PS C:\> Get-DmfDequeuePackageDetails -JobId "db5e719a-8db3-4fe5-9c78-7be479ce85a2" -Url "https://usnconeboxax1aos.cloud.onebox.dynamics.com" -AuthenticationToken "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOi....."
         
         This will fetch the available DMF package details.
         It will use "db5e719a-8db3-4fe5-9c78-7be479ce85a2" as the jobid parameter passed to the DMF endpoint.
@@ -33,7 +33,7 @@
         Author: Mötz Jensen (@Splaxi)
 #>
 
-function Get-DmfPackageDetails {
+function Get-DmfDequeuePackageDetails {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
     [CmdletBinding()]
     [OutputType('System.String')]

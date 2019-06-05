@@ -108,21 +108,14 @@ function Import-D365DmfPackage {
     process {
         Invoke-TimeSignal -Start
 
-        $request = New-WebRequest -Url $requestUrl -Action "POST" -AuthenticationToken $bearer -ContentType "application/zip"
-
-        Add-WebRequestContentFromFile -WebRequest $request -Path $Path
-
-        try {
-            $response = $request.GetResponse()
-
-            $response
+        $dmfParms = @{
+            JobId               = $JobId
+            Url                 = $Url
+            AuthenticationToken = $bearer
+            Path = $Path
         }
-        catch {
-            $messageString = "Something went wrong while importing data through the OData endpoint for the entity: $EntityName"
-            Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $EntityName
-            Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>', ''))) -ErrorRecord $_
-            return
-        }
+
+        $dmfDetails = Invoke-DmfEnqueuePackage @dmfParms -EnableException:$EnableException
 
         Invoke-TimeSignal -End
     }
