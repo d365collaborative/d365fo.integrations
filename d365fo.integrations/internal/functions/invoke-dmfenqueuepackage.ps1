@@ -58,7 +58,7 @@ function Invoke-DmfEnqueuePackage {
         [switch] $EnableException
     )
 
-    Write-PSFMessage -Level Verbose -Message "Building request for the DMF Package dequeue endpoint." -Target $JobId
+    Write-PSFMessage -Level Verbose -Message "Building request for the DMF Package enqueue endpoint." -Target $JobId
 
     $requestUrl = "$Url/api/connector/enqueue/$JobId"
 
@@ -67,9 +67,11 @@ function Invoke-DmfEnqueuePackage {
     Add-WebRequestContentFromFile -WebRequest $request -Path $Path
 
     try {
-        Write-PSFMessage -Level Verbose -Message "Executing the DMF Package dequeue request against the DMF endpoint."
+        Write-PSFMessage -Level Verbose -Message "Executing the DMF Package enqueue request against the DMF endpoint."
 
         $response = $request.GetResponse()
+
+        Write-PSFMessage -Level Verbose -Message "Response completed ($($request.ContentLength))."
     }
     catch {
         $messageString = "Something went wrong while importing data through the OData endpoint for the entity: $EntityName"
@@ -87,5 +89,12 @@ function Invoke-DmfEnqueuePackage {
         return
     }
 
-    $response
+    $stream = $response.GetResponseStream()
+    
+    $streamReader = New-Object System.IO.StreamReader($stream);
+        
+    $res = $streamReader.ReadToEnd()
+    $streamReader.Close();
+        
+    $res
 }

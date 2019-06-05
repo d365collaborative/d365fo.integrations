@@ -94,10 +94,10 @@ function Import-D365DmfPackage {
 
     begin {
         $bearerParms = @{
-            Url     = $Url
+            Url          = $Url
             ClientId     = $ClientId
             ClientSecret = $ClientSecret
-            Tenant = $Tenant
+            Tenant       = $Tenant
         }
 
         $bearer = New-BearerToken @bearerParms
@@ -110,15 +110,19 @@ function Import-D365DmfPackage {
             JobId               = $JobId
             Url                 = $Url
             AuthenticationToken = $bearer
-            Path = $Path
+            Path                = $Path
         }
 
         $dmfDetails = Invoke-DmfEnqueuePackage @dmfParms -EnableException:$EnableException
 
-        if($null -eq $dmfDetails) {
+        if ([string]::IsNullOrWhiteSpace($dmfDetails)) {
             Write-PSFMessage -Level Verbose -Message "Output object is null" -Target $Var
         }
 
+        [PSCustomObject]@{
+            MessageId = $dmfDetails
+        }
+        
         Invoke-TimeSignal -End
     }
 }
