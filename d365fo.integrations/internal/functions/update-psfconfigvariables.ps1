@@ -1,4 +1,22 @@
-﻿function Update-PsfConfigVariables {
+﻿<#
+.SYNOPSIS
+Update module variables from the configuration store
+
+.DESCRIPTION
+Update all module variables that are based on the PSF configuration store
+
+.EXAMPLE
+PS C:\> Update-PsfConfigVariables
+
+This will update all module variables based on the configuration store.
+
+.NOTES
+Tags: Variable, Variables
+
+Author: Mötz Jensen (@Splaxi)
+#>
+
+function Update-PsfConfigVariables {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
 
