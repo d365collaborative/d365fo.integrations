@@ -131,9 +131,12 @@ function Export-D365DmfPackage {
 
         $dmfDetailsJson | Get-DmfFile -Path $Path -AuthenticationToken $bearer
 
-        Invoke-DmfAcknowledge -JsonMessage $dmfDetails @dmfParms
-
+        $dmfAckResponse = Invoke-DmfAcknowledge -JsonMessage $dmfDetails @dmfParms
+        
         if (Test-PSFFunctionInterrupt) { return }
+
+        if($null -eq $dmfAckResponse) { return }
+        
 
         Invoke-TimeSignal -End
     }

@@ -41,6 +41,8 @@ function Add-WebRequestContent {
         [string] $Payload
     )
 
+    Write-PSFMessage -Level Verbose -Message "Parsing the payload and adding it to the web request." -Target $JobId
+
     try {
         $WebRequest.ContentLength = [System.Text.Encoding]::UTF8.GetByteCount($Payload)
         $stream = $WebRequest.GetRequestStream()
@@ -53,5 +55,4 @@ function Add-WebRequestContent {
         Write-PSFMessage -Level Critical -Message "Exception while creating WebRequest $RequestUrl" -Exception $_.Exception
         Stop-PSFFunction -Message "Stopping" -StepsUpward 1
     }
-
 }
