@@ -109,6 +109,8 @@ function Remove-D365ODataEntity {
     process {
         Invoke-TimeSignal -Start
 
+        Write-PSFMessage -Level Verbose -Message "Building request for removing data entity through the OData endpoint for entity named: $EntityName." -Target $EntityName
+
         $keyBuilder = [System.Text.StringBuilder]::new()
 
         $null = $keyBuilder.Append("(")
@@ -119,8 +121,6 @@ function Remove-D365ODataEntity {
         $keyBuilder.Length--
         $null = $keyBuilder.Append(")")
 
-        Write-PSFMessage -Level Verbose -Message "Working against $EntityName" -Target $entityName
-        
         [System.UriBuilder] $odataEndpoint = $URL
 
         $odataEndpoint.Path = "data/$EntityName$($keyBuilder.ToString())"

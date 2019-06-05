@@ -183,10 +183,14 @@ function Get-D365ODataPublicEntity {
         $odataEndpoint.Query = ""
         
         if (-not ([string]::IsNullOrEmpty($EntityName))) {
+            Write-PSFMessage -Level Verbose -Message "Building request for the OData metadata endpoint for entity named: $EntityName." -Target $EntityName
+
             $searchEntityName = $EntityName
             $odataEndpoint.Query = "`$filter=(tolower(Name) eq tolower('$EntityName') or tolower(EntitySetName) eq tolower('$EntityName'))"
         }
         elseif (-not ([string]::IsNullOrEmpty($EntityNameContains))) {
+            Write-PSFMessage -Level Verbose -Message "Building request for the OData metadata endpoint for entity that contains: $EntityNameContains." -Target $EntityNameContains
+
             $searchEntityName = $EntityNameContains
             $odataEndpoint.Query = "`$filter=(contains(tolower(Name), tolower('$EntityNameContains')) or contains(tolower(EntitySetName), tolower('$EntityNameContains')))"
         }
@@ -196,7 +200,7 @@ function Get-D365ODataPublicEntity {
         }
 
         try {
-            Write-PSFMessage -Level Verbose -Message "Executing http request against the OData endpoint." -Target $($odataEndpoint.Uri.AbsoluteUri)
+            Write-PSFMessage -Level Verbose -Message "Executing http request against the OData metadata endpoint." -Target $($odataEndpoint.Uri.AbsoluteUri)
             $res = Invoke-RestMethod -Method Get -Uri $odataEndpoint.Uri.AbsoluteUri -Headers $headers -ContentType 'application/json'
 
             if(-not ($RawOutput)) {

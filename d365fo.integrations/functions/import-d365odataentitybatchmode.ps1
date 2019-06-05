@@ -39,6 +39,9 @@
     .PARAMETER ClientSecret
         The ClientSecret obtained from the Azure Portal when you created a Registered Application
         
+    .PARAMETER RawOutput
+        Instructs the cmdlet to output the raw json string directly
+
     .PARAMETER EnableException
         This parameters disables user-friendly warnings and enables the throwing of exceptions
         This is less user friendly, but allows catching exceptions in calling scripts
@@ -93,16 +96,18 @@ function Import-D365ODataEntityBatchMode {
         [Parameter(Mandatory = $false)]
         [string] $ClientSecret = $Script:ODataClientSecret,
 
+        [switch] $RawOutput,
+
         [switch] $EnableException
 
     )
 
     begin {
         $bearerParms = @{
-            Url     = $Url
+            Url          = $Url
             ClientId     = $ClientId
             ClientSecret = $ClientSecret
-            Tenant = $Tenant
+            Tenant       = $Tenant
         }
 
         $bearer = New-BearerToken @bearerParms
@@ -120,6 +125,8 @@ function Import-D365ODataEntityBatchMode {
 
     process {
         Invoke-TimeSignal -Start
+
+        Write-PSFMessage -Level Verbose -Message "Building batch request for the OData endpoint for entity named: $EntityName." -Target $EntityName
 
         $idbatch = $(New-Guid).ToString()
         $idchangeset = $(New-Guid).ToString()
@@ -143,7 +150,7 @@ function Import-D365ODataEntityBatchMode {
         $counter = 0
         while ($payLoadEnumerator.MoveNext()) {
 
-            Write-PSFMessage -Level Verbose -Message "Inside the payload loop"
+            Write-PSFMessage -Level Verbose -Message "Parsing the payload for the batch request."
 
             $counter ++
             $localPayload = $payLoadEnumerator.Current.Trim()
@@ -161,27 +168,44 @@ function Import-D365ODataEntityBatchMode {
         $null = $dataBuilder.Append("$batchPayload--")
         $data = $dataBuilder.ToString()
 
-        Write-PSFMessage -Level VeryVerbose -Message $data -Tag "Webrequest.DATA"
+        Write-PSFMessage -Level Debug -Message "Parsing data to debug log next."
+
+        Write-PSFMessage -Level Debug -Message $data
         
-        $request.ContentLength = $data.Length
-
-        $stream = $request.GetRequestStream()
-        $streamWriter = new-object System.IO.StreamWriter($stream)
-        $streamWriter.Write([string]$data);
-        $streamWriter.Flush();
+        Add-WebRequestContent -WebRequest $request -Payload $data
     
-        $response = $request.GetResponse()
+        try {
+            Write-PSFMessage -Level Verbose -Message "Executing http request against the OData endpoint."
 
-        # $response
+            $response = $request.GetResponse()
+        }
+        catch {
+            $messageString = "Something went wrong while importing batch data through the OData endpoint for the entity: $EntityName"
+            Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $EntityName
+            Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>', ''))) -ErrorRecord $_
+            return
+        }
+    
+        #Might need to be something else than OK and Created
+        if ($response.StatusCode -ne [System.Net.HttpStatusCode]::Ok -and $response.StatusCode -ne [System.Net.HttpStatusCode]::Created) {
+            Write-PSFMessage -Level Verbose -Message "Status code not 'Ok' and not 'Created', Description $($response.StatusDescription)"
+            Stop-PSFFunction -Message "Stopping" -Exception $([System.Exception]::new("Returned status code indicates that the request was unsuccessful."))
+            return
+        }
 
         $stream = $response.GetResponseStream()
     
-        $streamReader = New-Object System.IO.StreamReader($stream);
+        $streamReader = New-Object System.IO.StreamReader($stream)
         
-        $integrationResponse = $streamReader.ReadToEnd()
+        $res = $streamReader.ReadToEnd()
         $streamReader.Close();
 
-        $integrationResponse
+        if ($RawOutput) {
+            $res
+        }
+        else {
+            
+        }
 
         Invoke-TimeSignal -End
     }

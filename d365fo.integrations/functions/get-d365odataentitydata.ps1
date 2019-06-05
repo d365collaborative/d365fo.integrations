@@ -167,9 +167,9 @@ function Get-D365ODataEntityData {
     process {
         Invoke-TimeSignal -Start
 
-        $entity = "$EntityName$EntitySetName"
+        Write-PSFMessage -Level Verbose -Message "Building request for the OData endpoint for entity: $entity." -Target $entity
 
-        Write-PSFMessage -Level Verbose -Message "Working against $entity" -Target $entity
+        $entity = "$EntityName$EntitySetName"
 
         [System.UriBuilder] $odataEndpoint = $URL
         

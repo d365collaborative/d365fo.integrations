@@ -116,7 +116,7 @@ function Import-D365ODataEntity {
     process {
         Invoke-TimeSignal -Start
 
-        Write-PSFMessage -Level Verbose -Message "Working against $EntityName" -Target $entityName
+        Write-PSFMessage -Level Verbose -Message "Building request for the OData endpoint for entity named: $EntityName." -Target $EntityName
         
         [System.UriBuilder] $odataEndpoint = $URL
 
