@@ -38,11 +38,12 @@ function Get-FileFromWebRequest {
         [string] $Path
     )
 
-    Write-PSFMessage -Level Verbose -Message "Saving to file $FileName"
 
     $response = $null
     
     try {
+        Write-PSFMessage -Level Verbose -Message "Executing http request to download the DMF Package." -Target $($odataEndpoint.Uri.AbsoluteUri)
+
         $response = $WebRequest.GetResponse()
     }
     catch {

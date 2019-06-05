@@ -31,11 +31,10 @@ Tags: DMF, Package, Acknowledge, Acknowledgement, Ack
 
 Author: Mötz Jensen (@Splaxi)
 #>
-
 function Invoke-DmfAcknowledge {
+
     [CmdletBinding()]
-    [OutputType('System.String')]
-    # [OutputType([System.Net.WebRequest])]
+    [OutputType()]
     param (
         [Parameter(Mandatory = $true)]
         [String] $JobId,
@@ -62,13 +61,19 @@ function Invoke-DmfAcknowledge {
         Write-PSFMessage -Level Verbose -Message "Executing the ACK request against the DMF endpoint." -Target $JsonMessage
 
         $response = $request.GetResponse()
-
-        $response
     }
     catch {
-        $messageString = "Something went wrong while importing data through the OData endpoint for the entity: $EntityName"
+        $messageString = "Something went wrong while trying to acknowledge the DMF Package against the DMF endpoint."
         Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $EntityName
         Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>', ''))) -ErrorRecord $_ -StepsUpward 1
+        return
+    }
+
+    Write-PSFMessage -Level Verbose -Message "Status code was: $($response.StatusCode)" -Target $response.StatusCode
+    
+    if ($response.StatusCode -ne [System.Net.HttpStatusCode]::Ok) {
+        Write-PSFMessage -Level Verbose -Message "Status code not Ok, Description $($response.StatusDescription)"
+        Stop-PSFFunction -Message "Stopping" -StepsUpward 1 -EnableException:$false
         return
     }
 }

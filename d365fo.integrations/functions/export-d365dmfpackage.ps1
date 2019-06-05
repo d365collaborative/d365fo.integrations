@@ -116,7 +116,7 @@ function Export-D365DmfPackage {
         
         if (Test-PSFFunctionInterrupt) { return }
 
-    	if ([string]::IsNullOrWhiteSpace($dmfDetails)) {
+        if ([string]::IsNullOrWhiteSpace($dmfDetails)) {
             $messageString = "There was no file ready to be downloaded."
             Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception
             Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>', ''))) -ErrorRecord $_
@@ -126,16 +126,24 @@ function Export-D365DmfPackage {
         $dmfDetailsJson = $dmfDetails | ConvertFrom-Json
 
         if ($VerbosePreference -ne [System.Management.Automation.ActionPreference]::SilentlyContinue) {
-            $dmfDetailsJson
+            Write-PSFMessage -Level Verbose -Message "$dmfDetails" -Target $dmfDetailsJson
         }
 
         $dmfDetailsJson | Get-DmfFile -Path $Path -AuthenticationToken $bearer
 
+        if (Test-PSFFunctionInterrupt) {
+            Stop-PSFFunction -Message "Downloading the DMF Package file failed." -Exception $([System.Exception]::new("Unable to download the DMF package file."))
+            return
+        }
+
         $dmfAckResponse = Invoke-DmfAcknowledge -JsonMessage $dmfDetails @dmfParms
         
-        if (Test-PSFFunctionInterrupt) { return }
+        if (Test-PSFFunctionInterrupt) {
+            Stop-PSFFunction -Message "Acknowledgement of the DMF Package failed." -Exception $([System.Exception]::new("Unable to acknowledge the DMF package file."))
+            return
+        }
 
-        if($null -eq $dmfAckResponse) { return }
+        if ($null -eq $dmfAckResponse) { return }
         
 
         Invoke-TimeSignal -End
