@@ -136,15 +136,14 @@ function Export-D365DmfPackage {
             return
         }
 
-        $dmfAckResponse = Invoke-DmfAcknowledge -JsonMessage $dmfDetails @dmfParms
+        Invoke-DmfAcknowledge -JsonMessage $dmfDetails @dmfParms
         
         if (Test-PSFFunctionInterrupt) {
             Stop-PSFFunction -Message "Acknowledgement of the DMF Package failed." -Exception $([System.Exception]::new("Unable to acknowledge the DMF package file."))
             return
         }
 
-        if ($null -eq $dmfAckResponse) { return }
-        
+        Get-Item -Path $Path | Select-PSFObject "Name as Filename", @{Name = "Size"; Expression = {[PSFSize]$_.Length}}, "LastWriteTime as LastModified", "Fullname as File"
 
         Invoke-TimeSignal -End
     }
