@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-D365ODataConfig
 
 ## SYNOPSIS
-Get broadcast message configs
+Get OData configs
 
 ## SYNTAX
 
@@ -17,38 +17,38 @@ Get-D365ODataConfig [[-Name] <String>] [-OutputAsHashtable] [-EnableException] [
 ```
 
 ## DESCRIPTION
-Get all broadcast message configuration objects from the configuration store
+Get all OData configuration objects from the configuration store
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-D365BroadcastMessageConfig
+Get-D365ODataConfig
 ```
 
-This will display all broadcast message configurations on the machine.
+This will display all OData configurations on the machine.
 
 ### EXAMPLE 2
 ```
-Get-D365BroadcastMessageConfig -OutputAsHashtable
+Get-D365ODataConfig -OutputAsHashtable
 ```
 
-This will display all broadcast message configurations on the machine.
+This will display all OData configurations on the machine.
 Every object will be output as a hashtable, for you to utilize as parameters for other cmdlets.
 
 ### EXAMPLE 3
 ```
-Get-D365BroadcastMessageConfig -Name "UAT"
+Get-D365ODataConfig -Name "UAT"
 ```
 
-This will display the broadcast message configuration that is saved with the name "UAT" on the machine.
+This will display the OData configuration that is saved with the name "UAT" on the machine.
 
 ## PARAMETERS
 
 ### -Name
-The name of the broadcast message configuration you are looking for
+The name of the OData configuration you are looking for
 
-Default value is "*" to display all broadcast message configs
+Default value is "*" to display all OData configs
 
 ```yaml
 Type: String
@@ -103,7 +103,7 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 
 ### PSCustomObject
 ## NOTES
-Tags: Servicing, Message, Users, Environment, Config, Configuration, ClientId, ClientSecret
+Tags: OData, Environment, Config, Configuration, ClientId, ClientSecret
 
 Author: Mötz Jensen (@Splaxi)
 

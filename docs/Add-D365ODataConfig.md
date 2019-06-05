@@ -8,37 +8,35 @@ schema: 2.0.0
 # Add-D365ODataConfig
 
 ## SYNOPSIS
-Save a broadcast message config
+Save an OData config
 
 ## SYNTAX
 
 ```
-Add-D365ODataConfig [-Name] <String> [[-Tenant] <String>] [[-URL] <String>] [[-ClientId] <String>]
+Add-D365ODataConfig [-Name] <String> [[-Tenant] <String>] [[-Url] <String>] [[-ClientId] <String>]
  [[-ClientSecret] <String>] [-Temporary] [-Force] [-EnableException] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Adds a broadcast message config to the configuration store
+Adds an OData config to the configuration store
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Add-D365BroadcastMessageConfig -Name "UAT" -Tenant "e674da86-7ee5-40a7-b777-1111111111111" -URL "https://usnconeboxax1aos.cloud.onebox.dynamics.com" -ClientId "dea8d7a9-1602-4429-b138-111111111111" -ClientSecret "Vja/VmdxaLOPR+alkjfsadffelkjlfw234522"
+Add-D365ODataConfig -Name "UAT" -Tenant "e674da86-7ee5-40a7-b777-1111111111111" -Url "https://usnconeboxax1aos.cloud.onebox.dynamics.com" -ClientId "dea8d7a9-1602-4429-b138-111111111111" -ClientSecret "Vja/VmdxaLOPR+alkjfsadffelkjlfw234522"
 ```
 
-This will create a new broadcast message configuration with the name "UAT".
+This will create an new OData configuration with the name "UAT".
 It will save "e674da86-7ee5-40a7-b777-1111111111111" as the Azure Active Directory guid.
 It will save "https://usnconeboxax1aos.cloud.onebox.dynamics.com" as the D365FO environment.
 It will save "dea8d7a9-1602-4429-b138-111111111111" as the ClientId.
 It will save "Vja/VmdxaLOPR+alkjfsadffelkjlfw234522" as ClientSecret.
-It will use the default value "UTC" Time Zone for converting the different time and dates.
-It will use the default end time which is 60 minutes.
 
 ## PARAMETERS
 
 ### -Name
-The logical name of the broadcast configuration you are about to register in the configuration store
+The logical name of the OData configuration you are about to register in the configuration store
 
 ```yaml
 Type: String
@@ -53,7 +51,7 @@ Accept wildcard characters: False
 ```
 
 ### -Tenant
-Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is connected to, that you want to send a message to
+Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is connected to, that you want to access through OData
 
 ```yaml
 Type: String
@@ -67,13 +65,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -URL
-URL / URI for the D365FO environment you want to send a message to
+### -Url
+URL / URI for the D365FO environment you want to access through OData
 
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: URI
+Aliases: Uri
 
 Required: False
 Position: 3
@@ -113,7 +111,7 @@ Accept wildcard characters: False
 ```
 
 ### -Temporary
-Instruct the cmdlet to only temporarily add the broadcast message configuration in the configuration store
+Instruct the cmdlet to only temporarily add the OData configuration in the configuration store
 
 ```yaml
 Type: SwitchParameter
@@ -128,7 +126,7 @@ Accept wildcard characters: False
 ```
 
 ### -Force
-Instruct the cmdlet to overwrite the broadcast message configuration with the same name
+Instruct the cmdlet to overwrite the OData configuration with the same name
 
 ```yaml
 Type: SwitchParameter
@@ -167,7 +165,7 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 ## OUTPUTS
 
 ## NOTES
-Tags: Servicing, Broadcast, Message, Users, Environment, Config, Configuration, ClientId, ClientSecret
+Tags: Integrations, Integration, Bearer Token, Token, OData, Configuration
 
 Author: Mötz Jensen (@Splaxi)
 

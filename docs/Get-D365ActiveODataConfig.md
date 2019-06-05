@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-D365ActiveODataConfig
 
 ## SYNOPSIS
-Get active broadcast message configuration
+Get the active OData configuration
 
 ## SYNTAX
 
@@ -17,16 +17,16 @@ Get-D365ActiveODataConfig [-OutputAsHashtable] [-EnableException] [<CommonParame
 ```
 
 ## DESCRIPTION
-Get active broadcast message configuration from the configuration store
+Get the active OData configuration from the configuration store
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-D365ActiveBroadcastMessageConfig
+Get-D365ActiveODataConfig
 ```
 
-This will get the active broadcast message configuration.
+This will get the active OData configuration.
 
 ## PARAMETERS
 
@@ -70,7 +70,7 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 ## OUTPUTS
 
 ## NOTES
-Tags: Servicing, Message, Users, Environment, Config, Configuration, ClientId, ClientSecret
+Tags: OData, Environment, Config, Configuration, ClientId, ClientSecret
 
 Author: Mötz Jensen (@Splaxi)
 
