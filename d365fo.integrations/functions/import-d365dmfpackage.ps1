@@ -101,8 +101,6 @@ function Import-D365DmfPackage {
         }
 
         $bearer = New-BearerToken @bearerParms
-
-        $requestUrl = "$Url/api/connector/enqueue/$JobId"
     }
 
     process {
@@ -116,6 +114,10 @@ function Import-D365DmfPackage {
         }
 
         $dmfDetails = Invoke-DmfEnqueuePackage @dmfParms -EnableException:$EnableException
+
+        if($null -eq $dmfDetails) {
+            Write-PSFMessage -Level Verbose -Message "Output object is null" -Target $Var
+        }
 
         Invoke-TimeSignal -End
     }

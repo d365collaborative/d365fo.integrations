@@ -6,6 +6,9 @@
     .DESCRIPTION
         Enqueue a DMF package to the Dynamics 365 for Finance & Operations environment
         
+    .PARAMETER Path
+        Path of the file that you want to import into D365FO
+
     .PARAMETER JobId
         The GUID from the recurring data job
         
@@ -37,7 +40,7 @@
 function Invoke-DmfEnqueuePackage {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
     [CmdletBinding()]
-    [OutputType('System.String')]
+    [OutputType()]
     param (
         [Parameter(Mandatory = $true)]
         [Alias('File')]
