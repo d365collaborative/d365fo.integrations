@@ -40,7 +40,7 @@
 function Invoke-DmfEnqueuePackage {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
     [CmdletBinding()]
-    [OutputType()]
+    [OutputType('System.String')]
     param (
         [Parameter(Mandatory = $true)]
         [Alias('File')]
