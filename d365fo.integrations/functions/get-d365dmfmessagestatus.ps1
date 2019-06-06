@@ -1,17 +1,18 @@
-﻿<#
-.SYNOPSIS
-Get Message Status from the DMF
-
-.DESCRIPTION
-Get the Message Status based on the MessageId from the DMF Endpoint of the Dynamics 365 for Finance & Operations environment
-
-.PARAMETER MessageId
-MessageId of the message that you want to query the status for
-
-.PARAMETER Tenant
-Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is connected to, that you want to access through DMF
-
-.PARAMETER Url
+﻿
+<#
+    .SYNOPSIS
+        Get Message Status from the DMF
+        
+    .DESCRIPTION
+        Get the Message Status based on the MessageId from the DMF Endpoint of the Dynamics 365 for Finance & Operations environment
+        
+    .PARAMETER MessageId
+        MessageId of the message that you want to query the status for
+        
+    .PARAMETER Tenant
+        Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is connected to, that you want to access through DMF
+        
+    .PARAMETER Url
         URL / URI for the D365FO environment you want to access through DMF
         
     .PARAMETER ClientId
@@ -19,14 +20,14 @@ Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is con
         
     .PARAMETER ClientSecret
         The ClientSecret obtained from the Azure Portal when you created a Registered Application
-
-.PARAMETER WaitForCompletion
-Instruct the cmdlet to wait until the Message Status is in a terminating state
-
+        
+    .PARAMETER WaitForCompletion
+        Instruct the cmdlet to wait until the Message Status is in a terminating state
+        
     .PARAMETER EnableException
         This parameters disables user-friendly warnings and enables the throwing of exceptions
         This is less user friendly, but allows catching exceptions in calling scripts
-
+        
     .EXAMPLE
         PS C:\> Get-D365DmfMessageStatus -MessageId "84a383c8-336d-45e4-9933-0c3e8bfb734a"
         
@@ -44,13 +45,13 @@ Instruct the cmdlet to wait until the Message Status is in a terminating state
         It will use "https://usnconeboxax1aos.cloud.onebox.dynamics.com" as the base D365FO environment url.
         It will use "dea8d7a9-1602-4429-b138-111111111111" as the ClientId.
         It will use "Vja/VmdxaLOPR+alkjfsadffelkjlfw234522" as ClientSecret.
-
+        
     .LINK
         Add-D365ODataConfig
         
     .LINK
         Get-D365ActiveODataConfig
-
+        
     .LINK
         Import-D365DmfPackage
         

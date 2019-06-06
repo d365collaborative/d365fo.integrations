@@ -8,7 +8,7 @@
         
     .PARAMETER Path
         Path of the file that you want to import into D365FO
-
+        
     .PARAMETER JobId
         The GUID from the recurring data job
         
