@@ -53,6 +53,9 @@
         
     .LINK
         Get-D365ActiveODataConfig
+
+    .LINK
+        Get-D365DmfMessageStatus
         
     .LINK
         Set-D365ActiveODataConfig

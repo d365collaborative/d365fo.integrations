@@ -47,7 +47,8 @@
 		,	'Enable-d365Exception'
 		,	'Export-D365DmfPackage'
 		
-		,   'Get-D365ActiveODataConfig'
+        ,   'Get-D365ActiveODataConfig'
+        ,   'Get-D365DmfMessageStatus'
         ,	'Get-D365ODataConfig'
         ,   'Get-D365ODataEntityData'
         ,   'Get-D365ODataEntityKey'
