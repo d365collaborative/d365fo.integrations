@@ -5,42 +5,40 @@ online version:
 schema: 2.0.0
 ---
 
-# Import-D365DmfPackage
+# Get-D365DmfMessageStatus
 
 ## SYNOPSIS
-Import a DMF package into Dynamics 365 Finance & Operations
+Get Message Status from the DMF
 
 ## SYNTAX
 
 ```
-Import-D365DmfPackage [-Path] <String> [-JobId] <String> [[-Tenant] <String>] [[-Url] <String>]
- [[-ClientId] <String>] [[-ClientSecret] <String>] [-EnableException] [<CommonParameters>]
+Get-D365DmfMessageStatus [-MessageId] <String> [[-Tenant] <String>] [[-Url] <String>] [[-ClientId] <String>]
+ [[-ClientSecret] <String>] [-WaitForCompletion] [-EnableException] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Imports a DMF package into the DMF endpoint of the Dynamics 365 Finance & Operations
+Get the Message Status based on the MessageId from the DMF Endpoint of the Dynamics 365 for Finance & Operations environment
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Import-D365DmfPackage -Path "c:\temp\d365fo.tools\dmfpackage.zip" -JobId "db5e719a-8db3-4fe5-9c78-7be479ce85a2"
+Get-D365DmfMessageStatus -MessageId "84a383c8-336d-45e4-9933-0c3e8bfb734a"
 ```
 
-This will import a package into the 123456789 job through the DMF endpoint.
-It will use "c:\temp\d365fo.tools\dmfpackage.zip" as the location to read the file from.
-It will use "db5e719a-8db3-4fe5-9c78-7be479ce85a2" as the jobid parameter passed to the DMF endpoint.
+This will get the message status through the DMF endpoint.
+It will use "84a383c8-336d-45e4-9933-0c3e8bfb734a" as the MessageId parameter passed to the DMF endpoint.
 
 It will use the default OData configuration details that are stored in the configuration store.
 
 ### EXAMPLE 2
 ```
-Export-D365DmfPackage -Path "c:\temp\d365fo.tools\dmfpackage.zip" -JobId "db5e719a-8db3-4fe5-9c78-7be479ce85a2" -Tenant "e674da86-7ee5-40a7-b777-1111111111111" -Url "https://usnconeboxax1aos.cloud.onebox.dynamics.com" -ClientId "dea8d7a9-1602-4429-b138-111111111111" -ClientSecret "Vja/VmdxaLOPR+alkjfsadffelkjlfw234522"
+Get-D365DmfMessageStatus -MessageId "84a383c8-336d-45e4-9933-0c3e8bfb734a" -Tenant "e674da86-7ee5-40a7-b777-1111111111111" -Url "https://usnconeboxax1aos.cloud.onebox.dynamics.com" -ClientId "dea8d7a9-1602-4429-b138-111111111111" -ClientSecret "Vja/VmdxaLOPR+alkjfsadffelkjlfw234522"
 ```
 
 This will import a package into the 123456789 job through the DMF endpoint.
-It will use "c:\temp\d365fo.tools\dmfpackage.zip" as the location to read the file from.
-It will use "db5e719a-8db3-4fe5-9c78-7be479ce85a2" as the jobid parameter passed to the DMF endpoint.
+It will use "84a383c8-336d-45e4-9933-0c3e8bfb734a" as the MessageId parameter passed to the DMF endpoint.
 It will use "e674da86-7ee5-40a7-b777-1111111111111" as the Azure Active Directory guid.
 It will use "https://usnconeboxax1aos.cloud.onebox.dynamics.com" as the base D365FO environment url.
 It will use "dea8d7a9-1602-4429-b138-111111111111" as the ClientId.
@@ -48,23 +46,8 @@ It will use "Vja/VmdxaLOPR+alkjfsadffelkjlfw234522" as ClientSecret.
 
 ## PARAMETERS
 
-### -Path
-Path of the file that you want to import into D365FO
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: File
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -JobId
-JobId of the DMF job you want to import into
+### -MessageId
+MessageId of the message that you want to query the status for
 
 ```yaml
 Type: String
@@ -72,9 +55,9 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 2
+Position: 1
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -87,7 +70,7 @@ Parameter Sets: (All)
 Aliases: $AADGuid
 
 Required: False
-Position: 3
+Position: 2
 Default value: $Script:ODataTenant
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -102,7 +85,7 @@ Parameter Sets: (All)
 Aliases: URI
 
 Required: False
-Position: 4
+Position: 3
 Default value: $Script:ODataUrl
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -117,7 +100,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 5
+Position: 4
 Default value: $Script:ODataClientId
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -132,8 +115,23 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 6
+Position: 5
 Default value: $Script:ODataClientSecret
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WaitForCompletion
+Instruct the cmdlet to wait until the Message Status is in a terminating state
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -163,7 +161,7 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 ## OUTPUTS
 
 ## NOTES
-Tags: Import, Upload, DMF, Package, Packages, JobId
+Tags: Import, Upload, DMF, Package, Packages, Message, MessageId, Message Status
 
 Author: Mötz Jensen (@Splaxi)
 
@@ -173,7 +171,7 @@ Author: Mötz Jensen (@Splaxi)
 
 [Get-D365ActiveODataConfig]()
 
-[Get-D365DmfMessageStatus]()
+[Import-D365DmfPackage]()
 
 [Set-D365ActiveODataConfig]()
 
