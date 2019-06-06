@@ -126,7 +126,7 @@ function Get-D365DmfMessageStatus {
                     Start-Sleep -Seconds 60
                 }
                 
-                Write-PSFMessage -Level Verbose -Message "Executing http request against the OData endpoint." -Target $($odataEndpoint.Uri.AbsoluteUri)
+                Write-PSFMessage -Level Verbose -Message "Executing http request against the Message Status OData endpoint." -Target $($odataEndpoint.Uri.AbsoluteUri)
                 
                 $res = Invoke-RestMethod -Method Post -Uri $odataEndpoint.Uri.AbsoluteUri -Headers $headers -ContentType 'application/json' -Body $payload
 
@@ -139,8 +139,8 @@ function Get-D365DmfMessageStatus {
             $res | Select-PSFObject "Value as MessageStatus", "MessageId", "@odata.context"
         }
         catch {
-            $messageString = "Something went wrong while retrieving data from the OData endpoint for the entity: $entity"
-            Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $entity
+            $messageString = "Something went wrong while retrieving data from the Message Status OData endpoint for MessageId: $MessageId"
+            Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $MessageId
             Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>',''))) -ErrorRecord $_
             return
         }

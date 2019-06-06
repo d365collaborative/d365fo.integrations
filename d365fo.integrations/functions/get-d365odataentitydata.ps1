@@ -169,6 +169,7 @@ function Get-D365ODataEntityData {
 
         Write-PSFMessage -Level Verbose -Message "Building request for the OData endpoint for entity: $entity." -Target $entity
 
+        #A simple hack to select either names as the name going forward
         $entity = "$EntityName$EntitySetName"
 
         [System.UriBuilder] $odataEndpoint = $URL

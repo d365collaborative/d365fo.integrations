@@ -73,7 +73,7 @@ function Get-DmfFile {
             $retriesLocal = $retriesLocal - 1;
 
             if ($retriesLocal -lt 0) {
-                Write-PSFMessage -Level Critical "Number of retries exhausted for $JobId"
+                Write-PSFMessage -Level Critical "Number of retries exhausted for JobId: $JobId"
                 Stop-PSFFunction -Message "Stopping" -StepsUpward 1
                 return
             }

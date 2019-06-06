@@ -123,7 +123,7 @@ function Import-D365DmfPackage {
         }
 
         [PSCustomObject]@{
-            MessageId = $dmfDetails
+            MessageId = $dmfDetails.Replace("\r\n", "")
         }
         
         Invoke-TimeSignal -End

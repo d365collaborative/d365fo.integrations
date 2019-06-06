@@ -175,7 +175,7 @@ function Import-D365ODataEntityBatchMode {
         Add-WebRequestContent -WebRequest $request -Payload $data
     
         try {
-            Write-PSFMessage -Level Verbose -Message "Executing http request against the OData endpoint."
+            Write-PSFMessage -Level Verbose -Message "Executing batch http request against the OData endpoint."
 
             $response = $request.GetResponse()
         }

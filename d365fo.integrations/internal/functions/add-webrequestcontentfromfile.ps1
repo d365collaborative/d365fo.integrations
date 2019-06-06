@@ -45,6 +45,7 @@ function Add-WebRequestContentFromFile {
     if (-not (Test-PathExists -Path $Path -Type Leaf)) { return }
 
     try {
+        Write-PSFMessage -Level Debug -Message "Working on file: $Path" -Target $Path
     
         $fileStream = New-Object System.IO.FileStream($Path, [System.IO.FileMode]::Open)
         

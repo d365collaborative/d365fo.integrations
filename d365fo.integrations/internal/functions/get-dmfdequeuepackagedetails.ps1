@@ -73,8 +73,8 @@ function Get-DmfDequeuePackageDetails {
         $res
     }
     catch {
-        $messageString = "Something went wrong while importing data through the OData endpoint for the entity: $EntityName"
-        Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $EntityName
+        $messageString = "Something went wrong while dequeuing through the DMF Package endpoint for JobId: $JobId"
+        Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $JobId
         Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>', ''))) -ErrorRecord $_ -StepsUpward 1
         return
     }

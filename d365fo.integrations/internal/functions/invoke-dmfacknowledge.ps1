@@ -50,7 +50,7 @@ function Invoke-DmfAcknowledge {
         [string] $Url
     )
 
-    Write-PSFMessage -Level Verbose -Message "Building request for the ACK of the DMF package." -Target $JobId
+    Write-PSFMessage -Level Verbose -Message "Building request for the ACK interface of the DMF package." -Target $JobId
 
     $requestUrl = "$Url/api/connector/ack/$JobId"
 
@@ -59,13 +59,13 @@ function Invoke-DmfAcknowledge {
     Add-WebRequestContent -WebRequest $request -Payload $JsonMessage
 
     try {
-        Write-PSFMessage -Level Verbose -Message "Executing the ACK request against the DMF endpoint." -Target $JsonMessage
+        Write-PSFMessage -Level Verbose -Message "Executing the request against the ACK interface of the DMF endpoint." -Target $JsonMessage
 
         $response = $request.GetResponse()
     }
     catch {
-        $messageString = "Something went wrong while trying to acknowledge the DMF Package against the DMF endpoint."
-        Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $EntityName
+        $messageString = "Something went wrong while contacting the ACK interface of the DMF endpoint for JobId: $JobId."
+        Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $JobId
         Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>', ''))) -ErrorRecord $_ -StepsUpward 1
         return
     }

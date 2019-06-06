@@ -67,15 +67,15 @@ function Invoke-DmfEnqueuePackage {
     Add-WebRequestContentFromFile -WebRequest $request -Path $Path
 
     try {
-        Write-PSFMessage -Level Verbose -Message "Executing the DMF Package enqueue request against the DMF endpoint."
+        Write-PSFMessage -Level Verbose -Message "Executing the request against the DMF Package enqueue endpoint."
 
         $response = $request.GetResponse()
 
         Write-PSFMessage -Level Verbose -Message "Response completed ($($request.ContentLength))."
     }
     catch {
-        $messageString = "Something went wrong while importing data through the OData endpoint for the entity: $EntityName"
-        Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $EntityName
+        $messageString = "Something went wrong while enqueueing through the DMF Package endpoint for the JobId: $JobId"
+        Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $JobId
         Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>', ''))) -ErrorRecord $_ -StepsUpward 1
         return
     }
