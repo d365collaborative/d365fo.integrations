@@ -1,5 +1,5 @@
 ﻿$script:ModuleRoot = $PSScriptRoot
-$script:ModuleVersion = (Import-PowerShellDataFile -Path "$($script:ModuleRoot)\d365fo.integrations.psd1").ModuleVersion
+$script:ModuleVersion = '0.2.1'
 
 Set-PSFFeature -Name PSFramework.InheritEnableException -Value $true -ModuleName 'd365fo.integrations'
 
