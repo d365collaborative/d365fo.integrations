@@ -77,4 +77,4 @@ $fileData = $fileData.Replace('"<compile code into here>"', ($text -join "`n`n")
 
 # Publish to Gallery
 Write-PSFMessage -Level Important -Message "Running the publish command against PowerShell gallery."
-Publish-Module -Path "$($publishDir.FullName)\d365fo.integrations" -NuGetApiKey $ApiKey -Force
+Publish-Module -Path "$($publishDir.FullName)\d365fo.integrations" -NuGetApiKey $ApiKey -Force -Verbose
