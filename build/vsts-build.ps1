@@ -5,27 +5,24 @@ It expects as input an ApiKey authorized to publish the module.
 Insert any build steps you may need to take before publishing it here.
 #>
 param (
-	$ApiKey
+	$ApiKey,
+	
+	$WorkingDirectory = $env:SYSTEM_DEFAULTWORKINGDIRECTORY
 )
 
 # Prepare publish folder
-Write-PSFMessage -Level Important -Message "Creating and populating publishing directory"
-$publishDir = New-Item -Path $env:SYSTEM_DEFAULTWORKINGDIRECTORY -Name publish -ItemType Directory
-Copy-Item -Path "$($env:SYSTEM_DEFAULTWORKINGDIRECTORY)\d365fo.integrations" -Destination $publishDir.FullName -Recurse -Force
+Write-PSFMessage -Level Important -Message "Creating and populating publishing directory."
+$publishDir = New-Item -Path $WorkingDirectory -Name publish -ItemType Directory
 
-# Create commands.ps1
+Write-PSFMessage -Level Important -Message "Copying files from the working directory to the publish directory."
+Copy-Item -Path "$($WorkingDirectory)\d365fo.integrations" -Destination $publishDir.FullName -Recurse -Force
+
+#region Gather text data to compile
 $text = @()
-Get-ChildItem -Path "$($publishDir.FullName)\d365fo.integrations\internal\functions\" -Recurse -File -Filter "*.ps1" | ForEach-Object {
-	$text += [System.IO.File]::ReadAllText($_.FullName)
-}
-Get-ChildItem -Path "$($publishDir.FullName)\d365fo.integrations\functions\" -Recurse -File -Filter "*.ps1" | ForEach-Object {
-	$text += [System.IO.File]::ReadAllText($_.FullName)
-}
-$text -join "`n`n" | Set-Content -Path "$($publishDir.FullName)\d365fo.integrations\commands.ps1"
-
-# Create resourcesBefore.ps1
 $processed = @()
-$text = @()
+
+# Gather Stuff to run before
+Write-PSFMessage -Level Important -Message "Fixing the before files."
 foreach ($line in (Get-Content "$($PSScriptRoot)\filesBefore.txt" | Where-Object { $_ -notlike "#*" }))
 {
 	if ([string]::IsNullOrWhiteSpace($line)) { continue }
@@ -40,11 +37,20 @@ foreach ($line in (Get-Content "$($PSScriptRoot)\filesBefore.txt" | Where-Object
 		$processed += $item.FullName
 	}
 }
-if ($text) { $text -join "`n`n" | Set-Content -Path "$($publishDir.FullName)\d365fo.integrations\resourcesBefore.ps1" }
 
-# Create resourcesAfter.ps1
-$processed = @()
-$text = @()
+# Gather commands
+Write-PSFMessage -Level Important -Message "Fetching internal functions."
+Get-ChildItem -Path "$($publishDir.FullName)\d365fo.integrations\internal\functions\" -Recurse -File -Filter "*.ps1" | ForEach-Object {
+	$text += [System.IO.File]::ReadAllText($_.FullName)
+}
+
+Write-PSFMessage -Level Important -Message "Fetching external functions."
+Get-ChildItem -Path "$($publishDir.FullName)\d365fo.integrations\functions\" -Recurse -File -Filter "*.ps1" | ForEach-Object {
+	$text += [System.IO.File]::ReadAllText($_.FullName)
+}
+
+# Gather stuff to run afterwards
+Write-PSFMessage -Level Important -Message "Fixing the after files."
 foreach ($line in (Get-Content "$($PSScriptRoot)\filesAfter.txt" | Where-Object { $_ -notlike "#*" }))
 {
 	if ([string]::IsNullOrWhiteSpace($line)) { continue }
@@ -59,7 +65,16 @@ foreach ($line in (Get-Content "$($PSScriptRoot)\filesAfter.txt" | Where-Object 
 		$processed += $item.FullName
 	}
 }
-if ($text) { $text -join "`n`n" | Set-Content -Path "$($publishDir.FullName)\d365fo.integrations\resourcesAfter.ps1" }
+#endregion Gather text data to compile
+
+#region Update the psm1 file
+Write-PSFMessage -Level Important -Message "Update the psm1 file."
+$fileData = Get-Content -Path "$($publishDir.FullName)\d365fo.integrations\d365fo.integrations.psm1" -Raw
+$fileData = $fileData.Replace('"<was not compiled>"', '"<was compiled>"')
+$fileData = $fileData.Replace('"<compile code into here>"', ($text -join "`n`n"))
+[System.IO.File]::WriteAllText("$($publishDir.FullName)\d365fo.integrations\d365fo.integrations.psm1", $fileData, [System.Text.Encoding]::UTF8)
+#endregion Update the psm1 file
 
 # Publish to Gallery
-Publish-Module -Path "$($publishDir.FullName)\d365fo.integrations" -NuGetApiKey $ApiKey -Force
+Write-PSFMessage -Level Important -Message "Running the publish command against PowerShell gallery."
+Publish-Module -Path "$($publishDir.FullName)\d365fo.integrations" -NuGetApiKey $ApiKey -Force -Verbose
