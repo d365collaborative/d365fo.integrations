@@ -54,6 +54,14 @@
         This parameters disables user-friendly warnings and enables the throwing of exceptions
         This is less user friendly, but allows catching exceptions in calling scripts
         
+.PARAMETER RawOutput
+        Instructs the cmdlet to include the outer structure of the response received from OData endpoint
+        
+        The output will still be a PSCustomObject
+        
+    .PARAMETER OutputAsJson
+        Instructs the cmdlet to convert the output to a Json string
+        
     .EXAMPLE
         PS C:\> Get-D365ODataEntityData -EntityName CustomersV3 -ODataQuery '$top=1'
         
@@ -142,16 +150,20 @@ function Get-D365ODataEntityData {
         [Parameter(Mandatory = $false)]
         [string] $ClientSecret = $Script:ODataClientSecret,
 
-        [switch] $EnableException
+        [switch] $EnableException,
+
+        [switch] $RawOutput,
+
+        [switch] $OutputAsJson
 
     )
 
     begin {
         $bearerParms = @{
-            Url     = $Url
+            Url          = $Url
             ClientId     = $ClientId
             ClientSecret = $ClientSecret
-            Tenant = $Tenant
+            Tenant       = $Tenant
         }
 
         $bearer = New-BearerToken @bearerParms
@@ -180,18 +192,29 @@ function Get-D365ODataEntityData {
             $odataEndpoint.Query = "$ODataQuery"
         }
         
-        if($CrossCompany){
+        if ($CrossCompany) {
             $odataEndpoint.Query = $($odataEndpoint.Query + "&cross-company=true").Replace("?", "")
         }
 
         try {
             Write-PSFMessage -Level Verbose -Message "Executing http request against the OData endpoint." -Target $($odataEndpoint.Uri.AbsoluteUri)
-            Invoke-RestMethod -Method Get -Uri $odataEndpoint.Uri.AbsoluteUri -Headers $headers -ContentType 'application/json'
+            $res = Invoke-RestMethod -Method Get -Uri $odataEndpoint.Uri.AbsoluteUri -Headers $headers -ContentType 'application/json'
+
+            if (-not $RawOutput) {
+                $res = $res.Value
+            }
+
+            if ($OutputAsJson) {
+                $res | ConvertTo-Json
+            }
+            else {
+                $res
+            }
         }
         catch {
             $messageString = "Something went wrong while retrieving data from the OData endpoint for the entity: $entity"
             Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $entity
-            Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>',''))) -ErrorRecord $_
+            Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>', ''))) -ErrorRecord $_
             return
         }
 

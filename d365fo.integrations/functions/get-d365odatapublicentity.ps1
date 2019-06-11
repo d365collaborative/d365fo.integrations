@@ -58,7 +58,7 @@
         
         The output will still be a PSCustomObject
         
-    .PARAMETER RawJsonOutput
+    .PARAMETER OutputAsJson
         Instructs the cmdlet to convert the output to a Json string
         
     .EXAMPLE
@@ -150,7 +150,7 @@ function Get-D365ODataPublicEntity {
 
         [switch] $RawOutput,
         
-        [switch] $RawJsonOutput
+        [switch] $OutputAsJson
 
     )
 
@@ -207,7 +207,7 @@ function Get-D365ODataPublicEntity {
                 $res = $res.Value
             }
 
-            if($RawJsonOutput) {
+            if($OutputAsJson) {
                 $res | ConvertTo-Json
             }else {
                 $res
