@@ -3,7 +3,7 @@
     RootModule   = 'd365fo.integrations.psm1'
 	
     # Version number of this module.
-    ModuleVersion     = '0.2.2'
+    ModuleVersion     = '0.2.3'
 	
     # ID used to uniquely identify this module
     GUID              = 'd2667b62-1436-42b3-a840-ab6b4a0e5aa0'
@@ -29,7 +29,7 @@
         @{ ModuleName = 'PSFramework'; ModuleVersion = '1.0.13' }
         , @{ ModuleName = 'Azure.Storage'; ModuleVersion = '4.4.0' }
         ,	@{ ModuleName = 'PSNotification'; ModuleVersion = '0.5.3' }
-        ,	@{ ModuleName = 'PSOAuthHelper'; ModuleVersion = '0.2.3' }
+        ,	@{ ModuleName = 'PSOAuthHelper'; ModuleVersion = '0.2.5' }
     )
 	
     # Assemblies that must be loaded prior to importing this module

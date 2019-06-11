@@ -1,0 +1,3 @@
+﻿Update-ODataVariables
+
+Update-PsfConfigVariables

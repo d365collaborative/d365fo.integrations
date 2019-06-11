@@ -1,5 +1,5 @@
 ﻿$script:ModuleRoot = $PSScriptRoot
-$script:ModuleVersion = '0.2.2'
+$script:ModuleVersion = '0.2.3'
 
 Set-PSFFeature -Name PSFramework.InheritEnableException -Value $true -ModuleName 'd365fo.integrations'
 
