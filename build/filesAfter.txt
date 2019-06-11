@@ -6,3 +6,4 @@ internal\scriptblocks\*.ps1
 internal\tepp\*.tepp.ps1
 internal\tepp\assignment.ps1
 internal\scripts\license.ps1
+internal\scripts\variables.ps1
