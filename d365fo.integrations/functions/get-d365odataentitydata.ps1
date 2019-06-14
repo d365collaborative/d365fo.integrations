@@ -62,7 +62,7 @@
     .PARAMETER OutputAsJson
         Instructs the cmdlet to convert the output to a Json string
         
-.PARAMETER RawOutput
+    .PARAMETER RawOutput
         Instructs the cmdlet to include the outer structure of the response received from OData endpoint
         
         The output will still be a PSCustomObject
