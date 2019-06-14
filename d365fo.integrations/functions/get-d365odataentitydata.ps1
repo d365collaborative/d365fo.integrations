@@ -54,6 +54,14 @@
         This parameters disables user-friendly warnings and enables the throwing of exceptions
         This is less user friendly, but allows catching exceptions in calling scripts
         
+    .PARAMETER RawOutput
+        Instructs the cmdlet to include the outer structure of the response received from OData endpoint
+        
+        The output will still be a PSCustomObject
+        
+    .PARAMETER OutputAsJson
+        Instructs the cmdlet to convert the output to a Json string
+        
 .PARAMETER RawOutput
         Instructs the cmdlet to include the outer structure of the response received from OData endpoint
         
