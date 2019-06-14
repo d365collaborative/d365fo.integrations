@@ -140,9 +140,9 @@
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
 		}
-		It 'Should have the expected parameter RawJsonOutput' {
-			$parameter = (Get-Command Get-D365ODataPublicEntity).Parameters['RawJsonOutput']
-			$parameter.Name | Should -Be 'RawJsonOutput'
+		It 'Should have the expected parameter OutputAsJson' {
+			$parameter = (Get-Command Get-D365ODataPublicEntity).Parameters['OutputAsJson']
+			$parameter.Name | Should -Be 'OutputAsJson'
 			$parameter.ParameterType.ToString() | Should -Be System.Management.Automation.SwitchParameter
 			$parameter.IsDynamic | Should -Be $False
 			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
@@ -158,19 +158,19 @@
 	Describe "Testing parameterset Default" {
 		<#
 		Default -
-		Default -EntityName -ODataQuery -Tenant -URL -ClientId -ClientSecret -EnableException -RawOutput -RawJsonOutput
+		Default -EntityName -ODataQuery -Tenant -URL -ClientId -ClientSecret -EnableException -RawOutput -OutputAsJson
 		#>
 	}
  	Describe "Testing parameterset NameContains" {
 		<#
 		NameContains -EntityNameContains
-		NameContains -EntityNameContains -ODataQuery -Tenant -URL -ClientId -ClientSecret -EnableException -RawOutput -RawJsonOutput
+		NameContains -EntityNameContains -ODataQuery -Tenant -URL -ClientId -ClientSecret -EnableException -RawOutput -OutputAsJson
 		#>
 	}
  	Describe "Testing parameterset Query" {
 		<#
 		Query -ODataQuery
-		Query -ODataQuery -Tenant -URL -ClientId -ClientSecret -EnableException -RawOutput -RawJsonOutput
+		Query -ODataQuery -Tenant -URL -ClientId -ClientSecret -EnableException -RawOutput -OutputAsJson
 		#>
 	}
 
