@@ -60,7 +60,7 @@
         
     .PARAMETER OutNamesOnly
         Instructs the cmdlet to only display the DataEntityName and the EntityName from the response received from OData endpoint
-
+        
         DataEntityName is the (logical) name of the entity from a code perspective.
         EntityName is the public OData endpoint name of the entity.
         
