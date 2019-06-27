@@ -3,7 +3,7 @@
     RootModule   = 'd365fo.integrations.psm1'
 	
     # Version number of this module.
-    ModuleVersion     = '0.2.6'
+    ModuleVersion     = '0.2.7'
 	
     # ID used to uniquely identify this module
     GUID              = 'd2667b62-1436-42b3-a840-ab6b4a0e5aa0'
@@ -52,6 +52,7 @@
         ,	'Get-D365ODataConfig'
         ,   'Get-D365ODataEntityData'
         ,   'Get-D365ODataEntityKey'
+        ,   'Get-D365ODataEntityMandatoryFields'
         ,	'Get-D365ODataPublicEntity'
         
         ,   'Import-D365DmfPackage'

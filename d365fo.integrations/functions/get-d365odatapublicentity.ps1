@@ -58,6 +58,12 @@
         
         The output will still be a PSCustomObject
         
+    .PARAMETER OutNamesOnly
+        Instructs the cmdlet to only display the DataEntityName and the EntityName from the response received from OData endpoint
+
+        DataEntityName is the (logical) name of the entity from a code perspective.
+        EntityName is the public OData endpoint name of the entity.
+        
     .PARAMETER OutputAsJson
         Instructs the cmdlet to convert the output to a Json string
         
@@ -150,8 +156,9 @@ function Get-D365ODataPublicEntity {
 
         [switch] $RawOutput,
         
-        [switch] $OutputAsJson
+        [switch] $OutNamesOnly,
 
+        [switch] $OutputAsJson
     )
 
 
@@ -205,6 +212,10 @@ function Get-D365ODataPublicEntity {
 
             if(-not ($RawOutput)) {
                 $res = $res.Value
+
+                if($OutNamesOnly) {
+                    $res = $res | Select-PSFObject "Name as DataEntityName", "EntitySetName as EntityName"
+                }
             }
 
             if($OutputAsJson) {
