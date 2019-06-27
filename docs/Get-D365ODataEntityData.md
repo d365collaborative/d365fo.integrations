@@ -15,13 +15,15 @@ Get data from an Data Entity using OData
 ### Default (Default)
 ```
 Get-D365ODataEntityData -EntitySetName <String> [-ODataQuery <String>] [-CrossCompany] [-Tenant <String>]
- [-URL <String>] [-ClientId <String>] [-ClientSecret <String>] [-EnableException] [<CommonParameters>]
+ [-URL <String>] [-ClientId <String>] [-ClientSecret <String>] [-EnableException] [-RawOutput] [-OutputAsJson]
+ [<CommonParameters>]
 ```
 
 ### Specific
 ```
 Get-D365ODataEntityData -EntityName <String> [-ODataQuery <String>] [-CrossCompany] [-Tenant <String>]
- [-URL <String>] [-ClientId <String>] [-ClientSecret <String>] [-EnableException] [<CommonParameters>]
+ [-URL <String>] [-ClientId <String>] [-ClientSecret <String>] [-EnableException] [-RawOutput] [-OutputAsJson]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -211,6 +213,38 @@ Accept wildcard characters: False
 ### -EnableException
 This parameters disables user-friendly warnings and enables the throwing of exceptions
 This is less user friendly, but allows catching exceptions in calling scripts
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -RawOutput
+Instructs the cmdlet to include the outer structure of the response received from OData endpoint
+
+The output will still be a PSCustomObject
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -OutputAsJson
+Instructs the cmdlet to convert the output to a Json string
 
 ```yaml
 Type: SwitchParameter

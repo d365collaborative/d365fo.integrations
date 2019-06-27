@@ -15,21 +15,21 @@ Get public OData Data Entity and their metadata
 ### Default (Default)
 ```
 Get-D365ODataPublicEntity [-EntityName <String>] [-ODataQuery <String>] [-Tenant <String>] [-URL <String>]
- [-ClientId <String>] [-ClientSecret <String>] [-EnableException] [-RawOutput] [-RawJsonOutput]
+ [-ClientId <String>] [-ClientSecret <String>] [-EnableException] [-RawOutput] [-OutNamesOnly] [-OutputAsJson]
  [<CommonParameters>]
 ```
 
 ### NameContains
 ```
 Get-D365ODataPublicEntity -EntityNameContains <String> [-ODataQuery <String>] [-Tenant <String>]
- [-URL <String>] [-ClientId <String>] [-ClientSecret <String>] [-EnableException] [-RawOutput] [-RawJsonOutput]
- [<CommonParameters>]
+ [-URL <String>] [-ClientId <String>] [-ClientSecret <String>] [-EnableException] [-RawOutput] [-OutNamesOnly]
+ [-OutputAsJson] [<CommonParameters>]
 ```
 
 ### Query
 ```
 Get-D365ODataPublicEntity -ODataQuery <String> [-Tenant <String>] [-URL <String>] [-ClientId <String>]
- [-ClientSecret <String>] [-EnableException] [-RawOutput] [-RawJsonOutput] [<CommonParameters>]
+ [-ClientSecret <String>] [-EnableException] [-RawOutput] [-OutNamesOnly] [-OutputAsJson] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -259,7 +259,25 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -RawJsonOutput
+### -OutNamesOnly
+Instructs the cmdlet to only display the DataEntityName and the EntityName from the response received from OData endpoint
+
+DataEntityName is the (logical) name of the entity from a code perspective.
+EntityName is the public OData endpoint name of the entity.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -OutputAsJson
 Instructs the cmdlet to convert the output to a Json string
 
 ```yaml
