@@ -13,7 +13,7 @@
         The properties value from the meta data object
         
     .EXAMPLE
-        PS C:\> Get-D365ODataPublicEntity -EntityName CustomersV3 | Get-D365ODataEntityMandatoryFields | Format-List
+        PS C:\> Get-D365ODataPublicEntity -EntityName CustomersV3 | Get-D365ODataEntityMandatoryField | Format-List
         
         This will extract all the relevant mandatory fields from the Data Entity.
         The "CustomersV3" value is used to get the desired Data Entity.
@@ -22,7 +22,7 @@
         The output will be formatted as a list.
         
     .LINK
-        Get-D365ODataEntityMandatoryFields
+        Get-D365ODataPublicEntity
         
     .NOTES
         Tags: OData, Data, Entity, MetaData, Meta, Mandatory
@@ -31,7 +31,7 @@
         
 #>
 
-function Get-D365ODataEntityMandatoryFields {
+function Get-D365ODataEntityMandatoryField {
     [CmdletBinding()]
     [OutputType()]
     param (

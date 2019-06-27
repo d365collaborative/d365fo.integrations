@@ -52,7 +52,7 @@
         ,	'Get-D365ODataConfig'
         ,   'Get-D365ODataEntityData'
         ,   'Get-D365ODataEntityKey'
-        ,   'Get-D365ODataEntityMandatoryFields'
+        ,   'Get-D365ODataEntityMandatoryField'
         ,	'Get-D365ODataPublicEntity'
         
         ,   'Import-D365DmfPackage'
