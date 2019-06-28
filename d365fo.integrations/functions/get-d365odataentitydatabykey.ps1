@@ -1,10 +1,10 @@
 ﻿
 <#
     .SYNOPSIS
-        Get data from an Data Entity using OData
+        Get data from an Data Entity using OData, providing a key
         
     .DESCRIPTION
-        Get data from an Data Entity using the OData endpoint of the Dynamics 365 Finance & Operations
+        Get data from an Data Entity, by providing a key, using the OData endpoint of the Dynamics 365 Finance & Operations
         
     .PARAMETER EntityName
         Name of the Data Entity you want to work against
@@ -17,10 +17,10 @@
         
         Look at the Get-D365ODataPublicEntity cmdlet to help you obtain the correct name
         
-    .PARAMETER EntitySetName
-        Name of the Data Entity you want to work against
-        
-        The parameter is created specifically to be used when piping from Get-D365ODataPublicEntity
+    .PARAMETER Key
+        A string value that contains all needed fields and value to be a valid OData key
+
+        The key needs to be a valid http encoded value and each datatype needs to handled appropriately
         
     .PARAMETER ODataQuery
         Valid OData query string that you want to pass onto the D365 OData endpoint while retrieving data
@@ -54,41 +54,26 @@
         This parameters disables user-friendly warnings and enables the throwing of exceptions
         This is less user friendly, but allows catching exceptions in calling scripts
         
-    .PARAMETER RawOutput
-        Instructs the cmdlet to include the outer structure of the response received from OData endpoint
-        
-        The output will still be a PSCustomObject
-        
     .PARAMETER OutputAsJson
         Instructs the cmdlet to convert the output to a Json string
         
     .EXAMPLE
-        PS C:\> Get-D365ODataEntityData -EntityName CustomersV3 -ODataQuery '$top=1'
+        PS C:\> Get-D365ODataEntityDataByKey -EntityName CustomersV3 -Key "dataAreaId='DAT',CustomerAccount='123456789'"
         
-        This will get Customers from the OData endpoint.
-        It will use the CustomerV3 entity, and its EntitySetName / CollectionName "CustomersV3".
-        It will get the top 1 results from the list of customers.
-        
-        It will use the default OData configuration details that are stored in the configuration store.
-        
-    .EXAMPLE
-        PS C:\> Get-D365ODataEntityData -EntityName CustomersV3 -ODataQuery '$top=10' -CrossCompany
-        
-        This will get Customers from the OData endpoint.
-        It will use the CustomerV3 entity, and its EntitySetName / CollectionName "CustomersV3".
-        It will get the top 10 results from the list of customers.
-        It will make sure to search across all legal entities / companies inside the D365FO environment.
+        This will get the specific Customer from the OData endpoint.
+        It will use the "CustomerV3" entity, and its EntitySetName / CollectionName "CustomersV3".
+        It will use the "dataAreaId='DAT',CustomerAccount='123456789'" as key to identify the unique Customer record.
+        It will NOT look across companies.
         
         It will use the default OData configuration details that are stored in the configuration store.
         
     .EXAMPLE
-        PS C:\> Get-D365ODataEntityData -EntityName CustomersV3 -ODataQuery '$top=10&$filter=dataAreaId eq ''Comp1''' -CrossCompany
+        PS C:\> Get-D365ODataEntityDataByKey -EntityName CustomersV3 -Key "dataAreaId='DAT',CustomerAccount='123456789'"
         
-        This will get Customers from the OData endpoint.
-        It will use the CustomerV3 entity, and its EntitySetName / CollectionName "CustomersV3".
-        It will get the top 10 results from the list of customers.
+        This will get the specific Customer from the OData endpoint.
+        It will use the "CustomerV3" entity, and its EntitySetName / CollectionName "CustomersV3".
+        It will use the "dataAreaId='DAT',CustomerAccount='123456789'" as key to identify the unique Customer record.
         It will make sure to search across all legal entities / companies inside the D365FO environment.
-        It will search the customers inside the "Comp1" legal entity / company.
         
         It will use the default OData configuration details that are stored in the configuration store.
         
@@ -118,7 +103,7 @@
         
 #>
 
-function Get-D365ODataEntityData {
+function Get-D365ODataEntityDataByKey {
     [CmdletBinding(DefaultParameterSetName = "Default")]
     [OutputType()]
     param (
@@ -126,9 +111,8 @@ function Get-D365ODataEntityData {
         [Alias('Name')]
         [string] $EntityName,
 
-        [Parameter(Mandatory = $true, ParameterSetName = "Default", ValueFromPipelineByPropertyName = $true)]
-        [Alias('CollectionName')]
-        [string] $EntitySetName,
+        [Parameter(Mandatory = $true, ParameterSetName = "Specific")]
+        [string] $Key,
 
         [Parameter(Mandatory = $false)]
         [string] $ODataQuery,
@@ -152,10 +136,7 @@ function Get-D365ODataEntityData {
 
         [switch] $EnableException,
 
-        [switch] $RawOutput,
-
         [switch] $OutputAsJson
-
     )
 
     begin {
@@ -181,12 +162,9 @@ function Get-D365ODataEntityData {
 
         Write-PSFMessage -Level Verbose -Message "Building request for the OData endpoint for entity: $entity." -Target $entity
 
-        #A simple hack to select either names as the name going forward
-        $entity = "$EntityName$EntitySetName"
-
         [System.UriBuilder] $odataEndpoint = $URL
         
-        $odataEndpoint.Path = "data/$entity"
+        $odataEndpoint.Path = "data/$EntityName($Key)"
 
         if (-not ([string]::IsNullOrEmpty($ODataQuery))) {
             $odataEndpoint.Query = "$ODataQuery"
@@ -200,10 +178,6 @@ function Get-D365ODataEntityData {
             Write-PSFMessage -Level Verbose -Message "Executing http request against the OData endpoint." -Target $($odataEndpoint.Uri.AbsoluteUri)
             $res = Invoke-RestMethod -Method Get -Uri $odataEndpoint.Uri.AbsoluteUri -Headers $headers -ContentType 'application/json'
 
-            if (-not $RawOutput) {
-                $res = $res.Value
-            }
-
             if ($OutputAsJson) {
                 $res | ConvertTo-Json
             }
@@ -211,9 +185,30 @@ function Get-D365ODataEntityData {
                 $res
             }
         }
+        catch [System.Net.WebException]
+        {
+            $webException = $_.Exception
+            
+            if(($webException.Status -eq [System.Net.WebExceptionStatus]::ProtocolError) -and (-not($null -eq $webException.Response))) {
+                $resp = [System.Net.HttpWebResponse]$webException.Response
+
+                if($resp.StatusCode -eq [System.Net.HttpStatusCode]::NotFound){
+                    $messageString = "It seems that the OData endpoint was unable to locate the desired entity: $EntityName, based on the key: <c='em'>$key</c>. Please make sure that the key is <c='em'>valid</c> or try using the <c='em'>-CrossCompany</c> parameter."
+                    Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $EntityName
+                    Stop-PSFFunction -Message "Stopping because of HTTP error 404." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>', ''))) -ErrorRecord $_
+                    return
+                }
+                else {
+                    $messageString = "Something went wrong while retrieving data from the OData endpoint for the entity: $EntityName"
+                    Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $EntityName
+                    Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>', ''))) -ErrorRecord $_
+                    return
+                }
+            }
+        }
         catch {
-            $messageString = "Something went wrong while retrieving data from the OData endpoint for the entity: $entity"
-            Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $entity
+            $messageString = "Something went wrong while retrieving data from the OData endpoint for the entity: $EntityName"
+            Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $EntityName
             Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>', ''))) -ErrorRecord $_
             return
         }

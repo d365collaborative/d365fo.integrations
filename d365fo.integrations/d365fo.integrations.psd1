@@ -51,6 +51,7 @@
         ,   'Get-D365DmfMessageStatus'
         ,	'Get-D365ODataConfig'
         ,   'Get-D365ODataEntityData'
+        ,   'Get-D365ODataEntityDataByKey'
         ,   'Get-D365ODataEntityKey'
         ,   'Get-D365ODataEntityMandatoryField'
         ,	'Get-D365ODataPublicEntity'
