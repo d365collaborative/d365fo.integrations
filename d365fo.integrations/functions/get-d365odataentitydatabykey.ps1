@@ -19,7 +19,7 @@
         
     .PARAMETER Key
         A string value that contains all needed fields and value to be a valid OData key
-
+        
         The key needs to be a valid http encoded value and each datatype needs to handled appropriately
         
     .PARAMETER ODataQuery
