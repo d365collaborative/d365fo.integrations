@@ -62,7 +62,7 @@
         
         ,   'Remove-D365ODataEntity'
         ,	'Set-D365ActiveODataConfig'
-
+        ,   'Update-D365ODataEntity'
     )
 	
     # Cmdlets to export from this module
