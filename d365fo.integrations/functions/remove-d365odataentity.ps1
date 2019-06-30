@@ -17,7 +17,7 @@
         
         Look at the Get-D365ODataPublicEntity cmdlet to help you obtain the correct name
         
-    .PARAMETER EntityKey
+    .PARAMETER Key
         The key that will select the desired Data Entity uniquely across the OData endpoint
         
         The key would most likely be made up from multiple values, but can also be a single value
@@ -42,11 +42,11 @@
         This is less user friendly, but allows catching exceptions in calling scripts
         
     .EXAMPLE
-        PS C:\> Remove-D365ODataEntity -EntityName ExchangeRates -EntityKey "RateTypeName='TEST'","FromCurrency='DKK'","ToCurrency='EUR'","StartDate=2019-01-13T12:00:00Z"
+        PS C:\> Remove-D365ODataEntity -EntityName ExchangeRates -Key "RateTypeName='TEST',FromCurrency='DKK',ToCurrency='EUR',StartDate=2019-01-13T12:00:00Z"
         
         This will remove a Data Entity from the D365FO environment through OData.
         It will use the ExchangeRate entity, and its EntitySetName / CollectionName "ExchangeRates".
-        It will use the "RateTypeName='TEST'","FromCurrency='DKK'","ToCurrency='EUR'","StartDate=2019-01-13T12:00:00Z" as the unique key for the entity.
+        It will use the "RateTypeName='TEST',FromCurrency='DKK',ToCurrency='EUR',StartDate=2019-01-13T12:00:00Z" as the unique key for the entity.
         
         It will use the default OData configuration details that are stored in the configuration store.
         
@@ -65,7 +65,7 @@ function Remove-D365ODataEntity {
         [string] $EntityName,
 
         [Parameter(Mandatory = $true)]
-        [string[]] $EntityKey,
+        [string] $Key,
 
         [Parameter(Mandatory = $false)]
         [switch] $CrossCompany,
@@ -111,19 +111,9 @@ function Remove-D365ODataEntity {
 
         Write-PSFMessage -Level Verbose -Message "Building request for removing data entity through the OData endpoint for entity named: $EntityName." -Target $EntityName
 
-        $keyBuilder = [System.Text.StringBuilder]::new()
-
-        $null = $keyBuilder.Append("(")
-
-        foreach ($item in $EntityKey) {
-            $null = $keyBuilder.Append("$item,")
-        }
-        $keyBuilder.Length--
-        $null = $keyBuilder.Append(")")
-
         [System.UriBuilder] $odataEndpoint = $URL
 
-        $odataEndpoint.Path = "data/$EntityName$($keyBuilder.ToString())"
+        $odataEndpoint.Path = "data/$EntityName($Key)"
 
         if ($CrossCompany) {
             $odataEndpoint.Query = $($odataEndpoint.Query + "&cross-company=true").Replace("?", "")

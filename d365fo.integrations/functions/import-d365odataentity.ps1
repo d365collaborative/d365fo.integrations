@@ -4,7 +4,7 @@
         Import a Data Entity into Dynamics 365 Finance & Operations
         
     .DESCRIPTION
-        Imports a Data Entity, defined as a json payload, using the OData endpoint of the Dynamics 365 Finance & Operations
+        Imports a Data Entity, defined as a json payload, using the OData endpoint of the Dynamics 365 Finance & Operations platform
         
     .PARAMETER EntityName
         Name of the Data Entity you want to work against
