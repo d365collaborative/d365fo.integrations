@@ -18,7 +18,7 @@ Import-D365ODataEntity [-EntityName] <String> [-Payload] <String> [-CrossCompany
 ```
 
 ## DESCRIPTION
-Imports a Data Entity, defined as a json payload, using the OData endpoint of the Dynamics 365 Finance & Operations
+Imports a Data Entity, defined as a json payload, using the OData endpoint of the Dynamics 365 Finance & Operations platform
 
 ## EXAMPLES
 
