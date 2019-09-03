@@ -100,7 +100,7 @@ function Add-D365ODataConfig {
         return
     }
 
-    $configName = ""
+    $configName = $Name.ToLower()
 
     #The ':keys' label is used to have a continue inside the switch statement itself
     :keys foreach ($key in $PSBoundParameters.Keys) {
@@ -113,7 +113,6 @@ function Add-D365ODataConfig {
         
         switch ($key) {
             "Name" {
-                $configName = $Name.ToLower()
                 $fullConfigName = "d365fo.integrations.odata.$configName.name"
             }
 
