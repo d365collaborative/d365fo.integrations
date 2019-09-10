@@ -2,6 +2,6 @@ $modules = @("Pester", "PSFramework", "PSScriptAnalyzer", "Azure.Storage", "PSNo
 
 foreach ($module in $modules) {
     Write-Host "Installing $module" -ForegroundColor Cyan
-    Install-Module $module -Force -SkipPublisherCheck
+    Install-Module $module -Force -SkipPublisherCheck -AllowClobber
     Import-Module $module -Force -PassThru
 }
