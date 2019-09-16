@@ -219,7 +219,7 @@ function Get-D365ODataPublicEntity {
             }
 
             if($OutputAsJson) {
-                $res | ConvertTo-Json
+                $res | ConvertTo-Json -Depth 10
             }else {
                 $res
             }

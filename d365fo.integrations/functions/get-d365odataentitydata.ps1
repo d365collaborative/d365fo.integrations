@@ -205,7 +205,7 @@ function Get-D365ODataEntityData {
             }
 
             if ($OutputAsJson) {
-                $res | ConvertTo-Json
+                $res | ConvertTo-Json -Depth 10
             }
             else {
                 $res
