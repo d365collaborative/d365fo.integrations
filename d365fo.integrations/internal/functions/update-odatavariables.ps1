@@ -1,15 +1,15 @@
 ﻿
 <#
     .SYNOPSIS
-        Update the broadcast message config variables
+        Update the OData config variables
         
     .DESCRIPTION
-        Update the active broadcast message config variables that the module will use as default values
+        Update the active OData config variables that the module will use as default values
         
     .EXAMPLE
-        PS C:\> Update-BroadcastVariables
+        PS C:\> Update-ODataVariables
         
-        This will update the broadcast variables.
+        This will update the OData variables.
         
     .NOTES
         Author: Mötz Jensen (@Splaxi)

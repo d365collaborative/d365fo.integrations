@@ -2,45 +2,26 @@
 <#
         
     .SYNOPSIS
-        Set the active broadcast message configuration
+        Set the active OData configuration
         
     .DESCRIPTION
-        Updates the current active broadcast message configuration with a new one
+        Updates the current active OData configuration with a new one
         
     .PARAMETER Name
-        Name of the broadcast message configuration you want to load into the active broadcast message configuration
+        Name of the OData configuration you want to load into the active OData configuration
         
     .PARAMETER Temporary
         Instruct the cmdlet to only temporarily override the persisted settings in the configuration store
         
     .EXAMPLE
-        PS C:\> Set-D365ActiveBroadcastMessageConfig -Name "UAT"
+        PS C:\> Set-D365ActiveODataConfig -Name "UAT"
         
-        This will set the broadcast message configuration named "UAT" as the active configuration.
+        This will set the OData configuration named "UAT" as the active configuration.
         
     .NOTES
-        Tags: Servicing, Message, Users, Environment, Config, Configuration, ClientId, ClientSecret, OnPremise
+        Tags: Environment, Config, Configuration, ClientId, ClientSecret
         
         Author: Mötz Jensen (@Splaxi)
-        
-    .LINK
-        Add-D365BroadcastMessageConfig
-        
-    .LINK
-        Clear-D365ActiveBroadcastMessageConfig
-        
-    .LINK
-        Get-D365ActiveBroadcastMessageConfig
-        
-    .LINK
-        Get-D365BroadcastMessageConfig
-        
-    .LINK
-        Remove-D365BroadcastMessageConfig
-        
-    .LINK
-        Send-D365BroadcastMessage
-        
 #>
 
 function Set-D365ActiveODataConfig {

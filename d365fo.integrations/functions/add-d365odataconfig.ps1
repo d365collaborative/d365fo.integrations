@@ -70,18 +70,14 @@ function Add-D365ODataConfig {
         [Parameter(Mandatory = $true, Position = 0)]
         [string] $Name,
 
-        [Parameter(Mandatory = $false, Position = 1)]
         [Alias('$AADGuid')]
         [string] $Tenant,
 
-        [Parameter(Mandatory = $false, Position = 2)]
         [Alias('Uri')]
         [string] $Url,
 
-        [Parameter(Mandatory = $false, Position = 3)]
         [string] $ClientId,
 
-        [Parameter(Mandatory = $false, Position = 4)]
         [string] $ClientSecret,
 
         [switch] $Temporary,
