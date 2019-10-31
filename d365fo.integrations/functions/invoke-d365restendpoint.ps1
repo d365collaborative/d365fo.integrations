@@ -1,35 +1,36 @@
 ﻿
 <#
     .SYNOPSIS
-        Import a Data Entity into Dynamics 365 Finance & Operations
+        Invoke a REST Endpoint in Dynamics 365 Finance & Operations
         
     .DESCRIPTION
-        Imports a Data Entity, defined as a json payload, using the OData endpoint of the Dynamics 365 Finance & Operations platform
+        Invokce any REST Endpoint available in a Dynamics 365 Finance & Operations environment
+
+        It can be REST endpoints that are available out of the box or custom REST endpoints based on X++ classesrations platform
         
-    .PARAMETER EntityName
-        Name of the Data Entity you want to work against
-        
-        The parameter is Case Sensitive, because the OData endpoint in D365FO is Case Sensitive
-        
-        Remember that most Data Entities in a D365FO environment is named by its singular name, but most be retrieve using the plural name
-        
-        E.g. The version 3 of the customers Data Entity is named CustomerV3, but can only be retrieving using CustomersV3
-        
-        Look at the Get-D365ODataPublicEntity cmdlet to help you obtain the correct name
+    .PARAMETER ServiceName
+        The "name" of the REST endpoint that you want to invoke
+
+        The REST endpoints consists of the following elementes:
+        ServiceGroupName/ServiceName/MethodName
         
     .PARAMETER Payload
-        The entire string contain the json object that you want to import into the D365FO environment
-        
+        The entire string contain the json object that you want to pass to the REST endpoint
+
+        If the payload parameter is NOT blank, it will trigger a HTTP POST action against the URL.
+
+        But if the payload is null / blank or empty, it will trigger a HTTP GET action against the URL.
+
         Remember that json is text based and can use either single quotes (') or double quotes (") as the text qualifier, so you might need to escape the different quotes in your payload before passing it in
         
     .PARAMETER CrossCompany
-        Instruct the cmdlet / function to ensure the request against the OData endpoint will work across all companies
+        Instruct the cmdlet / function to ensure the request against the REST endpoint will work across all companies
         
     .PARAMETER Tenant
-        Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is connected to, that you want to access through OData
+        Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is connected to, that you want to access through REST endpoint
         
     .PARAMETER Url
-        URL / URI for the D365FO environment you want to access through OData
+        URL / URI for the D365FO environment you want to access through REST endpoint
         
     .PARAMETER ClientId
         The ClientId obtained from the Azure Portal when you created a Registered Application
@@ -42,7 +43,7 @@
         This is less user friendly, but allows catching exceptions in calling scripts
         
     .EXAMPLE
-        PS C:\> Import-D365ODataEntity -EntityName "ExchangeRates" -Payload '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}'
+        PS C:\> Invoke-D365RestEndpoint -EntityName "ExchangeRates" -Payload '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}'
         
         This will import a Data Entity into Dynamics 365 Finance & Operations using the OData endpoint.
         The EntityName used for the import is ExchangeRates.
@@ -50,7 +51,7 @@
         
     .EXAMPLE
         PS C:\> $Payload = '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}'
-        PS C:\> Import-D365ODataEntity -EntityName "ExchangeRates" -Payload $Payload
+        PS C:\> Invoke-D365RestEndpoint -EntityName "ExchangeRates" -Payload $Payload
         
         This will import a Data Entity into Dynamics 365 Finance & Operations using the OData endpoint.
         First the desired json data is put into the $Payload variable.
@@ -63,14 +64,13 @@
         Author: Mötz Jensen (@Splaxi)
 #>
 
-function Import-D365ODataEntity {
+function Invoke-D365RestEndpoint {
     [CmdletBinding()]
     [OutputType()]
     param (
         [Parameter(Mandatory = $true)]
-        [string] $EntityName,
+        [string] $ServiceName,
 
-        [Parameter(Mandatory = $true)]
         [Alias('Json')]
         [string] $Payload,
 
@@ -116,23 +116,36 @@ function Import-D365ODataEntity {
     process {
         Invoke-TimeSignal -Start
 
-        Write-PSFMessage -Level Verbose -Message "Building request for the OData endpoint for entity named: $EntityName." -Target $EntityName
+        Write-PSFMessage -Level Verbose -Message "Building request for the REST endpoint for the service: $ServiceName." -Target $ServiceName
         
-        [System.UriBuilder] $odataEndpoint = $URL
+        [System.UriBuilder] $restEndpoint = $URL
 
-        $odataEndpoint.Path = "data/$EntityName"
+        $restEndpoint.Path = "api/services/$ServiceName"
 
         if ($CrossCompany) {
-            $odataEndpoint.Query = "cross-company=true"
+            $restEndpoint.Query = "cross-company=true"
         }
 
+        $params = @{ }
+        $params.Uri = $restEndpoint.Uri.AbsoluteUri
+        $params.Headers = $headers
+        $params.ContentType = "application/json"
+
+        if (-not [System.String]::IsNullOrEmpty()) {
+            $params.Method = "POST"
+            $params.Body = $Payload
+        }
+        else {
+            $params.Method = "GET"
+        }
+        
         try {
-            Write-PSFMessage -Level Verbose -Message "Executing http request against the OData endpoint." -Target $($odataEndpoint.Uri.AbsoluteUri)
-            Invoke-RestMethod -Method POST -Uri $odataEndpoint.Uri.AbsoluteUri -Headers $headers -ContentType 'application/json' -Body $Payload
+            Write-PSFMessage -Level Verbose -Message "Executing http request against the REST endpoint." -Target $($restEndpoint.Uri.AbsoluteUri)
+            Invoke-RestMethod @params
         }
         catch {
-            $messageString = "Something went wrong while importing data through the OData endpoint for the entity: $EntityName"
-            Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $EntityName
+            $messageString = "Something went wrong while importing data through the REST endpoint for the entity: $ServiceName"
+            Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $ServiceName
             Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>', ''))) -ErrorRecord $_
             return
         }
