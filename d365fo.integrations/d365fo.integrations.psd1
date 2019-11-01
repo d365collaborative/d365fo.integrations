@@ -59,6 +59,8 @@
         ,   'Import-D365DmfPackage'
         ,   'Import-D365ODataEntity'
         ,   'Import-D365ODataEntityBatchMode'
+
+        ,   'Invoke-D365RestEndpoint'
         
         ,   'Remove-D365ODataEntity'
         ,	'Set-D365ActiveODataConfig'
