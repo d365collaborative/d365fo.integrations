@@ -25,9 +25,6 @@
 
         Remember that json is text based and can use either single quotes (') or double quotes (") as the text qualifier, so you might need to escape the different quotes in your payload before passing it in
         
-    .PARAMETER CrossCompany
-        Instruct the cmdlet / function to ensure the request against the REST endpoint will work across all companies
-        
     .PARAMETER Tenant
         Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is connected to, that you want to access through REST endpoint
         
@@ -77,9 +74,6 @@ function Invoke-D365RestEndpoint {
         [string] $Payload,
 
         [Parameter(Mandatory = $false)]
-        [switch] $CrossCompany,
-
-        [Parameter(Mandatory = $false)]
         [Alias('$AADGuid')]
         [string] $Tenant = $Script:ODataTenant,
 
@@ -123,10 +117,6 @@ function Invoke-D365RestEndpoint {
         [System.UriBuilder] $restEndpoint = $URL
 
         $restEndpoint.Path = "api/services/$ServiceName"
-
-        if ($CrossCompany) {
-            $restEndpoint.Query = "cross-company=true"
-        }
 
         $params = @{ }
         $params.Uri = $restEndpoint.Uri.AbsoluteUri
