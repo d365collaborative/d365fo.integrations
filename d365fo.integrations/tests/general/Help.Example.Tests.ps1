@@ -1,5 +1,11 @@
 ﻿$excludeCommands = @(
     "Get-DeepClone"
+    , "Get-D365ODataEntityData"
+    , "Get-D365ODataEntityDataByKey"
+    , "Get-DmfFile"
+    , "Invoke-DmfAcknowledge"
+    , "Remove-D365ODataEntity"
+    , "Update-D365ODataEntity"
 )
 
 $commandsRaw = Get-Command -Module d365fo.integrations
@@ -33,7 +39,7 @@ foreach ( $commandName in $commands) {
             # which makes some of the tests fail
             $example = $_.Code -replace "`n.*" -replace "PS C:\\>"
 
-            if ( ($example -like "*|*" ) -or (-not ($example -match $commandName)) -or ($example -like "*).*")) {
+            if ( ($example -like "*|*" ) -or (-not ($example -match $commandName)) -or ($example -like "*).*") -or ($example -like "*@{*}*")) {
                 It "Example - $example" -Skip { $true }
             } elseif ($example -like "*=*") {
                 $varAssignment = ($example -split "=")[0]
