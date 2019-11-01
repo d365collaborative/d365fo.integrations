@@ -1,5 +1,5 @@
 ﻿$script:ModuleRoot = $PSScriptRoot
-$script:ModuleVersion = '0.3.2'
+$script:ModuleVersion = '0.3.3'
 
 $Script:TimeSignals = @{}
 
