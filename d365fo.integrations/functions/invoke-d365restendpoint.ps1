@@ -5,24 +5,24 @@
         
     .DESCRIPTION
         Invokce any REST Endpoint available in a Dynamics 365 Finance & Operations environment
-
+        
         It can be REST endpoints that are available out of the box or custom REST endpoints based on X++ classesrations platform
         
     .PARAMETER ServiceName
         The "name" of the REST endpoint that you want to invoke
-
+        
         The REST endpoints consists of the following elementes:
         ServiceGroupName/ServiceName/MethodName
-
+        
         E.g. "UserSessionService/AifUserSessionService/GetUserSessionInfo"
         
     .PARAMETER Payload
         The entire string contain the json object that you want to pass to the REST endpoint
-
+        
         If the payload parameter is NOT null, it will trigger a HTTP POST action against the URL.
-
+        
         But if the payload is null, it will trigger a HTTP GET action against the URL.
-
+        
         Remember that json is text based and can use either single quotes (') or double quotes (") as the text qualifier, so you might need to escape the different quotes in your payload before passing it in
         
     .PARAMETER Tenant
