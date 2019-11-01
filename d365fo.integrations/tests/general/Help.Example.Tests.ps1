@@ -1,11 +1,12 @@
 ﻿$excludeCommands = @(
-    "Get-DeepClone"
-    , "Get-D365ODataEntityData"
+    
+    "Get-D365ODataEntityData"
     , "Get-D365ODataEntityDataByKey"
     , "Get-DmfFile"
     , "Invoke-DmfAcknowledge"
     , "Remove-D365ODataEntity"
     , "Update-D365ODataEntity"
+    , "Import-ModuleFile"
 )
 
 $commandsRaw = Get-Command -Module d365fo.integrations
