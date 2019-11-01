@@ -5,57 +5,56 @@ online version:
 schema: 2.0.0
 ---
 
-# Import-D365ODataEntity
+# Invoke-D365RestEndpoint
 
 ## SYNOPSIS
-Import a Data Entity into Dynamics 365 Finance & Operations
+Invoke a REST Endpoint in Dynamics 365 Finance & Operations
 
 ## SYNTAX
 
 ```
-Import-D365ODataEntity [-EntityName] <String> [-Payload] <String> [-CrossCompany] [[-Tenant] <String>]
- [[-URL] <String>] [[-ClientId] <String>] [[-ClientSecret] <String>] [-EnableException] [<CommonParameters>]
+Invoke-D365RestEndpoint [-ServiceName] <String> [[-Payload] <String>] [[-Tenant] <String>] [[-URL] <String>]
+ [[-ClientId] <String>] [[-ClientSecret] <String>] [-EnableException] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Imports a Data Entity, defined as a json payload, using the OData endpoint of the Dynamics 365 Finance & Operations platform
+Invokce any REST Endpoint available in a Dynamics 365 Finance & Operations environment
+
+It can be REST endpoints that are available out of the box or custom REST endpoints based on X++ classesrations platform
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Import-D365ODataEntity -EntityName "ExchangeRates" -Payload '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}'
+Invoke-D365RestEndpoint -ServiceName "UserSessionService/AifUserSessionService/GetUserSessionInfo" -Payload "{"RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}"
 ```
 
-This will import a Data Entity into Dynamics 365 Finance & Operations using the OData endpoint.
-The EntityName used for the import is ExchangeRates.
+This will invoke the REST endpoint in the  Dynamics 365 Finance & Operations environment.
+The ServiceName used for the import is "UserSessionService/AifUserSessionService/GetUserSessionInfo".
 The Payload is a valid json string, containing all the needed properties.
 
 ### EXAMPLE 2
 ```
-$Payload = '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}'
+$Payload = '{"RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}'
 ```
 
-PS C:\\\> Import-D365ODataEntity -EntityName "ExchangeRates" -Payload $Payload
+PS C:\\\> Invoke-D365RestEndpoint -ServiceName "UserSessionService/AifUserSessionService/GetUserSessionInfo" -Payload $Payload
 
-This will import a Data Entity into Dynamics 365 Finance & Operations using the OData endpoint.
+This will invoke the REST endpoint in the  Dynamics 365 Finance & Operations environment.
 First the desired json data is put into the $Payload variable.
-The EntityName used for the import is ExchangeRates.
+The ServiceName used for the import is "UserSessionService/AifUserSessionService/GetUserSessionInfo".
 The $Payload variable is passed to the cmdlet.
 
 ## PARAMETERS
 
-### -EntityName
-Name of the Data Entity you want to work against
+### -ServiceName
+The "name" of the REST endpoint that you want to invoke
 
-The parameter is Case Sensitive, because the OData endpoint in D365FO is Case Sensitive
-
-Remember that most Data Entities in a D365FO environment is named by its singular name, but most be retrieve using the plural name
+The REST endpoints consists of the following elementes:
+ServiceGroupName/ServiceName/MethodName
 
 E.g.
-The version 3 of the customers Data Entity is named CustomerV3, but can only be retrieving using CustomersV3
-
-Look at the Get-D365ODataPublicEntity cmdlet to help you obtain the correct name
+"UserSessionService/AifUserSessionService/GetUserSessionInfo"
 
 ```yaml
 Type: String
@@ -70,7 +69,11 @@ Accept wildcard characters: False
 ```
 
 ### -Payload
-The entire string contain the json object that you want to import into the D365FO environment
+The entire string contain the json object that you want to pass to the REST endpoint
+
+If the payload parameter is NOT null, it will trigger a HTTP POST action against the URL.
+
+But if the payload is null, it will trigger a HTTP GET action against the URL.
 
 Remember that json is text based and can use either single quotes (') or double quotes (") as the text qualifier, so you might need to escape the different quotes in your payload before passing it in
 
@@ -79,30 +82,15 @@ Type: String
 Parameter Sets: (All)
 Aliases: Json
 
-Required: True
+Required: False
 Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -CrossCompany
-Instruct the cmdlet / function to ensure the request against the OData endpoint will work across all companies
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Tenant
-Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is connected to, that you want to access through OData
+Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is connected to, that you want to access through REST endpoint
 
 ```yaml
 Type: String
@@ -117,7 +105,7 @@ Accept wildcard characters: False
 ```
 
 ### -URL
-URL / URI for the D365FO environment you want to access through OData
+URL / URI for the D365FO environment you want to access through REST endpoint
 
 ```yaml
 Type: String
@@ -185,7 +173,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
-Tags: OData, Data, Entity, Import, Upload
+Tags: REST, Endpoint, Custom Service, Services
 
 Author: Mötz Jensen (@Splaxi)
 
