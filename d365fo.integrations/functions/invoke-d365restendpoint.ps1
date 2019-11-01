@@ -19,9 +19,9 @@
     .PARAMETER Payload
         The entire string contain the json object that you want to pass to the REST endpoint
 
-        If the payload parameter is NOT blank, it will trigger a HTTP POST action against the URL.
+        If the payload parameter is NOT null, it will trigger a HTTP POST action against the URL.
 
-        But if the payload is null / blank or empty, it will trigger a HTTP GET action against the URL.
+        But if the payload is null, it will trigger a HTTP GET action against the URL.
 
         Remember that json is text based and can use either single quotes (') or double quotes (") as the text qualifier, so you might need to escape the different quotes in your payload before passing it in
         
@@ -42,19 +42,19 @@
         This is less user friendly, but allows catching exceptions in calling scripts
         
     .EXAMPLE
-        PS C:\> Invoke-D365RestEndpoint -ServiceName "UserSessionService/AifUserSessionService/GetUserSessionInfo" -Payload ""
+        PS C:\> Invoke-D365RestEndpoint -ServiceName "UserSessionService/AifUserSessionService/GetUserSessionInfo" -Payload "{"RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}"
         
-        This will import a Data Entity into Dynamics 365 Finance & Operations using the OData endpoint.
-        The EntityName used for the import is ExchangeRates.
+        This will invoke the REST endpoint in the  Dynamics 365 Finance & Operations environment.
+        The ServiceName used for the import is "UserSessionService/AifUserSessionService/GetUserSessionInfo".
         The Payload is a valid json string, containing all the needed properties.
         
     .EXAMPLE
         PS C:\> $Payload = '{"RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}'
         PS C:\> Invoke-D365RestEndpoint -ServiceName "UserSessionService/AifUserSessionService/GetUserSessionInfo" -Payload $Payload
         
-        This will import a Data Entity into Dynamics 365 Finance & Operations using the OData endpoint.
+        This will invoke the REST endpoint in the  Dynamics 365 Finance & Operations environment.
         First the desired json data is put into the $Payload variable.
-        The EntityName used for the import is ExchangeRates.
+        The ServiceName used for the import is "UserSessionService/AifUserSessionService/GetUserSessionInfo".
         The $Payload variable is passed to the cmdlet.
         
     .NOTES
@@ -88,7 +88,6 @@ function Invoke-D365RestEndpoint {
         [string] $ClientSecret = $Script:ODataClientSecret,
 
         [switch] $EnableException
-
     )
 
     begin {
