@@ -13,6 +13,8 @@
 
         The REST endpoints consists of the following elementes:
         ServiceGroupName/ServiceName/MethodName
+
+        E.g. "UserSessionService/AifUserSessionService/GetUserSessionInfo"
         
     .PARAMETER Payload
         The entire string contain the json object that you want to pass to the REST endpoint
@@ -43,15 +45,15 @@
         This is less user friendly, but allows catching exceptions in calling scripts
         
     .EXAMPLE
-        PS C:\> Invoke-D365RestEndpoint -EntityName "ExchangeRates" -Payload '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}'
+        PS C:\> Invoke-D365RestEndpoint -ServiceName "UserSessionService/AifUserSessionService/GetUserSessionInfo" -Payload ""
         
         This will import a Data Entity into Dynamics 365 Finance & Operations using the OData endpoint.
         The EntityName used for the import is ExchangeRates.
         The Payload is a valid json string, containing all the needed properties.
         
     .EXAMPLE
-        PS C:\> $Payload = '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}'
-        PS C:\> Invoke-D365RestEndpoint -EntityName "ExchangeRates" -Payload $Payload
+        PS C:\> $Payload = '{"RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}'
+        PS C:\> Invoke-D365RestEndpoint -ServiceName "UserSessionService/AifUserSessionService/GetUserSessionInfo" -Payload $Payload
         
         This will import a Data Entity into Dynamics 365 Finance & Operations using the OData endpoint.
         First the desired json data is put into the $Payload variable.
@@ -59,7 +61,7 @@
         The $Payload variable is passed to the cmdlet.
         
     .NOTES
-        Tags: OData, Data, Entity, Import, Upload
+        Tags: REST, Endpoint, Custom Service, Services
         
         Author: Mötz Jensen (@Splaxi)
 #>
@@ -131,7 +133,7 @@ function Invoke-D365RestEndpoint {
         $params.Headers = $headers
         $params.ContentType = "application/json"
 
-        if (-not [System.String]::IsNullOrEmpty()) {
+        if ($null -ne $Payload) {
             $params.Method = "POST"
             $params.Body = $Payload
         }

@@ -2,7 +2,7 @@
     "Get-DeepClone"
 )
 
-$commandsRaw = Get-Command -Module d365fo.tools
+$commandsRaw = Get-Command -Module d365fo.integrations
 
 if ($excludeCommands.Count -gt 0) {
     $commands = $commandsRaw | Select-String -Pattern $excludeCommands -SimpleMatch -NotMatch
