@@ -43,6 +43,17 @@
     .PARAMETER Url
         URL / URI for the D365FO environment you want to access through OData
         
+        If you are working against a D365FO instance, it will be the URL / URI for the instance itself
+        
+        If you are working against a D365 Talent / HR instance, this will have to be "http://hr.talent.dynamics.com"
+        
+    .PARAMETER SystemUrl
+        URL / URI for the D365FO instance where the OData endpoint is available
+
+        If you are working against a D365FO instance, it will be the URL / URI for the instance itself, which is the same as the Url parameter value
+
+        If you are working against a D365 Talent / HR instance, this will to be full instance URL / URI like "https://aos-rts-sf-b1b468164ee-prod-northeurope.hr.talent.dynamics.com/namespaces/0ab49d18-6325-4597-97b3-c7f2321aa80c"
+
     .PARAMETER ClientId
         The ClientId obtained from the Azure Portal when you created a Registered Application
         
@@ -138,18 +149,17 @@ function Get-D365ODataPublicEntity {
         [Parameter(Mandatory = $true, ParameterSetName = "Query")]
         [string] $ODataQuery,
 
-        [Parameter(Mandatory = $false)]
         [Alias('$AADGuid')]
         [string] $Tenant = $Script:ODataTenant,
 
-        [Parameter(Mandatory = $false)]
-        [Alias('URI')]
-        [string] $URL = $Script:ODataUrl,
+        [Alias('Uri')]
+        [Alias('AuthenticationUrl')]
+        [string] $Url = $Script:ODataUrl,
 
-        [Parameter(Mandatory = $false)]
+        [string] $SystemUrl = $Script:ODataSystemUrl,
+
         [string] $ClientId = $Script:ODataClientId,
 
-        [Parameter(Mandatory = $false)]
         [string] $ClientSecret = $Script:ODataClientSecret,
 
         [switch] $EnableException,
@@ -163,25 +173,45 @@ function Get-D365ODataPublicEntity {
 
 
     begin {
+        if ([System.String]::IsNullOrEmpty($SystemUrl)) {
+            Write-PSFMessage -Level Verbose -Message "The SystemUrl parameter was empty, using the Url parameter as the OData endpoint base address." -Target $SystemUrl
+            $SystemUrl = $Url
+        }
+
+        if ($Url.Substring($Url.Length - 1) -eq "/") {
+            Write-PSFMessage -Level Verbose -Message "The Url parameter had a tailing slash, which shouldn't be there. Removing the tailling slash." -Target $Url
+            $Url = $Url.Substring(0, $Url.Length - 1)
+        }
+    
+        if ($SystemUrl.Substring($SystemUrl.Length - 1) -eq "/") {
+            Write-PSFMessage -Level Verbose -Message "The SystemUrl parameter had a tailing slash, which shouldn't be there. Removing the tailling slash." -Target $Url
+            $SystemUrl = $SystemUrl.Substring(0, $SystemUrl.Length - 1)
+        }
         
         $bearerParms = @{
-            Url     = $Url
+            Url          = $Url
             ClientId     = $ClientId
             ClientSecret = $ClientSecret
-            Tenant = $Tenant
+            Tenant       = $Tenant
         }
 
         $bearer = New-BearerToken @bearerParms
 
         $headerParms = @{
-            URL         = $URL
+            URL         = $Url
             BearerToken = $bearer
         }
 
         $headers = New-AuthorizationHeaderBearerToken @headerParms
 
-        [System.UriBuilder] $odataEndpoint = $URL
-        $odataEndpoint.Path = "metadata/PublicEntities"
+        [System.UriBuilder] $odataEndpoint = $SystemUrl
+        
+        if ($odataEndpoint.Path -eq "/") {
+            $odataEndpoint.Path = "metadata/PublicEntities"
+        }
+        else {
+            $odataEndpoint.Path += "/metadata/PublicEntities"
+        }
     }
 
     process {
@@ -210,24 +240,25 @@ function Get-D365ODataPublicEntity {
             Write-PSFMessage -Level Verbose -Message "Executing http request against the Metadata OData endpoint." -Target $($odataEndpoint.Uri.AbsoluteUri)
             $res = Invoke-RestMethod -Method Get -Uri $odataEndpoint.Uri.AbsoluteUri -Headers $headers -ContentType 'application/json'
 
-            if(-not ($RawOutput)) {
+            if (-not ($RawOutput)) {
                 $res = $res.Value
 
-                if($OutNamesOnly) {
+                if ($OutNamesOnly) {
                     $res = $res | Select-PSFObject "Name as DataEntityName", "EntitySetName as EntityName"
                 }
             }
 
-            if($OutputAsJson) {
+            if ($OutputAsJson) {
                 $res | ConvertTo-Json -Depth 10
-            }else {
+            }
+            else {
                 $res
             }
         }
         catch {
             $messageString = "Something went wrong while searching the Metadata OData endpoint for the entity: $searchEntityName"
             Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $entityName
-            Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>',''))) -ErrorRecord $_
+            Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>', ''))) -ErrorRecord $_
             return
         }
 
