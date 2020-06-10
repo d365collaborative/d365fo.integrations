@@ -30,6 +30,8 @@ function Update-ODataVariables {
 
     $configName = $configName.ToString().ToLower()
     
+    Remove-Variable -Name "ODataSystemUrl" -Scope "Script" -Force -ErrorAction SilentlyContinue
+
     if (-not ($configName -eq "")) {
         $configHash = Get-D365ActiveODataConfig -OutputAsHashtable
         foreach ($item in $configHash.Keys) {
