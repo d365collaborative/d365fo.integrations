@@ -15,6 +15,17 @@
     .PARAMETER Url
         URL / URI for the D365FO environment you want to access through OData
         
+        If you are working against a D365FO instance, it will be the URL / URI for the instance itself
+        
+        If you are working against a D365 Talent / HR instance, this will have to be "http://hr.talent.dynamics.com"
+        
+    .PARAMETER SystemUrl
+        URL / URI for the D365FO instance where the OData endpoint is available
+
+        If you are working against a D365FO instance, it will be the URL / URI for the instance itself, which is the same as the Url parameter value
+
+        If you are working against a D365 Talent / HR instance, this will to be full instance URL / URI like "https://aos-rts-sf-b1b468164ee-prod-northeurope.hr.talent.dynamics.com/namespaces/0ab49d18-6325-4597-97b3-c7f2321aa80c"
+
     .PARAMETER ClientId
         The ClientId obtained from the Azure Portal when you created a Registered Application
         
@@ -74,7 +85,10 @@ function Add-D365ODataConfig {
         [string] $Tenant,
 
         [Alias('Uri')]
+        [Alias('AuthenticationUrl')]
         [string] $Url,
+
+        [string] $SystemUrl,
 
         [string] $ClientId,
 
@@ -92,8 +106,23 @@ function Add-D365ODataConfig {
     if (((Get-PSFConfig -FullName "d365fo.integrations.odata.*.name").Value -contains $Name) -and (-not $Force)) {
         $messageString = "An OData configuration with <c='em'>$Name</c> as name <c='em'>already exists</c>. If you want to <c='em'>overwrite</c> the current configuration, please supply the <c='em'>-Force</c> parameter."
         Write-PSFMessage -Level Host -Message $messageString
-        Stop-PSFFunction -Message "Stopping because an OData configuration already exists with that name." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>','')))
+        Stop-PSFFunction -Message "Stopping because an OData configuration already exists with that name." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>', '')))
         return
+    }
+
+    if ([System.String]::IsNullOrEmpty($SystemUrl) -and (-not [System.String]::IsNullOrEmpty($Url))) {
+        Write-PSFMessage -Level Verbose -Message "You didn't fill in the SystemUrl parameter, which is needed. Expecting that you are working against D365FO and using the Url parameter value." -Target $Url
+        $PSBoundParameters.Add("SystemUrl", $Url)
+    }
+
+    if ($Url.Substring($Url.Length - 1) -eq "/") {
+        Write-PSFMessage -Level Verbose -Message "The Url parameter had a tailing slash, which shouldn't be there. Removing the tailling slash." -Target $Url
+        $Url = $Url.Substring(0, $Url.Length - 1)
+    }
+
+    if ($SystemUrl.Substring($SystemUrl.Length - 1) -eq "/") {
+        Write-PSFMessage -Level Verbose -Message "The SystemUrl parameter had a tailing slash, which shouldn't be there. Removing the tailling slash." -Target $Url
+        $SystemUrl = $SystemUrl.Substring(0, $SystemUrl.Length - 1)
     }
 
     $configName = $Name.ToLower()
@@ -112,7 +141,7 @@ function Add-D365ODataConfig {
                 $fullConfigName = "d365fo.integrations.odata.$configName.name"
             }
 
-            {"Temporary","Force" -contains $_} {
+            { "Temporary", "Force" -contains $_ } {
                 continue keys
             }
             
