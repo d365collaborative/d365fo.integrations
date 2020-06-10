@@ -13,8 +13,8 @@ Save an OData config
 ## SYNTAX
 
 ```
-Add-D365ODataConfig [-Name] <String> [-Tenant <String>] [-Url <String>] [-ClientId <String>]
- [-ClientSecret <String>] [-Temporary] [-Force] [-EnableException] [<CommonParameters>]
+Add-D365ODataConfig [-Name] <String> [-Tenant <String>] [-Url <String>] [-SystemUrl <String>]
+ [-ClientId <String>] [-ClientSecret <String>] [-Temporary] [-Force] [-EnableException] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -68,10 +68,33 @@ Accept wildcard characters: False
 ### -Url
 URL / URI for the D365FO environment you want to access through OData
 
+If you are working against a D365FO instance, it will be the URL / URI for the instance itself
+
+If you are working against a D365 Talent / HR instance, this will have to be "http://hr.talent.dynamics.com"
+
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: Uri
+Aliases: AuthenticationUrl, Uri
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SystemUrl
+URL / URI for the D365FO instance where the OData endpoint is available
+
+If you are working against a D365FO instance, it will be the URL / URI for the instance itself, which is the same as the Url parameter value
+
+If you are working against a D365 Talent / HR instance, this will to be full instance URL / URI like "https://aos-rts-sf-b1b468164ee-prod-northeurope.hr.talent.dynamics.com/namespaces/0ab49d18-6325-4597-97b3-c7f2321aa80c"
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
 
 Required: False
 Position: Named
