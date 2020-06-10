@@ -21,11 +21,11 @@
         
     .PARAMETER SystemUrl
         URL / URI for the D365FO instance where the OData endpoint is available
-
+        
         If you are working against a D365FO instance, it will be the URL / URI for the instance itself, which is the same as the Url parameter value
-
+        
         If you are working against a D365 Talent / HR instance, this will to be full instance URL / URI like "https://aos-rts-sf-b1b468164ee-prod-northeurope.hr.talent.dynamics.com/namespaces/0ab49d18-6325-4597-97b3-c7f2321aa80c"
-
+        
     .PARAMETER ClientId
         The ClientId obtained from the Azure Portal when you created a Registered Application
         
