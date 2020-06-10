@@ -51,35 +51,37 @@ function Get-DmfFile {
         [int] $Retries = $Script:DmfDownloadRetries
     )
 
-    if($DownloadLocation.StartsWith("http://")) {
-        $DownloadLocation = $DownloadLocation.Replace("http://", "https://").Replace(":80","")
-    }
-
-    Write-PSFMessage -Level Verbose -Message "Download URI / URL for the DMF Package is: $DownloadLocation" -Target $DownloadLocation
-
-    $retriesLocal = $Retries
-
-    while ($retriesLocal -gt 0 ) {
-        $attemptNo = ($Retries - $retriesLocal) + 1
-        Write-PSFMessage -Level Verbose -Message "($attemptNo) - Building request for downloading the DMF Package." -Target $DownloadLocation
-
-        $request = New-WebRequest -Url $DownloadLocation -Action "GET" -AuthenticationToken $AuthenticationToken
-
-        Get-FileFromWebRequest -WebRequest $request -Path $Path
-
-        if (Test-PSFFunctionInterrupt) {
-            Write-PSFMessage -Level Verbose -Message "($attemptNo) - Downloading the DMF Package failed."
-            
-            $retriesLocal = $retriesLocal - 1;
-
-            if ($retriesLocal -lt 0) {
-                Write-PSFMessage -Level Critical "Number of retries exhausted for JobId: $JobId"
-                Stop-PSFFunction -Message "Stopping" -StepsUpward 1
-                return
-            }
+    process {
+        if ($DownloadLocation.StartsWith("http://")) {
+            $DownloadLocation = $DownloadLocation.Replace("http://", "https://").Replace(":80", "")
         }
-        else {
-            $retriesLocal = 0
+
+        Write-PSFMessage -Level Verbose -Message "Download URI / URL for the DMF Package is: $DownloadLocation" -Target $DownloadLocation
+
+        $retriesLocal = $Retries
+
+        while ($retriesLocal -gt 0 ) {
+            $attemptNo = ($Retries - $retriesLocal) + 1
+            Write-PSFMessage -Level Verbose -Message "($attemptNo) - Building request for downloading the DMF Package." -Target $DownloadLocation
+
+            $request = New-WebRequest -Url $DownloadLocation -Action "GET" -AuthenticationToken $AuthenticationToken
+
+            Get-FileFromWebRequest -WebRequest $request -Path $Path
+
+            if (Test-PSFFunctionInterrupt) {
+                Write-PSFMessage -Level Verbose -Message "($attemptNo) - Downloading the DMF Package failed."
+            
+                $retriesLocal = $retriesLocal - 1;
+
+                if ($retriesLocal -lt 0) {
+                    Write-PSFMessage -Level Critical "Number of retries exhausted for JobId: $JobId"
+                    Stop-PSFFunction -Message "Stopping" -StepsUpward 1
+                    return
+                }
+            }
+            else {
+                $retriesLocal = 0
+            }
         }
     }
 }
