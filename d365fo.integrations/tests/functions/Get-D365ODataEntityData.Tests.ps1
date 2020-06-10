@@ -76,9 +76,22 @@
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
 		}
-		It 'Should have the expected parameter URL' {
-			$parameter = (Get-Command Get-D365ODataEntityData).Parameters['URL']
-			$parameter.Name | Should -Be 'URL'
+		It 'Should have the expected parameter Url' {
+			$parameter = (Get-Command Get-D365ODataEntityData).Parameters['Url']
+			$parameter.Name | Should -Be 'Url'
+			$parameter.ParameterType.ToString() | Should -Be System.String
+			$parameter.IsDynamic | Should -Be $False
+			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
+			$parameter.ParameterSets.Keys | Should -Contain '__AllParameterSets'
+			$parameter.ParameterSets['__AllParameterSets'].IsMandatory | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be -2147483648
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipeline | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
+		}
+		It 'Should have the expected parameter SystemUrl' {
+			$parameter = (Get-Command Get-D365ODataEntityData).Parameters['SystemUrl']
+			$parameter.Name | Should -Be 'SystemUrl'
 			$parameter.ParameterType.ToString() | Should -Be System.String
 			$parameter.IsDynamic | Should -Be $False
 			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
@@ -159,13 +172,13 @@
 	Describe "Testing parameterset Default" {
 		<#
 		Default -EntitySetName
-		Default -EntitySetName -ODataQuery -CrossCompany -Tenant -URL -ClientId -ClientSecret -EnableException -RawOutput -OutputAsJson
+		Default -EntitySetName -ODataQuery -CrossCompany -Tenant -Url -SystemUrl -ClientId -ClientSecret -EnableException -RawOutput -OutputAsJson
 		#>
 	}
  	Describe "Testing parameterset Specific" {
 		<#
 		Specific -EntityName
-		Specific -EntityName -ODataQuery -CrossCompany -Tenant -URL -ClientId -ClientSecret -EnableException -RawOutput -OutputAsJson
+		Specific -EntityName -ODataQuery -CrossCompany -Tenant -Url -SystemUrl -ClientId -ClientSecret -EnableException -RawOutput -OutputAsJson
 		#>
 	}
 
