@@ -172,6 +172,13 @@ function Get-D365ODataEntityData {
             $SystemUrl = $Url
         }
         
+        if ([System.String]::IsNullOrEmpty($Url) -or [System.String]::IsNullOrEmpty($SystemUrl)) {
+            $messageString = "It seems that you didn't supply a valid value for the Url parameter. You need specify the Url parameter or add a configuration with the <c='em'>Add-D365ODataConfig</c> cmdlet."
+            Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $entityName
+            Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>', ''))) -ErrorRecord $_
+            return
+        }
+        
         if ($Url.Substring($Url.Length - 1) -eq "/") {
             Write-PSFMessage -Level Verbose -Message "The Url parameter had a tailing slash, which shouldn't be there. Removing the tailling slash." -Target $Url
             $Url = $Url.Substring(0, $Url.Length - 1)
@@ -200,6 +207,8 @@ function Get-D365ODataEntityData {
     }
 
     process {
+        if (Test-PSFFunctionInterrupt) { return }
+
         Invoke-TimeSignal -Start
 
         Write-PSFMessage -Level Verbose -Message "Building request for the OData endpoint for entity: $entity." -Target $entity

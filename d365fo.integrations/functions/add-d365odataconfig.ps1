@@ -78,7 +78,7 @@
 function Add-D365ODataConfig {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory = $true, Position = 0)]
+        [Parameter(Mandatory = $true)]
         [string] $Name,
 
         [Alias('$AADGuid')]
@@ -113,18 +113,23 @@ function Add-D365ODataConfig {
     if ([System.String]::IsNullOrEmpty($SystemUrl) -and (-not [System.String]::IsNullOrEmpty($Url))) {
         Write-PSFMessage -Level Verbose -Message "You didn't fill in the SystemUrl parameter, which is needed. Expecting that you are working against D365FO and using the Url parameter value." -Target $Url
         $PSBoundParameters.Add("SystemUrl", $Url)
+        $SystemUrl = $Url
     }
 
-    if ($Url.Substring($Url.Length - 1) -eq "/") {
-        Write-PSFMessage -Level Verbose -Message "The Url parameter had a tailing slash, which shouldn't be there. Removing the tailling slash." -Target $Url
-        $Url = $Url.Substring(0, $Url.Length - 1)
+    if (![System.String]::IsNullOrEmpty($Url)) {
+        if ($Url.Substring($Url.Length - 1) -eq "/") {
+            Write-PSFMessage -Level Verbose -Message "The Url parameter had a tailing slash, which shouldn't be there. Removing the tailling slash." -Target $Url
+            $Url = $Url.Substring(0, $Url.Length - 1)
+        }
     }
 
-    if ($SystemUrl.Substring($SystemUrl.Length - 1) -eq "/") {
-        Write-PSFMessage -Level Verbose -Message "The SystemUrl parameter had a tailing slash, which shouldn't be there. Removing the tailling slash." -Target $Url
-        $SystemUrl = $SystemUrl.Substring(0, $SystemUrl.Length - 1)
+    if (![System.String]::IsNullOrEmpty($SystemUrl)) {
+        if ($SystemUrl.Substring($SystemUrl.Length - 1) -eq "/") {
+            Write-PSFMessage -Level Verbose -Message "The SystemUrl parameter had a tailing slash, which shouldn't be there. Removing the tailling slash." -Target $Url
+            $SystemUrl = $SystemUrl.Substring(0, $SystemUrl.Length - 1)
+        }
     }
-
+    
     $configName = $Name.ToLower()
 
     #The ':keys' label is used to have a continue inside the switch statement itself

@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# Enable-D365Exception
+# Enable-D365ExceptionIntegrations
 
 ## SYNOPSIS
 Enable exceptions to be thrown
@@ -13,7 +13,7 @@ Enable exceptions to be thrown
 ## SYNTAX
 
 ```
-Enable-D365Exception [<CommonParameters>]
+Enable-D365ExceptionIntegrations [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -25,7 +25,7 @@ Useful when the module is used in an automated fashion, like inside Azure DevOps
 
 ### EXAMPLE 1
 ```
-Enable-D365Exception
+Enable-D365ExceptionIntegrations
 ```
 
 This will for the rest of the current PowerShell session make sure that exceptions will be thrown.

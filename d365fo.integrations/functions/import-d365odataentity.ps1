@@ -31,6 +31,17 @@
     .PARAMETER Url
         URL / URI for the D365FO environment you want to access through OData
         
+        If you are working against a D365FO instance, it will be the URL / URI for the instance itself
+        
+        If you are working against a D365 Talent / HR instance, this will have to be "http://hr.talent.dynamics.com"
+        
+    .PARAMETER SystemUrl
+        URL / URI for the D365FO instance where the OData endpoint is available
+        
+        If you are working against a D365FO instance, it will be the URL / URI for the instance itself, which is the same as the Url parameter value
+        
+        If you are working against a D365 Talent / HR instance, this will to be full instance URL / URI like "https://aos-rts-sf-b1b468164ee-prod-northeurope.hr.talent.dynamics.com/namespaces/0ab49d18-6325-4597-97b3-c7f2321aa80c"
+        
     .PARAMETER ClientId
         The ClientId obtained from the Azure Portal when you created a Registered Application
         
@@ -74,28 +85,47 @@ function Import-D365ODataEntity {
         [Alias('Json')]
         [string] $Payload,
 
-        [Parameter(Mandatory = $false)]
         [switch] $CrossCompany,
 
-        [Parameter(Mandatory = $false)]
         [Alias('$AADGuid')]
         [string] $Tenant = $Script:ODataTenant,
 
-        [Parameter(Mandatory = $false)]
-        [Alias('URI')]
-        [string] $URL = $Script:ODataUrl,
+        [Alias('Uri')]
+        [Alias('AuthenticationUrl')]
+        [string] $Url = $Script:ODataUrl,
 
-        [Parameter(Mandatory = $false)]
+        [string] $SystemUrl = $Script:ODataSystemUrl,
+
         [string] $ClientId = $Script:ODataClientId,
 
-        [Parameter(Mandatory = $false)]
         [string] $ClientSecret = $Script:ODataClientSecret,
 
         [switch] $EnableException
-
     )
 
     begin {
+        if ([System.String]::IsNullOrEmpty($SystemUrl)) {
+            Write-PSFMessage -Level Verbose -Message "The SystemUrl parameter was empty, using the Url parameter as the OData endpoint base address." -Target $SystemUrl
+            $SystemUrl = $Url
+        }
+        
+        if ([System.String]::IsNullOrEmpty($Url) -or [System.String]::IsNullOrEmpty($SystemUrl)) {
+            $messageString = "It seems that you didn't supply a valid value for the Url parameter. You need specify the Url parameter or add a configuration with the <c='em'>Add-D365ODataConfig</c> cmdlet."
+            Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $entityName
+            Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>', ''))) -ErrorRecord $_
+            return
+        }
+        
+        if ($Url.Substring($Url.Length - 1) -eq "/") {
+            Write-PSFMessage -Level Verbose -Message "The Url parameter had a tailing slash, which shouldn't be there. Removing the tailling slash." -Target $Url
+            $Url = $Url.Substring(0, $Url.Length - 1)
+        }
+    
+        if ($SystemUrl.Substring($SystemUrl.Length - 1) -eq "/") {
+            Write-PSFMessage -Level Verbose -Message "The SystemUrl parameter had a tailing slash, which shouldn't be there. Removing the tailling slash." -Target $Url
+            $SystemUrl = $SystemUrl.Substring(0, $SystemUrl.Length - 1)
+        }
+
         $bearerParms = @{
             Url          = $Url
             ClientId     = $ClientId
@@ -106,7 +136,7 @@ function Import-D365ODataEntity {
         $bearer = New-BearerToken @bearerParms
 
         $headerParms = @{
-            URL         = $URL
+            URL         = $Url
             BearerToken = $bearer
         }
 
@@ -114,13 +144,20 @@ function Import-D365ODataEntity {
     }
 
     process {
+        if (Test-PSFFunctionInterrupt) { return }
+
         Invoke-TimeSignal -Start
 
         Write-PSFMessage -Level Verbose -Message "Building request for the OData endpoint for entity named: $EntityName." -Target $EntityName
         
-        [System.UriBuilder] $odataEndpoint = $URL
-
-        $odataEndpoint.Path = "data/$EntityName"
+        [System.UriBuilder] $odataEndpoint = $SystemUrl
+        
+        if ($odataEndpoint.Path -eq "/") {
+            $odataEndpoint.Path = "data/$EntityName($Key)"
+        }
+        else {
+            $odataEndpoint.Path += "/data/$EntityName($Key)"
+        }
 
         if ($CrossCompany) {
             $odataEndpoint.Query = "cross-company=true"

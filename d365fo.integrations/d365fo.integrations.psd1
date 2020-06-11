@@ -44,7 +44,7 @@
     # Functions to export from this module
     FunctionsToExport = @(
         	'Add-D365ODataConfig'
-		,	'Enable-d365Exception'
+		,	'Enable-D365ExceptionIntegrations'
 		,	'Export-D365DmfPackage'
 		
         ,   'Get-D365ActiveODataConfig'
