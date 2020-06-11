@@ -20,6 +20,7 @@
 #>
 
 function Enable-D365ExceptionIntegrations {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
     [CmdletBinding()]
     param ()
 
