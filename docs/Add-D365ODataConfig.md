@@ -13,8 +13,9 @@ Save an OData config
 ## SYNTAX
 
 ```
-Add-D365ODataConfig [-Name] <String> [-Tenant <String>] [-Url <String>] [-SystemUrl <String>]
- [-ClientId <String>] [-ClientSecret <String>] [-Temporary] [-Force] [-EnableException] [<CommonParameters>]
+Add-D365ODataConfig [-Name] <String> [[-Tenant] <String>] [[-Url] <String>] [[-SystemUrl] <String>]
+ [[-ClientId] <String>] [[-ClientSecret] <String>] [-Temporary] [-Force] [-EnableException]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -59,7 +60,7 @@ Parameter Sets: (All)
 Aliases: $AADGuid
 
 Required: False
-Position: Named
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -78,7 +79,7 @@ Parameter Sets: (All)
 Aliases: AuthenticationUrl, Uri
 
 Required: False
-Position: Named
+Position: 3
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -97,7 +98,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
+Position: 4
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -112,7 +113,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
+Position: 5
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -127,7 +128,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
+Position: 6
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
