@@ -39,7 +39,14 @@ function Update-ODataVariables {
             
             $name = "OData" + (Get-Culture).TextInfo.ToTitleCase($item)
         
-            Write-PSFMessage -Level Verbose -Message "$name - $($configHash[$item])" -Target $configHash[$item]
+            $valueMessage = $configHash[$item]
+
+            if ($item -like "*client*" -and $valueMessage.Length -gt 20)
+            {
+                $valueMessage = $valueMessage.Substring(0,18) + "[...REDACTED...]"
+            }
+
+            Write-PSFMessage -Level Verbose -Message "$name - $valueMessage" -Target $valueMessage
             Set-Variable -Name $name -Value $configHash[$item] -Scope Script
         }
     }
