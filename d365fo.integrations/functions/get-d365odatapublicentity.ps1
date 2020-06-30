@@ -250,7 +250,7 @@ function Get-D365ODataPublicEntity {
             $res = Invoke-RestMethod -Method Get -Uri $odataEndpoint.Uri.AbsoluteUri -Headers $headers -ContentType 'application/json'
 
             if (-not ($RawOutput)) {
-                $res = $res.Value
+                $res = $res.Value | Sort-Object -Property Name
 
                 if ($OutNamesOnly) {
                     $res = $res | Select-PSFObject "Name as DataEntityName", "EntitySetName as EntityName"
