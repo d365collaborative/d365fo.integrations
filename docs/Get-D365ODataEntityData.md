@@ -14,16 +14,18 @@ Get data from an Data Entity using OData
 
 ### Default (Default)
 ```
-Get-D365ODataEntityData -EntitySetName <String> [-ODataQuery <String>] [-CrossCompany] [-Tenant <String>]
- [-Url <String>] [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>] [-EnableException]
- [-RawOutput] [-OutputAsJson] [<CommonParameters>]
+Get-D365ODataEntityData -EntitySetName <String> [-Top <Int32>] [-Filter <String[]>] [-Select <String[]>]
+ [-Expand <String[]>] [-ODataQuery <String>] [-CrossCompany] [-Tenant <String>] [-Url <String>]
+ [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>] [-EnableException] [-RawOutput]
+ [-OutputAsJson] [<CommonParameters>]
 ```
 
 ### Specific
 ```
-Get-D365ODataEntityData -EntityName <String> [-ODataQuery <String>] [-CrossCompany] [-Tenant <String>]
- [-Url <String>] [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>] [-EnableException]
- [-RawOutput] [-OutputAsJson] [<CommonParameters>]
+Get-D365ODataEntityData -EntityName <String> [-Top <Int32>] [-Filter <String[]>] [-Select <String[]>]
+ [-Expand <String[]>] [-ODataQuery <String>] [-CrossCompany] [-Tenant <String>] [-Url <String>]
+ [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>] [-EnableException] [-RawOutput]
+ [-OutputAsJson] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -107,6 +109,76 @@ Required: True
 Position: Named
 Default value: None
 Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Top
+Number of records that you want returned from the OData endpoint
+
+Setting this will override anything in the OData parameter
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Filter
+Filter statements to limit the records outputted from the OData endpoint
+
+Supports an array of filter statements, so you don't need to know the syntax of combining filter statements
+
+Setting this will override anything in the OData parameter
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Select
+List of properties/columns that you want to return for the records outputted from the OData endpoint
+
+Setting this will override anything in the OData parameter
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Expand
+List of navigation properties/related properties that you want to include for the records outputted from the OData endpoint
+
+Setting this will override anything in the OData parameter
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

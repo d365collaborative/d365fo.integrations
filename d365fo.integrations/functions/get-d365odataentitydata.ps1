@@ -22,6 +22,28 @@
         
         The parameter is created specifically to be used when piping from Get-D365ODataPublicEntity
         
+    .PARAMETER Top
+        Number of records that you want returned from the OData endpoint
+        
+        Setting this will override anything in the OData parameter
+        
+    .PARAMETER Filter
+        Filter statements to limit the records outputted from the OData endpoint
+        
+        Supports an array of filter statements, so you don't need to know the syntax of combining filter statements
+        
+        Setting this will override anything in the OData parameter
+        
+    .PARAMETER Select
+        List of properties/columns that you want to return for the records outputted from the OData endpoint
+        
+        Setting this will override anything in the OData parameter
+        
+    .PARAMETER Expand
+        List of navigation properties/related properties that you want to include for the records outputted from the OData endpoint
+        
+        Setting this will override anything in the OData parameter
+        
     .PARAMETER ODataQuery
         Valid OData query string that you want to pass onto the D365 OData endpoint while retrieving data
         
@@ -141,6 +163,14 @@ function Get-D365ODataEntityData {
         [Alias('CollectionName')]
         [string] $EntitySetName,
 
+        [int] $Top,
+
+        [string[]] $Filter,
+
+        [string[]] $Select,
+
+        [string[]] $Expand,
+
         [string] $ODataQuery,
 
         [switch] $CrossCompany,
@@ -204,6 +234,41 @@ function Get-D365ODataEntityData {
         }
 
         $headers = New-AuthorizationHeaderBearerToken @headerParms
+
+        $odataAppend = "&"
+
+        $sbODataQuery = [System.Text.StringBuilder]::new()
+        if ($Top -gt 0) {
+            [void]$sbODataQuery.AppendFormat("`$top={0}", $top)
+        }
+
+        if (-not [System.String]::IsNullOrEmpty($Filter)) {
+            if ($sbODataQuery.Length -gt 0) {
+                $odataFilterAppend = $odataAppend
+            }
+
+            [void]$sbODataQuery.AppendFormat("{0}`$filter={1}", $odataFilterAppend, $($Filter -join " and "))
+        }
+        
+        if (-not [System.String]::IsNullOrEmpty($Select)) {
+            if ($sbODataQuery.Length -gt 0) {
+                $odataSelectAppend = $odataAppend
+            }
+
+            [void]$sbODataQuery.AppendFormat("{0}`$select={1}", $odataSelectAppend, $($Select -join ","))
+        }
+
+        if (-not [System.String]::IsNullOrEmpty($Expand)) {
+            if ($sbODataQuery.Length -gt 0) {
+                $odataExpandAppend = $odataAppend
+            }
+
+            [void]$sbODataQuery.AppendFormat("{0}`$expand={1}", $odataExpandAppend, $($Expand -join ","))
+        }
+
+        if ($sbODataQuery.Length -gt 0) {
+            $ODataQuery = $sbODataQuery.ToString()
+        }
     }
 
     process {
