@@ -25,6 +25,8 @@ function Enable-D365ExceptionIntegrations {
     param ()
 
     Write-PSFMessage -Level Verbose -Message "Enabling exception across the entire module." -Target $configurationValue
+    Set-PSFFeature -Name 'PSFramework.InheritEnableException' -Value $true -ModuleName "d365fo.integrations"
+    Set-PSFFeature -Name 'PSFramework.InheritEnableException' -Value $true -ModuleName "PSOAuthHelper"
 
     $PSDefaultParameterValues['*:EnableException'] = $true
 }
