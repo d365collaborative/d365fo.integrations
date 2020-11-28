@@ -2,19 +2,19 @@
 <#
     .SYNOPSIS
         Get Service Group from the Json Service endpoint
-
+        
     .DESCRIPTION
         Get available Service Group from the Json Service endpoint of the Dynamics 365 Finance & Operations instance
-
+        
     .PARAMETER ServiceGroupName
         Name of the Service Group that you want to be working against
-
+        
     .PARAMETER ServiceName
         Name of the Service that you want to be working against
-
+        
     .PARAMETER OperationName
         Name of the Operation that you want to be working against
-
+        
     .PARAMETER Tenant
         Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is connected to, that you want to access
         
@@ -47,28 +47,28 @@
         
     .EXAMPLE
         PS C:\> Get-D365RestServiceOperationDetails -ServiceGroupName "ERWebServices" -ServiceName "ERPullSolutionFromRepositoryService" -OperationName "Execute"
-                    
+        
         This will list all available Operation details from the Service Group "ERWebServices", ServiceName "ERPullSolutionFromRepositoryService" and OperationName "Execute" combinantion, from the Dynamics 365 Finance & Operations instance.
-
+        
         It will use the default configuration details that are stored in the configuration store.
-
+        
         Sample output:
-
+        
         ServiceGroupName : ERWebServices
         ServiceName      : ERPullSolutionFromRepositoryService
         OperationName    : Execute
         Parameters       : {@{Name=_request; Type=PullSolutionFromRepositoryRequest}}
         Return           : @{Name=return; Type=PullSolutionFromRepositoryResponse}
-
+        
     .EXAMPLE
         PS C:\> Get-D365RestServiceGroup -Name "ERWebServices" | Get-D365RestService | Get-D365RestServiceOperation | Get-D365RestServiceOperationDetails
-
+        
         This will list all available Operation details from the Service Group "ERWebServices", all available services, and all available operations for each service, from the Dynamics 365 Finance & Operations instance.
-
+        
         It will use the default configuration details that are stored in the configuration store.
-
+        
         Sample output:
-
+        
         ServiceGroupName : ERWebServices
         ServiceName      : ERPullSolutionFromRepositoryService
         OperationName    : Execute

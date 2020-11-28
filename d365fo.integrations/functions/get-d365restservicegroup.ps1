@@ -2,13 +2,13 @@
 <#
     .SYNOPSIS
         Get Service Group from the Json Service endpoint
-
+        
     .DESCRIPTION
         Get available Service Group from the Json Service endpoint of the Dynamics 365 Finance & Operations instance
-
+        
     .PARAMETER Name
         Name of the Service Group that you are looking for
-
+        
         The parameter supports wildcards. E.g. -Name "*Timesheet*"
         
         Default value is "*" to list all service groups
@@ -50,18 +50,18 @@
         
     .EXAMPLE
         PS C:\> Get-D365RestServiceGroup
-
+        
         This will list all available Service Groups from the Dynamics 365 Finance & Operations instance.
-
+        
         It will use the default configuration details that are stored in the configuration store.
         
     .EXAMPLE
         PS C:\> Get-D365RestServiceGroup -Name "*service*"
-
+        
         This will list all available Service Groups, which matches the "*service*" pattern, from the Dynamics 365 Finance & Operations instance.
-
+        
         It will use the default configuration details that are stored in the configuration store.
-
+        
     .LINK
         Add-D365ODataConfig
         
