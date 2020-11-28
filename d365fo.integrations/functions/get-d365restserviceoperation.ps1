@@ -2,23 +2,23 @@
 <#
     .SYNOPSIS
         Get Service Group from the Json Service endpoint
-        
+
     .DESCRIPTION
         Get available Service Group from the Json Service endpoint of the Dynamics 365 Finance & Operations instance
-        
+
     .PARAMETER ServiceGroupName
         Name of the Service Group that you want to be working against
-        
+
     .PARAMETER ServiceName
         Name of the Service that you want to be working against
-        
+
     .PARAMETER OperationName
         Name of the Operation that you are looking for
-        
+
         The parameter supports wildcards. E.g. -OperationName "*Get*"
         
         Default value is "*" to list all operations from the specific Service Group and Service combination
-        
+
     .PARAMETER Tenant
         Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is connected to, that you want to access
         
@@ -58,9 +58,9 @@
         PS C:\> Get-D365RestServiceOperation -ServiceGroupName "BIServices" -ServiceName "SRSFrameworkService"
         
         This will list all available Operations from the Service Group "DMFService" and ServiceName "SRSFrameworkService" combinantion, from the Dynamics 365 Finance & Operations instance.
-        
+
         It will use the default configuration details that are stored in the configuration store.
-        
+
         Sample output:
         
         ServiceGroupName ServiceName         OperationName
@@ -71,14 +71,14 @@
         BIServices       SRSFrameworkService getAosUtcNow
         BIServices       SRSFrameworkService getApplicationObjectServers
         BIServices       SRSFrameworkService getAssemblies
-        
+
     .EXAMPLE
         PS C:\> Get-D365RestServiceOperation -ServiceGroupName "BIServices" -ServiceName "SRSFrameworkService" -OperationName "*report*"
         
         This will list all available Operations from the Service Group "DMFService" and ServiceName "SRSFrameworkService" combinantion, which macthes the pattern "*report*", from the Dynamics 365 Finance & Operations instance.
-        
+
         It will use the default configuration details that are stored in the configuration store.
-        
+
         Sample output:
         
         ServiceGroupName ServiceName         OperationName
@@ -89,15 +89,15 @@
         BIServices       SRSFrameworkService getReportDesigns
         BIServices       SRSFrameworkService getReportDetails
         BIServices       SRSFrameworkService getReportFullPath
-        
+
     .EXAMPLE
         PS C:\> Get-D365RestServiceGroup -Name "BIServices" | Get-D365RestService | Get-D365RestServiceOperation
-        
+
         This will list all available Service Groups, which matches the "BIServices" pattern, from the Dynamics 365 Finance & Operations instance.
         It will pipe all Service Groups into the Get-D365RestService cmdlet, and pipe all Services available into the Get-D365RestServiceOperation cmdlet.
-        
+
         It will use the default configuration details that are stored in the configuration store.
-        
+
         Sample output:
         
         ServiceGroupName ServiceName         OperationName
@@ -224,8 +224,11 @@ function Get-D365RestServiceOperation {
                 $res.Operations = @($res.Operations | Where-Object { $_.Name -Like $OperationName -or $_.Name -eq $OperationName }) | Sort-Object Name
             }
         
-            $obj = [PSCustomObject]@{ ServiceGroupName = $ServiceGroupName; ServiceName = $ServiceName  }
-            $res = $res | Select-PSFObject "ServiceGroupName from obj","ServiceName from obj", "Name as OperationName"
+            $obj = [PSCustomObject]@{ ServiceGroupName = $ServiceGroupName; ServiceName = $ServiceName }
+            #Hack to silence the PSScriptAnalyzer
+            $obj | Out-Null
+                        
+            $res = $res | Select-PSFObject "ServiceGroupName from obj", "ServiceName from obj", "Name as OperationName"
 
             if ($OutputAsJson) {
                 $res | ConvertTo-Json -Depth 10

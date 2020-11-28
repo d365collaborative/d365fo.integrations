@@ -74,7 +74,7 @@
         OperationName    : Execute
         Parameters       : {@{Name=_request; Type=PullSolutionFromRepositoryRequest}}
         Return           : @{Name=return; Type=PullSolutionFromRepositoryResponse}
-        
+
     .LINK
         Add-D365ODataConfig
         
@@ -102,6 +102,7 @@
 #>
 
 function Get-D365RestServiceOperationDetails {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
     [CmdletBinding(DefaultParameterSetName = "Default")]
     [OutputType()]
     param (
@@ -193,6 +194,9 @@ function Get-D365RestServiceOperationDetails {
             $res = Invoke-RestMethod @params
         
             $obj = [PSCustomObject]@{ ServiceGroupName = $ServiceGroupName; ServiceName = $ServiceName; OperationName = $OperationName }
+            #Hack to silence the PSScriptAnalyzer
+            $obj | Out-Null
+
             $res = $res | Select-PSFObject "ServiceGroupName from obj", "ServiceName from obj", "OperationName from obj", "Parameters", "Return"
 
             if ($OutputAsJson) {

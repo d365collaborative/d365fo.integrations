@@ -2,16 +2,16 @@
 <#
     .SYNOPSIS
         Get Service Group from the Json Service endpoint
-        
+
     .DESCRIPTION
         Get available Service Group from the Json Service endpoint of the Dynamics 365 Finance & Operations instance
-        
+
     .PARAMETER ServiceGroupName
         Name of the Service Group that you want to be working against
-        
+
     .PARAMETER ServiceName
         Name of the Service that you are looking for
-        
+
         The parameter supports wildcards. E.g. -ServiceName "*Timesheet*"
         
         Default value is "*" to list all services from the specific Service Group
@@ -50,17 +50,17 @@
         
     .PARAMETER OutputAsJson
         Instructs the cmdlet to convert the output to a Json string
-        
+
     .EXAMPLE
         
         PS C:\> Get-D365RestService -ServiceGroupName "DMFService"
-        
+
         This will list all services that are available from the Service Group "DMFService", from the Dynamics 365 Finance & Operations instance.
-        
+
         It will use the default configuration details that are stored in the configuration store.
         
         Sample output:
-        
+
         ServiceGroupName ServiceName
         ---------------- -----------
         DMFService       DMFDataPackager
@@ -68,33 +68,33 @@
         DMFService       DMFEntityWriterService
         DMFService       DMFProcessGrpService
         DMFService       DMFStagingService
-        
+
     .EXAMPLE
         PS C:\> Get-D365RestService -ServiceGroupName "DMFService" -ServiceName "*service*"
-        
+
         This will list all available Services from the Service Group "DMFService", which matches the "*service*" pattern, from the Dynamics 365 Finance & Operations instance.
-        
+
         It will use the default configuration details that are stored in the configuration store.
         
         Sample output:
-        
+
         ServiceGroupName ServiceName
         ---------------- -----------
         DMFService       DMFDefinitionGroupService
         DMFService       DMFEntityWriterService
         DMFService       DMFProcessGrpService
         DMFService       DMFStagingService
-        
+
     .EXAMPLE
         PS C:\> Get-D365RestServiceGroup -Name "DMFService" | Get-D365RestService
-        
+
         This will list all available Service Groups, which matches the "DMFService" pattern, from the Dynamics 365 Finance & Operations instance.
         It will pipe all Service Groups into the Get-D365RestService cmdlet, and have it output all Services available from the Service Group.
-        
+
         It will use the default configuration details that are stored in the configuration store.
-        
+
         Sample output:
-        
+
         ServiceGroupName ServiceName
         ---------------- -----------
         DMFService       DMFDataPackager
@@ -102,7 +102,7 @@
         DMFService       DMFEntityWriterService
         DMFService       DMFProcessGrpService
         DMFService       DMFStagingService
-        
+
     .LINK
         Add-D365ODataConfig
         
@@ -216,6 +216,9 @@ function Get-D365RestService {
             }
         
             $obj = [PSCustomObject]@{ ServiceGroupName = $ServiceGroupName }
+            #Hack to silence the PSScriptAnalyzer
+            $obj | Out-Null
+
             $res = $res | Select-PSFObject "ServiceGroupName from obj", "Name as ServiceName"
 
             if ($OutputAsJson) {
