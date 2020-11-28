@@ -56,6 +56,11 @@
         ,   'Get-D365ODataEntityMandatoryField'
         ,	'Get-D365ODataPublicEntity'
         
+        ,   'Get-D365RestServiceGroup'
+        ,   'Get-D365RestService'
+        ,   'Get-D365RestServiceOperation'
+        ,   'Get-D365RestServiceOperationDetails'
+
         ,   'Import-D365DmfPackage'
         ,   'Import-D365ODataEntity'
         ,   'Import-D365ODataEntityBatchMode'
