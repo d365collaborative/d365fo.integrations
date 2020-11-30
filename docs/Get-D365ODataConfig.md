@@ -48,6 +48,10 @@ This will display the OData configuration that is saved with the name "UAT" on t
 ### -Name
 The name of the OData configuration you are looking for
 
+The parameter supports wildcards.
+E.g.
+-Name "*Customer*"
+
 Default value is "*" to display all OData configs
 
 ```yaml
