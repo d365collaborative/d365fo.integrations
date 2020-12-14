@@ -83,6 +83,11 @@
     .PARAMETER ClientSecret
         The ClientSecret obtained from the Azure Portal when you created a Registered Application
         
+    .PARAMETER TraverseNextLink
+        Instruct the cmdlet to keep traversing the NextLink if the result set from the OData endpoint is larger than what one round trip can handle
+        
+        The system default is 10,000 (10 thousands) at the time of writing this feature in December 2020
+        
     .PARAMETER EnableException
         This parameters disables user-friendly warnings and enables the throwing of exceptions
         This is less user friendly, but allows catching exceptions in calling scripts
@@ -125,6 +130,15 @@
         
         It will use the default OData configuration details that are stored in the configuration store.
         
+    .EXAMPLE
+        PS C:\> Get-D365ODataEntityData -EntityName CustomersV3 -TraverseNextLink
+        
+        This will get Customers from the OData endpoint.
+        It will use the CustomerV3 entity, and its EntitySetName / CollectionName "CustomersV3".
+        It will traverse all NextLink that will occur while fetching data from the OData endpoint.
+        
+        It will use the default OData configuration details that are stored in the configuration store.
+        
     .LINK
         Add-D365ODataConfig
         
@@ -156,10 +170,12 @@ function Get-D365ODataEntityData {
     [OutputType()]
     param (
         [Parameter(Mandatory = $true, ParameterSetName = "Specific")]
+        [Parameter(ParameterSetName = "NextLink")]
         [Alias('Name')]
         [string] $EntityName,
 
         [Parameter(Mandatory = $true, ParameterSetName = "Default", ValueFromPipelineByPropertyName = $true)]
+        [Parameter(ParameterSetName = "NextLink", ValueFromPipelineByPropertyName = $true)]
         [Alias('CollectionName')]
         [string] $EntitySetName,
 
@@ -188,8 +204,13 @@ function Get-D365ODataEntityData {
 
         [string] $ClientSecret = $Script:ODataClientSecret,
 
+        [Parameter(Mandatory = $true, ParameterSetName = "NextLink")]
+        [switch] $TraverseNextLink,
+
         [switch] $EnableException,
 
+        [Parameter(ParameterSetName = "Specific")]
+        [Parameter(ParameterSetName = "Default")]
         [switch] $RawOutput,
 
         [switch] $OutputAsJson
@@ -299,11 +320,27 @@ function Get-D365ODataEntityData {
         }
 
         try {
-            Write-PSFMessage -Level Verbose -Message "Executing http request against the OData endpoint." -Target $($odataEndpoint.Uri.AbsoluteUri)
-            $res = Invoke-RestMethod -Method Get -Uri $odataEndpoint.Uri.AbsoluteUri -Headers $headers -ContentType 'application/json'
+            [System.Collections.Generic.List[System.Object]] $resArray = @()
 
-            if (-not $RawOutput) {
-                $res = $res.Value
+            $localUri = $odataEndpoint.Uri.AbsoluteUri
+            do {
+                Write-PSFMessage -Level Verbose -Message "Executing http request against the OData endpoint." -Target $localUri
+                $resGet = Invoke-RestMethod -Method Get -Uri $localUri -Headers $headers -ContentType 'application/json'
+
+                if (-not $RawOutput) {
+                    $resArray.AddRange($resGet.Value)
+                }
+                else {
+                    $res = $resGet
+                }
+                
+                if ($($resGet.'@odata.nextLink') -match ".*(/data/.*)") {
+                    $localUri = "$SystemUrl$($Matches[1])"
+                }
+            } while ($TraverseNextLink -and $resGet.'@odata.nextLink')
+
+            if ($resArray.Count -gt 0) {
+                $res = $resArray.ToArray()
             }
 
             if ($OutputAsJson) {

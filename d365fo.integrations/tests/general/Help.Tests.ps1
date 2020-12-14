@@ -118,6 +118,8 @@ foreach ($command in $commands) {
             $parameters = $command.ParameterSets.Parameters | Sort-Object -Property Name -Unique | Where-Object Name -notin $common
             $parameterNames = $parameters.Name
             $HelpParameterNames = $Help.Parameters.Parameter.Name | Sort-Object -Unique
+
+            #TODO: The foreach should be per ParameterSet, because parameters could change mandatory valuew between 2 different parametersets and that will fail the below testing.
             foreach ($parameter in $parameters) {
                 $parameterName = $parameter.Name
                 $parameterHelp = $Help.parameters.parameter | Where-Object Name -EQ $parameterName
