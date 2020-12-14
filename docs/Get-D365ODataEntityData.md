@@ -20,6 +20,14 @@ Get-D365ODataEntityData -EntitySetName <String> [-Top <Int32>] [-Filter <String[
  [-OutputAsJson] [<CommonParameters>]
 ```
 
+### NextLink
+```
+Get-D365ODataEntityData [-EntityName <String>] [-EntitySetName <String>] [-Top <Int32>] [-Filter <String[]>]
+ [-Select <String[]>] [-Expand <String[]>] [-ODataQuery <String>] [-CrossCompany] [-Tenant <String>]
+ [-Url <String>] [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>] [-TraverseNextLink]
+ [-EnableException] [-OutputAsJson] [<CommonParameters>]
+```
+
 ### Specific
 ```
 Get-D365ODataEntityData -EntityName <String> [-Top <Int32>] [-Filter <String[]>] [-Select <String[]>]
@@ -69,6 +77,17 @@ It will search the customers inside the "Comp1" legal entity / company.
 
 It will use the default OData configuration details that are stored in the configuration store.
 
+### EXAMPLE 4
+```
+Get-D365ODataEntityData -EntityName CustomersV3 -TraverseNextLink
+```
+
+This will get Customers from the OData endpoint.
+It will use the CustomerV3 entity, and its EntitySetName / CollectionName "CustomersV3".
+It will traverse all NextLink that will occur while fetching data from the OData endpoint.
+
+It will use the default OData configuration details that are stored in the configuration store.
+
 ## PARAMETERS
 
 ### -EntityName
@@ -82,6 +101,18 @@ E.g.
 The version 3 of the customers Data Entity is named CustomerV3, but can only be retrieving using CustomersV3
 
 Look at the Get-D365ODataPublicEntity cmdlet to help you obtain the correct name
+
+```yaml
+Type: String
+Parameter Sets: NextLink
+Aliases: Name
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ```yaml
 Type: String
@@ -106,6 +137,18 @@ Parameter Sets: Default
 Aliases: CollectionName
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+```yaml
+Type: String
+Parameter Sets: NextLink
+Aliases: CollectionName
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: True (ByPropertyName)
@@ -305,6 +348,23 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -TraverseNextLink
+Instruct the cmdlet to keep traversing the NextLink if the result set from the OData endpoint is larger than what one round trip can handle
+
+The system default is 10,000 (10 thousands) at the time of writing this feature in December 2020
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: NextLink
+Aliases:
+
+Required: True
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -EnableException
 This parameters disables user-friendly warnings and enables the throwing of exceptions
 This is less user friendly, but allows catching exceptions in calling scripts
@@ -328,7 +388,7 @@ The output will still be a PSCustomObject
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: (All)
+Parameter Sets: Default, Specific
 Aliases:
 
 Required: False
