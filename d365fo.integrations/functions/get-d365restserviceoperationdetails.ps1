@@ -74,7 +74,7 @@
         OperationName    : Execute
         Parameters       : {@{Name=_request; Type=PullSolutionFromRepositoryRequest}}
         Return           : @{Name=return; Type=PullSolutionFromRepositoryResponse}
-
+        
     .LINK
         Add-D365ODataConfig
         
