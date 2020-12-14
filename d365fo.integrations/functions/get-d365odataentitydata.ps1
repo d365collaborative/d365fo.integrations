@@ -85,9 +85,9 @@
         
     .PARAMETER TraverseNextLink
         Instruct the cmdlet to keep traversing the NextLink if the result set from the OData endpoint is larger than what one round trip can handle
-
+        
         The system default is 10,000 (10 thousands) at the time of writing this feature in December 2020
-
+        
     .PARAMETER EnableException
         This parameters disables user-friendly warnings and enables the throwing of exceptions
         This is less user friendly, but allows catching exceptions in calling scripts
@@ -138,7 +138,7 @@
         It will traverse all NextLink that will occur while fetching data from the OData endpoint.
         
         It will use the default OData configuration details that are stored in the configuration store.
-
+        
     .LINK
         Add-D365ODataConfig
         
