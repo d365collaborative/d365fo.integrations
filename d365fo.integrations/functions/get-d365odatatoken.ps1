@@ -33,8 +33,8 @@
         This parameters disables user-friendly warnings and enables the throwing of exceptions
         This is less user friendly, but allows catching exceptions in calling scripts
         
-    .PARAMETER OutputAsJson
-        Instructs the cmdlet to convert the output to a Json string
+    .PARAMETER RawOutput
+        Instructs the cmdlet to output the raw token object and all its properties
         
     .EXAMPLE
         PS C:\> Get-D365ODataToken

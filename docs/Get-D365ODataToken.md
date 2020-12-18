@@ -144,7 +144,7 @@ Accept wildcard characters: False
 ```
 
 ### -RawOutput
-{{ Fill RawOutput Description }}
+Instructs the cmdlet to output the raw token object and all its properties
 
 ```yaml
 Type: SwitchParameter
