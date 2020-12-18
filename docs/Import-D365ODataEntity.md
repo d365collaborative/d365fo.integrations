@@ -13,9 +13,9 @@ Import a Data Entity into Dynamics 365 Finance & Operations
 ## SYNTAX
 
 ```
-Import-D365ODataEntity [-EntityName] <String> [-Payload] <String> [-CrossCompany] [[-Tenant] <String>]
- [[-Url] <String>] [[-SystemUrl] <String>] [[-ClientId] <String>] [[-ClientSecret] <String>] [-EnableException]
- [<CommonParameters>]
+Import-D365ODataEntity [-EntityName] <String> [-Payload] <String> [[-PayloadCharset] <String>] [-CrossCompany]
+ [[-Tenant] <String>] [[-Url] <String>] [[-SystemUrl] <String>] [[-ClientId] <String>]
+ [[-ClientSecret] <String>] [-EnableException] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -87,6 +87,25 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -PayloadCharset
+The charset / encoding that you want the cmdlet to use while updating the odata entity
+
+The default value is: "UTF8"
+
+The charset has to be a valid http charset like: ASCII, ANSI, ISO-8859-1, UTF-8
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 3
+Default value: UTF-8
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -CrossCompany
 Instruct the cmdlet / function to ensure the request against the OData endpoint will work across all companies
 
@@ -111,7 +130,7 @@ Parameter Sets: (All)
 Aliases: $AADGuid
 
 Required: False
-Position: 3
+Position: 4
 Default value: $Script:ODataTenant
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -130,7 +149,7 @@ Parameter Sets: (All)
 Aliases: AuthenticationUrl, Uri
 
 Required: False
-Position: 4
+Position: 5
 Default value: $Script:ODataUrl
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -149,7 +168,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 5
+Position: 6
 Default value: $Script:ODataSystemUrl
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -164,7 +183,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 6
+Position: 7
 Default value: $Script:ODataClientId
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -179,7 +198,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 7
+Position: 8
 Default value: $Script:ODataClientSecret
 Accept pipeline input: False
 Accept wildcard characters: False

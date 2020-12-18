@@ -50,6 +50,19 @@
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
 		}
+		It 'Should have the expected parameter PayloadCharset' {
+			$parameter = (Get-Command Update-D365ODataEntity).Parameters['PayloadCharset']
+			$parameter.Name | Should -Be 'PayloadCharset'
+			$parameter.ParameterType.ToString() | Should -Be System.String
+			$parameter.IsDynamic | Should -Be $False
+			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
+			$parameter.ParameterSets.Keys | Should -Contain '__AllParameterSets'
+			$parameter.ParameterSets['__AllParameterSets'].IsMandatory | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 3
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipeline | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
+		}
 		It 'Should have the expected parameter CrossCompany' {
 			$parameter = (Get-Command Update-D365ODataEntity).Parameters['CrossCompany']
 			$parameter.Name | Should -Be 'CrossCompany'
@@ -71,7 +84,7 @@
 			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
 			$parameter.ParameterSets.Keys | Should -Contain '__AllParameterSets'
 			$parameter.ParameterSets['__AllParameterSets'].IsMandatory | Should -Be $False
-			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 3
+			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 4
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipeline | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
@@ -84,7 +97,7 @@
 			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
 			$parameter.ParameterSets.Keys | Should -Contain '__AllParameterSets'
 			$parameter.ParameterSets['__AllParameterSets'].IsMandatory | Should -Be $False
-			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 4
+			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 5
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipeline | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
@@ -97,7 +110,7 @@
 			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
 			$parameter.ParameterSets.Keys | Should -Contain '__AllParameterSets'
 			$parameter.ParameterSets['__AllParameterSets'].IsMandatory | Should -Be $False
-			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 5
+			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 6
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipeline | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
@@ -110,7 +123,7 @@
 			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
 			$parameter.ParameterSets.Keys | Should -Contain '__AllParameterSets'
 			$parameter.ParameterSets['__AllParameterSets'].IsMandatory | Should -Be $False
-			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 6
+			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 7
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipeline | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
@@ -123,7 +136,7 @@
 			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
 			$parameter.ParameterSets.Keys | Should -Contain '__AllParameterSets'
 			$parameter.ParameterSets['__AllParameterSets'].IsMandatory | Should -Be $False
-			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 7
+			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 8
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipeline | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
@@ -146,7 +159,7 @@
 	Describe "Testing parameterset __AllParameterSets" {
 		<#
 		__AllParameterSets -EntityName -Key -Payload
-		__AllParameterSets -EntityName -Key -Payload -CrossCompany -Tenant -Url -SystemUrl -ClientId -ClientSecret -EnableException
+		__AllParameterSets -EntityName -Key -Payload -PayloadCharset -CrossCompany -Tenant -Url -SystemUrl -ClientId -ClientSecret -EnableException
 		#>
 	}
 
