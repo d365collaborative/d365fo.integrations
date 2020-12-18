@@ -88,6 +88,11 @@
         
         The system default is 10,000 (10 thousands) at the time of writing this feature in December 2020
         
+    .PARAMETER Token
+        Pass a bearer token string that you want to use for while working against the endpoint
+        
+        This can improve performance if you are iterating over a large collection/array
+        
     .PARAMETER EnableException
         This parameters disables user-friendly warnings and enables the throwing of exceptions
         This is less user friendly, but allows catching exceptions in calling scripts
@@ -207,6 +212,8 @@ function Get-D365ODataEntityData {
         [Parameter(Mandatory = $true, ParameterSetName = "NextLink")]
         [switch] $TraverseNextLink,
 
+        [string] $Token,
+        
         [switch] $EnableException,
 
         [Parameter(ParameterSetName = "Specific")]
@@ -240,15 +247,20 @@ function Get-D365ODataEntityData {
             $SystemUrl = $SystemUrl.Substring(0, $SystemUrl.Length - 1)
         }
 
-        $bearerParms = @{
-            Url          = $Url
-            ClientId     = $ClientId
-            ClientSecret = $ClientSecret
-            Tenant       = $Tenant
+        if (-not $Token) {
+            $bearerParms = @{
+                Url          = $Url
+                ClientId     = $ClientId
+                ClientSecret = $ClientSecret
+                Tenant       = $Tenant
+            }
+
+            $bearer = New-BearerToken @bearerParms
         }
-
-        $bearer = New-BearerToken @bearerParms
-
+        else {
+            $bearer = $Token
+        }
+        
         $headerParms = @{
             URL         = $Url
             BearerToken = $bearer

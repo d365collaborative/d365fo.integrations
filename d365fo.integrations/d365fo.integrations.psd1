@@ -55,6 +55,7 @@
         ,   'Get-D365ODataEntityKey'
         ,   'Get-D365ODataEntityMandatoryField'
         ,	'Get-D365ODataPublicEntity'
+        ,   'Get-D365ODataToken'
         
         ,   'Get-D365RestServiceGroup'
         ,   'Get-D365RestService'
