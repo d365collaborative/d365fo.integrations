@@ -1,23 +1,23 @@
 ﻿
 <#
     .SYNOPSIS
-        Get data from an Data Entity using OData
+        Get OAuth 2.0 token to be used against OData or Custom Service
         
     .DESCRIPTION
-        Get data from an Data Entity using the OData endpoint of the Dynamics 365 Finance & Operations
+        Get an OAuth 2.0 bearer token to be used against the OData or Custom Service endpoints of the Dynamics 365 Finance & Operations
         
     .PARAMETER Tenant
         Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is connected to, that you want to access through OData
         
     .PARAMETER Url
-        URL / URI for the D365FO environment you want to access through OData
+        URL / URI for the D365FO environment you want to be working against
         
         If you are working against a D365FO instance, it will be the URL / URI for the instance itself
         
         If you are working against a D365 Talent / HR instance, this will have to be "http://hr.talent.dynamics.com"
         
     .PARAMETER SystemUrl
-        URL / URI for the D365FO instance where the OData endpoint is available
+        URL / URI for the D365FO instance you want to be working against
         
         If you are working against a D365FO instance, it will be the URL / URI for the instance itself, which is the same as the Url parameter value
         
@@ -37,41 +37,18 @@
         Instructs the cmdlet to convert the output to a Json string
         
     .EXAMPLE
-        PS C:\> Get-D365ODataEntityData -EntityName CustomersV3 -ODataQuery '$top=1'
+        PS C:\> Get-D365ODataToken
         
-        This will get Customers from the OData endpoint.
-        It will use the CustomerV3 entity, and its EntitySetName / CollectionName "CustomersV3".
-        It will get the top 1 results from the list of customers.
-        
+        This will get a bearetrtoken string.
+        The output will be a formal formatted bearer token, ready to be used right away.
+
         It will use the default OData configuration details that are stored in the configuration store.
         
     .EXAMPLE
-        PS C:\> Get-D365ODataEntityData -EntityName CustomersV3 -ODataQuery '$top=10' -CrossCompany
+        PS C:\> Get-D365ODataToken -RawOutput
         
-        This will get Customers from the OData endpoint.
-        It will use the CustomerV3 entity, and its EntitySetName / CollectionName "CustomersV3".
-        It will get the top 10 results from the list of customers.
-        It will make sure to search across all legal entities / companies inside the D365FO environment.
-        
-        It will use the default OData configuration details that are stored in the configuration store.
-        
-    .EXAMPLE
-        PS C:\> Get-D365ODataEntityData -EntityName CustomersV3 -ODataQuery '$top=10&$filter=dataAreaId eq ''Comp1''' -CrossCompany
-        
-        This will get Customers from the OData endpoint.
-        It will use the CustomerV3 entity, and its EntitySetName / CollectionName "CustomersV3".
-        It will get the top 10 results from the list of customers.
-        It will make sure to search across all legal entities / companies inside the D365FO environment.
-        It will search the customers inside the "Comp1" legal entity / company.
-        
-        It will use the default OData configuration details that are stored in the configuration store.
-        
-    .EXAMPLE
-        PS C:\> Get-D365ODataEntityData -EntityName CustomersV3 -TraverseNextLink
-        
-        This will get Customers from the OData endpoint.
-        It will use the CustomerV3 entity, and its EntitySetName / CollectionName "CustomersV3".
-        It will traverse all NextLink that will occur while fetching data from the OData endpoint.
+        This will get an OAuth 2.0 token.
+        It will output all properties of the token.
         
         It will use the default OData configuration details that are stored in the configuration store.
         
@@ -85,17 +62,7 @@
         Set-D365ActiveODataConfig
         
     .NOTES
-        The OData standard is using the $ (dollar sign) for many functions and features, which in PowerShell is normally used for variables.
-        
-        Whenever you want to use the different query options, you need to take the $ sign and single quotes into consideration.
-        
-        Example of an execution where I want the top 1 result only, from a specific legal entity / company.
-        This example is using single quotes, to help PowerShell not trying to convert the $ into a variable.
-        Because the OData standard is using single quotes as text qualifiers, we need to escape them with multiple single quotes.
-        
-        -ODataQuery '$top=1&$filter=dataAreaId eq ''Comp1'''
-        
-        Tags: OData, Data, Entity, Query
+        Tags: OData, OAuth, Token, JWT
         
         Author: Mötz Jensen (@Splaxi)
         
