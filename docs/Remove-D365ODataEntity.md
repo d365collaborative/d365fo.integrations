@@ -14,8 +14,8 @@ Remove a Data Entity from Dynamics 365 Finance & Operations
 
 ```
 Remove-D365ODataEntity [-EntityName] <String> [-Key] <String> [-CrossCompany] [[-Tenant] <String>]
- [[-URL] <String>] [[-SystemUrl] <String>] [[-ClientId] <String>] [[-ClientSecret] <String>] [-EnableException]
- [<CommonParameters>]
+ [[-URL] <String>] [[-SystemUrl] <String>] [[-ClientId] <String>] [[-ClientSecret] <String>]
+ [[-Token] <String>] [-EnableException] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -171,6 +171,23 @@ Aliases:
 Required: False
 Position: 7
 Default value: $Script:ODataClientSecret
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Token
+Pass a bearer token string that you want to use for while working against the endpoint
+
+This can improve performance if you are iterating over a large collection/array
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 8
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

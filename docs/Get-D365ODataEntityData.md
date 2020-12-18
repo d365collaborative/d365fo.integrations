@@ -16,8 +16,8 @@ Get data from an Data Entity using OData
 ```
 Get-D365ODataEntityData -EntitySetName <String> [-Top <Int32>] [-Filter <String[]>] [-Select <String[]>]
  [-Expand <String[]>] [-ODataQuery <String>] [-CrossCompany] [-Tenant <String>] [-Url <String>]
- [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>] [-EnableException] [-RawOutput]
- [-OutputAsJson] [<CommonParameters>]
+ [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>] [-Token <String>] [-EnableException]
+ [-RawOutput] [-OutputAsJson] [<CommonParameters>]
 ```
 
 ### NextLink
@@ -25,15 +25,15 @@ Get-D365ODataEntityData -EntitySetName <String> [-Top <Int32>] [-Filter <String[
 Get-D365ODataEntityData [-EntityName <String>] [-EntitySetName <String>] [-Top <Int32>] [-Filter <String[]>]
  [-Select <String[]>] [-Expand <String[]>] [-ODataQuery <String>] [-CrossCompany] [-Tenant <String>]
  [-Url <String>] [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>] [-TraverseNextLink]
- [-EnableException] [-OutputAsJson] [<CommonParameters>]
+ [-Token <String>] [-EnableException] [-OutputAsJson] [<CommonParameters>]
 ```
 
 ### Specific
 ```
 Get-D365ODataEntityData -EntityName <String> [-Top <Int32>] [-Filter <String[]>] [-Select <String[]>]
  [-Expand <String[]>] [-ODataQuery <String>] [-CrossCompany] [-Tenant <String>] [-Url <String>]
- [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>] [-EnableException] [-RawOutput]
- [-OutputAsJson] [<CommonParameters>]
+ [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>] [-Token <String>] [-EnableException]
+ [-RawOutput] [-OutputAsJson] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -361,6 +361,23 @@ Aliases:
 Required: True
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Token
+Pass a bearer token string that you want to use for while working against the endpoint
+
+This can improve performance if you are iterating over a large collection/array
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

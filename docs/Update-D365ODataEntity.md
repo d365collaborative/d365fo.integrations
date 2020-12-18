@@ -15,7 +15,7 @@ Update a Data Entity in Dynamics 365 Finance & Operations
 ```
 Update-D365ODataEntity [-EntityName] <String> [-Key] <String> [-Payload] <String> [[-PayloadCharset] <String>]
  [-CrossCompany] [[-Tenant] <String>] [[-Url] <String>] [[-SystemUrl] <String>] [[-ClientId] <String>]
- [[-ClientSecret] <String>] [-EnableException] [<CommonParameters>]
+ [[-ClientSecret] <String>] [[-Token] <String>] [-EnableException] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -225,6 +225,23 @@ Aliases:
 Required: False
 Position: 9
 Default value: $Script:ODataClientSecret
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Token
+Pass a bearer token string that you want to use for while working against the endpoint
+
+This can improve performance if you are iterating over a large collection/array
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 10
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

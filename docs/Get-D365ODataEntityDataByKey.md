@@ -15,15 +15,15 @@ Get data from an Data Entity using OData, providing a key
 ### Default (Default)
 ```
 Get-D365ODataEntityDataByKey [-ODataQuery <String>] [-CrossCompany] [-Tenant <String>] [-Url <String>]
- [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>] [-EnableException] [-OutputAsJson]
- [<CommonParameters>]
+ [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>] [-Token <String>] [-EnableException]
+ [-OutputAsJson] [<CommonParameters>]
 ```
 
 ### Specific
 ```
 Get-D365ODataEntityDataByKey -EntityName <String> -Key <String> [-ODataQuery <String>] [-CrossCompany]
  [-Tenant <String>] [-Url <String>] [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>]
- [-EnableException] [-OutputAsJson] [<CommonParameters>]
+ [-Token <String>] [-EnableException] [-OutputAsJson] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -217,6 +217,23 @@ Aliases:
 Required: False
 Position: Named
 Default value: $Script:ODataClientSecret
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Token
+Pass a bearer token string that you want to use for while working against the endpoint
+
+This can improve performance if you are iterating over a large collection/array
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

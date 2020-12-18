@@ -14,7 +14,7 @@ Get Message Status from the DMF
 
 ```
 Get-D365DmfMessageStatus [-MessageId] <String> [[-Tenant] <String>] [[-Url] <String>] [[-ClientId] <String>]
- [[-ClientSecret] <String>] [-WaitForCompletion] [-EnableException] [<CommonParameters>]
+ [[-ClientSecret] <String>] [-WaitForCompletion] [[-Token] <String>] [-EnableException] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -132,6 +132,23 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Token
+Pass a bearer token string that you want to use for while working against the endpoint
+
+This can improve performance if you are iterating over a large collection/array
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 6
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

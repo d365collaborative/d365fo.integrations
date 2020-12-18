@@ -5,108 +5,74 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-D365RestServiceOperationDetails
+# Get-D365ODataToken
 
 ## SYNOPSIS
-Get Service Group from the Json Service endpoint
+Get data from an Data Entity using OData
 
 ## SYNTAX
 
 ```
-Get-D365RestServiceOperationDetails [-ServiceGroupName] <String> [-ServiceName] <String>
- [-OperationName] <String> [[-Tenant] <String>] [[-Url] <String>] [[-SystemUrl] <String>]
- [[-ClientId] <String>] [[-ClientSecret] <String>] [[-Token] <String>] [-EnableException] [-OutputAsJson]
- [<CommonParameters>]
+Get-D365ODataToken [[-Tenant] <String>] [[-Url] <String>] [[-SystemUrl] <String>] [[-ClientId] <String>]
+ [[-ClientSecret] <String>] [-EnableException] [-RawOutput] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Get available Service Group from the Json Service endpoint of the Dynamics 365 Finance & Operations instance
+Get data from an Data Entity using the OData endpoint of the Dynamics 365 Finance & Operations
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-D365RestServiceOperationDetails -ServiceGroupName "ERWebServices" -ServiceName "ERPullSolutionFromRepositoryService" -OperationName "Execute"
+Get-D365ODataEntityData -EntityName CustomersV3 -ODataQuery '$top=1'
 ```
 
-This will list all available Operation details from the Service Group "ERWebServices", ServiceName "ERPullSolutionFromRepositoryService" and OperationName "Execute" combinantion, from the Dynamics 365 Finance & Operations instance.
+This will get Customers from the OData endpoint.
+It will use the CustomerV3 entity, and its EntitySetName / CollectionName "CustomersV3".
+It will get the top 1 results from the list of customers.
 
-It will use the default configuration details that are stored in the configuration store.
-
-Sample output:
-
-ServiceGroupName : ERWebServices
-ServiceName      : ERPullSolutionFromRepositoryService
-OperationName    : Execute
-Parameters       : {@{Name=_request; Type=PullSolutionFromRepositoryRequest}}
-Return           : @{Name=return; Type=PullSolutionFromRepositoryResponse}
+It will use the default OData configuration details that are stored in the configuration store.
 
 ### EXAMPLE 2
 ```
-Get-D365RestServiceGroup -Name "ERWebServices" | Get-D365RestService | Get-D365RestServiceOperation | Get-D365RestServiceOperationDetails
+Get-D365ODataEntityData -EntityName CustomersV3 -ODataQuery '$top=10' -CrossCompany
 ```
 
-This will list all available Operation details from the Service Group "ERWebServices", all available services, and all available operations for each service, from the Dynamics 365 Finance & Operations instance.
+This will get Customers from the OData endpoint.
+It will use the CustomerV3 entity, and its EntitySetName / CollectionName "CustomersV3".
+It will get the top 10 results from the list of customers.
+It will make sure to search across all legal entities / companies inside the D365FO environment.
 
-It will use the default configuration details that are stored in the configuration store.
+It will use the default OData configuration details that are stored in the configuration store.
 
-Sample output:
+### EXAMPLE 3
+```
+Get-D365ODataEntityData -EntityName CustomersV3 -ODataQuery '$top=10&$filter=dataAreaId eq ''Comp1''' -CrossCompany
+```
 
-ServiceGroupName : ERWebServices
-ServiceName      : ERPullSolutionFromRepositoryService
-OperationName    : Execute
-Parameters       : {@{Name=_request; Type=PullSolutionFromRepositoryRequest}}
-Return           : @{Name=return; Type=PullSolutionFromRepositoryResponse}
+This will get Customers from the OData endpoint.
+It will use the CustomerV3 entity, and its EntitySetName / CollectionName "CustomersV3".
+It will get the top 10 results from the list of customers.
+It will make sure to search across all legal entities / companies inside the D365FO environment.
+It will search the customers inside the "Comp1" legal entity / company.
+
+It will use the default OData configuration details that are stored in the configuration store.
+
+### EXAMPLE 4
+```
+Get-D365ODataEntityData -EntityName CustomersV3 -TraverseNextLink
+```
+
+This will get Customers from the OData endpoint.
+It will use the CustomerV3 entity, and its EntitySetName / CollectionName "CustomersV3".
+It will traverse all NextLink that will occur while fetching data from the OData endpoint.
+
+It will use the default OData configuration details that are stored in the configuration store.
 
 ## PARAMETERS
 
-### -ServiceGroupName
-Name of the Service Group that you want to be working against
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: True (ByPropertyName, ByValue)
-Accept wildcard characters: False
-```
-
-### -ServiceName
-Name of the Service that you want to be working against
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 2
-Default value: None
-Accept pipeline input: True (ByPropertyName, ByValue)
-Accept wildcard characters: False
-```
-
-### -OperationName
-Name of the Operation that you want to be working against
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 3
-Default value: None
-Accept pipeline input: True (ByPropertyName, ByValue)
-Accept wildcard characters: False
-```
-
 ### -Tenant
-Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is connected to, that you want to access
+Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is connected to, that you want to access through OData
 
 ```yaml
 Type: String
@@ -114,14 +80,14 @@ Parameter Sets: (All)
 Aliases: $AADGuid
 
 Required: False
-Position: 4
+Position: 1
 Default value: $Script:ODataTenant
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -Url
-URL / URI for the D365FO environment you want to access
+URL / URI for the D365FO environment you want to access through OData
 
 If you are working against a D365FO instance, it will be the URL / URI for the instance itself
 
@@ -133,14 +99,14 @@ Parameter Sets: (All)
 Aliases: AuthenticationUrl, Uri
 
 Required: False
-Position: 5
+Position: 2
 Default value: $Script:ODataUrl
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -SystemUrl
-URL / URI for the D365FO instance where the Json Service endpoint is available
+URL / URI for the D365FO instance where the OData endpoint is available
 
 If you are working against a D365FO instance, it will be the URL / URI for the instance itself, which is the same as the Url parameter value
 
@@ -152,7 +118,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 6
+Position: 3
 Default value: $Script:ODataSystemUrl
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -167,7 +133,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 7
+Position: 4
 Default value: $Script:ODataClientId
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -182,25 +148,8 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 8
+Position: 5
 Default value: $Script:ODataClientSecret
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Token
-Pass a bearer token string that you want to use for while working against the endpoint
-
-This can improve performance if you are iterating over a large collection/array
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 9
-Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -221,8 +170,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -OutputAsJson
-Instructs the cmdlet to convert the output to a Json string
+### -RawOutput
+{{ Fill RawOutput Description }}
 
 ```yaml
 Type: SwitchParameter

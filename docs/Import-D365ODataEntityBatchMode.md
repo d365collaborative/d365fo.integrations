@@ -15,7 +15,7 @@ Import a set of Data Entities into Dynamics 365 Finance & Operations
 ```
 Import-D365ODataEntityBatchMode [-EntityName] <String> [-Payload] <String[]> [-CrossCompany]
  [[-Tenant] <String>] [[-URL] <String>] [[-ClientId] <String>] [[-ClientSecret] <String>] [-RawOutput]
- [-EnableException] [<CommonParameters>]
+ [[-Token] <String>] [-EnableException] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -175,6 +175,23 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Token
+Pass a bearer token string that you want to use for while working against the endpoint
+
+This can improve performance if you are iterating over a large collection/array
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 7
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
