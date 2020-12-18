@@ -14,7 +14,7 @@ Get Message Status from the DMF
 
 ```
 Get-D365DmfMessageStatus [-MessageId] <String> [[-Tenant] <String>] [[-Url] <String>] [[-ClientId] <String>]
- [[-ClientSecret] <String>] [-WaitForCompletion] [-EnableException] [<CommonParameters>]
+ [[-ClientSecret] <String>] [-WaitForCompletion] [[-Token] <String>] [-EnableException] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -43,6 +43,19 @@ It will use "e674da86-7ee5-40a7-b777-1111111111111" as the Azure Active Director
 It will use "https://usnconeboxax1aos.cloud.onebox.dynamics.com" as the base D365FO environment url.
 It will use "dea8d7a9-1602-4429-b138-111111111111" as the ClientId.
 It will use "Vja/VmdxaLOPR+alkjfsadffelkjlfw234522" as ClientSecret.
+
+### EXAMPLE 3
+```
+$token = Get-D365ODataToken
+```
+
+PS C:\\\> Get-D365DmfMessageStatus -MessageId "84a383c8-336d-45e4-9933-0c3e8bfb734a" -Token $token
+
+This will get the message status through the DMF endpoint.
+It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
+It will use "84a383c8-336d-45e4-9933-0c3e8bfb734a" as the MessageId parameter passed to the DMF endpoint.
+
+It will use the default OData configuration details that are stored in the configuration store.
 
 ## PARAMETERS
 
@@ -132,6 +145,23 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Token
+Pass a bearer token string that you want to use for while working against the endpoint
+
+This can improve performance if you are iterating over a large collection/array
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 6
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

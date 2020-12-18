@@ -15,7 +15,7 @@ Import a Data Entity into Dynamics 365 Finance & Operations
 ```
 Import-D365ODataEntity [-EntityName] <String> [-Payload] <String> [[-PayloadCharset] <String>] [-CrossCompany]
  [[-Tenant] <String>] [[-Url] <String>] [[-SystemUrl] <String>] [[-ClientId] <String>]
- [[-ClientSecret] <String>] [-EnableException] [<CommonParameters>]
+ [[-ClientSecret] <String>] [[-Token] <String>] [-EnableException] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -43,6 +43,18 @@ This will import a Data Entity into Dynamics 365 Finance & Operations using the 
 First the desired json data is put into the $Payload variable.
 The EntityName used for the import is ExchangeRates.
 The $Payload variable is passed to the cmdlet.
+
+### EXAMPLE 3
+```
+$token = Get-D365ODataToken
+```
+
+PS C:\\\> Import-D365ODataEntity -EntityName "ExchangeRates" -Payload '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}' -Token $token
+
+This will import a Data Entity into Dynamics 365 Finance & Operations using the OData endpoint.
+It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
+The EntityName used for the import is ExchangeRates.
+The Payload is a valid json string, containing all the needed properties.
 
 ## PARAMETERS
 
@@ -200,6 +212,23 @@ Aliases:
 Required: False
 Position: 8
 Default value: $Script:ODataClientSecret
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Token
+Pass a bearer token string that you want to use for while working against the endpoint
+
+This can improve performance if you are iterating over a large collection/array
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 9
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

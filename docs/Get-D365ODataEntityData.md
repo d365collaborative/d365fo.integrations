@@ -16,8 +16,8 @@ Get data from an Data Entity using OData
 ```
 Get-D365ODataEntityData -EntitySetName <String> [-Top <Int32>] [-Filter <String[]>] [-Select <String[]>]
  [-Expand <String[]>] [-ODataQuery <String>] [-CrossCompany] [-Tenant <String>] [-Url <String>]
- [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>] [-EnableException] [-RawOutput]
- [-OutputAsJson] [<CommonParameters>]
+ [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>] [-Token <String>] [-EnableException]
+ [-RawOutput] [-OutputAsJson] [<CommonParameters>]
 ```
 
 ### NextLink
@@ -25,15 +25,15 @@ Get-D365ODataEntityData -EntitySetName <String> [-Top <Int32>] [-Filter <String[
 Get-D365ODataEntityData [-EntityName <String>] [-EntitySetName <String>] [-Top <Int32>] [-Filter <String[]>]
  [-Select <String[]>] [-Expand <String[]>] [-ODataQuery <String>] [-CrossCompany] [-Tenant <String>]
  [-Url <String>] [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>] [-TraverseNextLink]
- [-EnableException] [-OutputAsJson] [<CommonParameters>]
+ [-Token <String>] [-EnableException] [-OutputAsJson] [<CommonParameters>]
 ```
 
 ### Specific
 ```
 Get-D365ODataEntityData -EntityName <String> [-Top <Int32>] [-Filter <String[]>] [-Select <String[]>]
  [-Expand <String[]>] [-ODataQuery <String>] [-CrossCompany] [-Tenant <String>] [-Url <String>]
- [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>] [-EnableException] [-RawOutput]
- [-OutputAsJson] [<CommonParameters>]
+ [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>] [-Token <String>] [-EnableException]
+ [-RawOutput] [-OutputAsJson] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -85,6 +85,20 @@ Get-D365ODataEntityData -EntityName CustomersV3 -TraverseNextLink
 This will get Customers from the OData endpoint.
 It will use the CustomerV3 entity, and its EntitySetName / CollectionName "CustomersV3".
 It will traverse all NextLink that will occur while fetching data from the OData endpoint.
+
+It will use the default OData configuration details that are stored in the configuration store.
+
+### EXAMPLE 5
+```
+$token = Get-D365ODataToken
+```
+
+PS C:\\\> Get-D365ODataEntityData -EntityName CustomersV3 -ODataQuery '$top=1' -Token $token
+
+This will get Customers from the OData endpoint.
+It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
+It will use the CustomerV3 entity, and its EntitySetName / CollectionName "CustomersV3".
+It will get the top 1 results from the list of customers.
 
 It will use the default OData configuration details that are stored in the configuration store.
 
@@ -361,6 +375,23 @@ Aliases:
 Required: True
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Token
+Pass a bearer token string that you want to use for while working against the endpoint
+
+This can improve performance if you are iterating over a large collection/array
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

@@ -60,6 +60,11 @@
     .PARAMETER ClientSecret
         The ClientSecret obtained from the Azure Portal when you created a Registered Application
         
+    .PARAMETER Token
+        Pass a bearer token string that you want to use for while working against the endpoint
+        
+        This can improve performance if you are iterating over a large collection/array
+        
     .PARAMETER EnableException
         This parameters disables user-friendly warnings and enables the throwing of exceptions
         This is less user friendly, but allows catching exceptions in calling scripts
@@ -85,6 +90,19 @@
         It will use the "dataAreaId='DAT',CustomerAccount='123456789'" as key to identify the unique Customer record.
         The $Payload variable is passed to the cmdlet.
         It will NOT look across companies.
+        
+        It will use the default OData configuration details that are stored in the configuration store.
+        
+    .EXAMPLE
+        PS C:\> $token = Get-D365ODataToken
+        PS C:\> Update-D365ODataEntity -EntityName "CustomersV3" -Key "dataAreaId='DAT',CustomerAccount='123456789'" -Payload '{"NameAlias": "CustomerA"}' -CrossCompany -Token $token
+        
+        This will update a Data Entity in Dynamics 365 Finance & Operations using the OData endpoint.
+        It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
+        The EntityName used for the update is "CustomersV3".
+        It will use the "dataAreaId='DAT',CustomerAccount='123456789'" as key to identify the unique Customer record.
+        The Payload is a valid json string, containing the needed properties that we want to update.
+        It will make sure to search across all legal entities / companies inside the D365FO environment.
         
         It will use the default OData configuration details that are stored in the configuration store.
         
@@ -135,6 +153,8 @@ function Update-D365ODataEntity {
 
         [string] $ClientSecret = $Script:ODataClientSecret,
 
+        [string] $Token,
+
         [switch] $EnableException
 
     )
@@ -162,14 +182,19 @@ function Update-D365ODataEntity {
             $SystemUrl = $SystemUrl.Substring(0, $SystemUrl.Length - 1)
         }
 
-        $bearerParms = @{
-            Url          = $Url
-            ClientId     = $ClientId
-            ClientSecret = $ClientSecret
-            Tenant       = $Tenant
-        }
+        if (-not $Token) {
+            $bearerParms = @{
+                Url          = $Url
+                ClientId     = $ClientId
+                ClientSecret = $ClientSecret
+                Tenant       = $Tenant
+            }
 
-        $bearer = New-BearerToken @bearerParms
+            $bearer = New-BearerToken @bearerParms
+        }
+        else {
+            $bearer = $Token
+        }
 
         $headerParms = @{
             URL         = $Url

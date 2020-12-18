@@ -15,15 +15,15 @@ Get data from an Data Entity using OData, providing a key
 ### Default (Default)
 ```
 Get-D365ODataEntityDataByKey [-ODataQuery <String>] [-CrossCompany] [-Tenant <String>] [-Url <String>]
- [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>] [-EnableException] [-OutputAsJson]
- [<CommonParameters>]
+ [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>] [-Token <String>] [-EnableException]
+ [-OutputAsJson] [<CommonParameters>]
 ```
 
 ### Specific
 ```
 Get-D365ODataEntityDataByKey -EntityName <String> -Key <String> [-ODataQuery <String>] [-CrossCompany]
  [-Tenant <String>] [-Url <String>] [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>]
- [-EnableException] [-OutputAsJson] [<CommonParameters>]
+ [-Token <String>] [-EnableException] [-OutputAsJson] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -52,6 +52,21 @@ This will get the specific Customer from the OData endpoint.
 It will use the "CustomerV3" entity, and its EntitySetName / CollectionName "CustomersV3".
 It will use the "dataAreaId='DAT',CustomerAccount='123456789'" as key to identify the unique Customer record.
 It will make sure to search across all legal entities / companies inside the D365FO environment.
+
+It will use the default OData configuration details that are stored in the configuration store.
+
+### EXAMPLE 3
+```
+$token = Get-D365ODataToken
+```
+
+PS C:\\\> Get-D365ODataEntityDataByKey -EntityName CustomersV3 -Key "dataAreaId='DAT',CustomerAccount='123456789'" -Token $token
+
+This will get the specific Customer from the OData endpoint.
+It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
+It will use the "CustomerV3" entity, and its EntitySetName / CollectionName "CustomersV3".
+It will use the "dataAreaId='DAT',CustomerAccount='123456789'" as key to identify the unique Customer record.
+It will NOT look across companies.
 
 It will use the default OData configuration details that are stored in the configuration store.
 
@@ -217,6 +232,23 @@ Aliases:
 Required: False
 Position: Named
 Default value: $Script:ODataClientSecret
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Token
+Pass a bearer token string that you want to use for while working against the endpoint
+
+This can improve performance if you are iterating over a large collection/array
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

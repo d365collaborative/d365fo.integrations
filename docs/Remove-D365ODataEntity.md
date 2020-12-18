@@ -14,8 +14,8 @@ Remove a Data Entity from Dynamics 365 Finance & Operations
 
 ```
 Remove-D365ODataEntity [-EntityName] <String> [-Key] <String> [-CrossCompany] [[-Tenant] <String>]
- [[-URL] <String>] [[-SystemUrl] <String>] [[-ClientId] <String>] [[-ClientSecret] <String>] [-EnableException]
- [<CommonParameters>]
+ [[-URL] <String>] [[-SystemUrl] <String>] [[-ClientId] <String>] [[-ClientSecret] <String>]
+ [[-Token] <String>] [-EnableException] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -29,6 +29,20 @@ Remove-D365ODataEntity -EntityName ExchangeRates -Key "RateTypeName='TEST',FromC
 ```
 
 This will remove a Data Entity from the D365FO environment through OData.
+It will use the ExchangeRate entity, and its EntitySetName / CollectionName "ExchangeRates".
+It will use the "RateTypeName='TEST',FromCurrency='DKK',ToCurrency='EUR',StartDate=2019-01-13T12:00:00Z" as the unique key for the entity.
+
+It will use the default OData configuration details that are stored in the configuration store.
+
+### EXAMPLE 2
+```
+$token = Get-D365ODataToken
+```
+
+PS C:\\\> Remove-D365ODataEntity -EntityName ExchangeRates -Key "RateTypeName='TEST',FromCurrency='DKK',ToCurrency='EUR',StartDate=2019-01-13T12:00:00Z" -Token $token
+
+This will remove a Data Entity from the D365FO environment through OData.
+It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
 It will use the ExchangeRate entity, and its EntitySetName / CollectionName "ExchangeRates".
 It will use the "RateTypeName='TEST',FromCurrency='DKK',ToCurrency='EUR',StartDate=2019-01-13T12:00:00Z" as the unique key for the entity.
 
@@ -171,6 +185,23 @@ Aliases:
 Required: False
 Position: 7
 Default value: $Script:ODataClientSecret
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Token
+Pass a bearer token string that you want to use for while working against the endpoint
+
+This can improve performance if you are iterating over a large collection/array
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 8
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

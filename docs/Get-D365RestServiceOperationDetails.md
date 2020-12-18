@@ -15,7 +15,8 @@ Get Service Group from the Json Service endpoint
 ```
 Get-D365RestServiceOperationDetails [-ServiceGroupName] <String> [-ServiceName] <String>
  [-OperationName] <String> [[-Tenant] <String>] [[-Url] <String>] [[-SystemUrl] <String>]
- [[-ClientId] <String>] [[-ClientSecret] <String>] [-EnableException] [-OutputAsJson] [<CommonParameters>]
+ [[-ClientId] <String>] [[-ClientSecret] <String>] [[-Token] <String>] [-EnableException] [-OutputAsJson]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -46,6 +47,26 @@ Get-D365RestServiceGroup -Name "ERWebServices" | Get-D365RestService | Get-D365R
 ```
 
 This will list all available Operation details from the Service Group "ERWebServices", all available services, and all available operations for each service, from the Dynamics 365 Finance & Operations instance.
+
+It will use the default configuration details that are stored in the configuration store.
+
+Sample output:
+
+ServiceGroupName : ERWebServices
+ServiceName      : ERPullSolutionFromRepositoryService
+OperationName    : Execute
+Parameters       : {@{Name=_request; Type=PullSolutionFromRepositoryRequest}}
+Return           : @{Name=return; Type=PullSolutionFromRepositoryResponse}
+
+### EXAMPLE 3
+```
+$token = Get-D365ODataToken
+```
+
+PS C:\\\> Get-D365RestServiceOperationDetails -ServiceGroupName "ERWebServices" -ServiceName "ERPullSolutionFromRepositoryService" -OperationName "Execute" -Token $token
+
+This will list all available Operation details from the Service Group "ERWebServices", ServiceName "ERPullSolutionFromRepositoryService" and OperationName "Execute" combinantion, from the Dynamics 365 Finance & Operations instance.
+It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
 
 It will use the default configuration details that are stored in the configuration store.
 
@@ -183,6 +204,23 @@ Aliases:
 Required: False
 Position: 8
 Default value: $Script:ODataClientSecret
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Token
+Pass a bearer token string that you want to use for while working against the endpoint
+
+This can improve performance if you are iterating over a large collection/array
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 9
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

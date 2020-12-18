@@ -115,6 +115,19 @@
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
 		}
+		It 'Should have the expected parameter Token' {
+			$parameter = (Get-Command Import-D365ODataEntityBatchMode).Parameters['Token']
+			$parameter.Name | Should -Be 'Token'
+			$parameter.ParameterType.ToString() | Should -Be System.String
+			$parameter.IsDynamic | Should -Be $False
+			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
+			$parameter.ParameterSets.Keys | Should -Contain '__AllParameterSets'
+			$parameter.ParameterSets['__AllParameterSets'].IsMandatory | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 6
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipeline | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
+		}
 		It 'Should have the expected parameter EnableException' {
 			$parameter = (Get-Command Import-D365ODataEntityBatchMode).Parameters['EnableException']
 			$parameter.Name | Should -Be 'EnableException'
@@ -133,7 +146,7 @@
 	Describe "Testing parameterset __AllParameterSets" {
 		<#
 		__AllParameterSets -EntityName -Payload
-		__AllParameterSets -EntityName -Payload -CrossCompany -Tenant -URL -ClientId -ClientSecret -RawOutput -EnableException
+		__AllParameterSets -EntityName -Payload -CrossCompany -Tenant -URL -ClientId -ClientSecret -RawOutput -Token -EnableException
 		#>
 	}
 

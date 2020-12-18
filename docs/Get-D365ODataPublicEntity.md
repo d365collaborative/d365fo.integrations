@@ -15,22 +15,22 @@ Get public OData Data Entity and their metadata
 ### Default (Default)
 ```
 Get-D365ODataPublicEntity [-EntityName <String>] [-ODataQuery <String>] [-Tenant <String>] [-Url <String>]
- [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>] [-EnableException] [-RawOutput]
- [-OutNamesOnly] [-OutputAsJson] [<CommonParameters>]
+ [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>] [-Token <String>] [-EnableException]
+ [-RawOutput] [-OutNamesOnly] [-OutputAsJson] [<CommonParameters>]
 ```
 
 ### NameContains
 ```
 Get-D365ODataPublicEntity -EntityNameContains <String> [-ODataQuery <String>] [-Tenant <String>]
- [-Url <String>] [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>] [-EnableException]
- [-RawOutput] [-OutNamesOnly] [-OutputAsJson] [<CommonParameters>]
+ [-Url <String>] [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>] [-Token <String>]
+ [-EnableException] [-RawOutput] [-OutNamesOnly] [-OutputAsJson] [<CommonParameters>]
 ```
 
 ### Query
 ```
 Get-D365ODataPublicEntity -ODataQuery <String> [-Tenant <String>] [-Url <String>] [-SystemUrl <String>]
- [-ClientId <String>] [-ClientSecret <String>] [-EnableException] [-RawOutput] [-OutNamesOnly] [-OutputAsJson]
- [<CommonParameters>]
+ [-ClientId <String>] [-ClientSecret <String>] [-Token <String>] [-EnableException] [-RawOutput]
+ [-OutNamesOnly] [-OutputAsJson] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -84,6 +84,17 @@ The "CustomersV3" value is used to get the desired Data Entity.
 The output from Get-D365ODataPublicEntity is piped into Get-D365ODataEntityKey.
 All key fields will be extracted and displayed.
 The output will be formatted as a list.
+
+### EXAMPLE 6
+```
+$token = Get-D365ODataToken
+```
+
+PS C:\\\> Get-D365ODataPublicEntity -EntityName customersv3 -Token $token
+
+This will get Data Entities from the OData endpoint.
+It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
+This will search for the Data Entities that are named "customersv3".
 
 ## PARAMETERS
 
@@ -246,6 +257,23 @@ Aliases:
 Required: False
 Position: Named
 Default value: $Script:ODataClientSecret
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Token
+Pass a bearer token string that you want to use for while working against the endpoint
+
+This can improve performance if you are iterating over a large collection/array
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

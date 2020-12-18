@@ -14,7 +14,7 @@ Invoke a REST Endpoint in Dynamics 365 Finance & Operations
 
 ```
 Invoke-D365RestEndpoint [-ServiceName] <String> [[-Payload] <String>] [[-Tenant] <String>] [[-URL] <String>]
- [[-ClientId] <String>] [[-ClientSecret] <String>] [-EnableException] [<CommonParameters>]
+ [[-ClientId] <String>] [[-ClientSecret] <String>] [[-Token] <String>] [-EnableException] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -44,6 +44,18 @@ This will invoke the REST endpoint in the  Dynamics 365 Finance & Operations env
 First the desired json data is put into the $Payload variable.
 The ServiceName used for the import is "UserSessionService/AifUserSessionService/GetUserSessionInfo".
 The $Payload variable is passed to the cmdlet.
+
+### EXAMPLE 3
+```
+$token = Get-D365ODataToken
+```
+
+PS C:\\\> Invoke-D365RestEndpoint -ServiceName "UserSessionService/AifUserSessionService/GetUserSessionInfo" -Payload "{"RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}" -Token $token
+
+This will invoke the REST endpoint in the  Dynamics 365 Finance & Operations environment.
+It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
+The ServiceName used for the import is "UserSessionService/AifUserSessionService/GetUserSessionInfo".
+The Payload is a valid json string, containing all the needed properties.
 
 ## PARAMETERS
 
@@ -145,6 +157,23 @@ Aliases:
 Required: False
 Position: 6
 Default value: $Script:ODataClientSecret
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Token
+Pass a bearer token string that you want to use for while working against the endpoint
+
+This can improve performance if you are iterating over a large collection/array
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 7
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

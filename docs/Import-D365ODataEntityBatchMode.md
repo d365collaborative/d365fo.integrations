@@ -15,7 +15,7 @@ Import a set of Data Entities into Dynamics 365 Finance & Operations
 ```
 Import-D365ODataEntityBatchMode [-EntityName] <String> [-Payload] <String[]> [-CrossCompany]
  [[-Tenant] <String>] [[-URL] <String>] [[-ClientId] <String>] [[-ClientSecret] <String>] [-RawOutput]
- [-EnableException] [<CommonParameters>]
+ [[-Token] <String>] [-EnableException] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -45,6 +45,18 @@ This will import a set of Data Entities into Dynamics 365 Finance & Operations u
 First the desired json data is put into the $Payload variable.
 The EntityName used for the import is ExchangeRates.
 The $Payload variable is passed to the cmdlet.
+
+### EXAMPLE 3
+```
+$token = Get-D365ODataToken
+```
+
+PS C:\\\> Import-D365ODataEntityBatchMode -EntityName "ExchangeRates" -Payload '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}','{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-04T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}' -Token $token
+
+This will import a set of Data Entities into Dynamics 365 Finance & Operations using the OData endpoint.
+It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
+The EntityName used for the import is ExchangeRates.
+The Payload is an array containing valid json strings, each containing all the needed properties.
 
 ## PARAMETERS
 
@@ -175,6 +187,23 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Token
+Pass a bearer token string that you want to use for while working against the endpoint
+
+This can improve performance if you are iterating over a large collection/array
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 7
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
