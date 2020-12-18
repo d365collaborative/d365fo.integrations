@@ -22,7 +22,12 @@
         
         Remember that json is text based and can use either single quotes (') or double quotes (") as the text qualifier, so you might need to escape the different quotes in your payload before passing it in
         
-        The payload has to be UTF8 compliant
+    .PARAMETER PayloadCharset
+        The charset / encoding that you want the cmdlet to use while updating the odata entity
+
+        The default value is: "UTF8"
+
+        The charset has to be a valid http charset like: ASCII, ANSI, ISO-8859-1, UTF-8
 
     .PARAMETER CrossCompany
         Instruct the cmdlet / function to ensure the request against the OData endpoint will work across all companies
@@ -87,6 +92,8 @@ function Import-D365ODataEntity {
         [Alias('Json')]
         [string] $Payload,
 
+        [string] $PayloadCharset = "UTF-8",
+
         [switch] $CrossCompany,
 
         [Alias('$AADGuid')]
@@ -143,6 +150,11 @@ function Import-D365ODataEntity {
         }
 
         $headers = New-AuthorizationHeaderBearerToken @headerParms
+        
+        $PayloadCharset = $PayloadCharset.ToLower()
+        if ($PayloadCharset -like "utf*" -and $PayloadCharset -notlike "utf-*") {
+            $PayloadCharset = $PayloadCharset -replace "utf", "utf-"
+        }
     }
 
     process {
@@ -167,7 +179,7 @@ function Import-D365ODataEntity {
 
         try {
             Write-PSFMessage -Level Verbose -Message "Executing http request against the OData endpoint." -Target $($odataEndpoint.Uri.AbsoluteUri)
-            Invoke-RestMethod -Method POST -Uri $odataEndpoint.Uri.AbsoluteUri -Headers $headers -ContentType 'application/json;charset=utf-8' -Body $Payload
+            Invoke-RestMethod -Method POST -Uri $odataEndpoint.Uri.AbsoluteUri -Headers $headers -ContentType "application/json;charset=$PayloadCharset" -Body $Payload
         }
         catch {
             $messageString = "Something went wrong while importing data through the OData endpoint for the entity: $EntityName"
