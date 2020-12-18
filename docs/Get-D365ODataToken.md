@@ -5,79 +5,47 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-D365RestServiceGroup
+# Get-D365ODataToken
 
 ## SYNOPSIS
-Get Service Group from the Json Service endpoint
+Get OAuth 2.0 token to be used against OData or Custom Service
 
 ## SYNTAX
 
 ```
-Get-D365RestServiceGroup [[-Name] <String>] [[-Tenant] <String>] [[-Url] <String>] [[-SystemUrl] <String>]
- [[-ClientId] <String>] [[-ClientSecret] <String>] [[-Token] <String>] [-EnableException] [-RawOutput]
- [-OutputAsJson] [<CommonParameters>]
+Get-D365ODataToken [[-Tenant] <String>] [[-Url] <String>] [[-SystemUrl] <String>] [[-ClientId] <String>]
+ [[-ClientSecret] <String>] [-EnableException] [-RawOutput] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Get available Service Group from the Json Service endpoint of the Dynamics 365 Finance & Operations instance
+Get an OAuth 2.0 bearer token to be used against the OData or Custom Service endpoints of the Dynamics 365 Finance & Operations
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-D365RestServiceGroup
+Get-D365ODataToken
 ```
 
-This will list all available Service Groups from the Dynamics 365 Finance & Operations instance.
+This will get a bearetrtoken string.
+The output will be a formal formatted bearer token, ready to be used right away.
 
-It will use the default configuration details that are stored in the configuration store.
+It will use the default OData configuration details that are stored in the configuration store.
 
 ### EXAMPLE 2
 ```
-Get-D365RestServiceGroup -Name "*service*"
+Get-D365ODataToken -RawOutput
 ```
 
-This will list all available Service Groups, which matches the "*service*" pattern, from the Dynamics 365 Finance & Operations instance.
+This will get an OAuth 2.0 token.
+It will output all properties of the token.
 
-It will use the default configuration details that are stored in the configuration store.
-
-### EXAMPLE 3
-```
-$token = Get-D365ODataToken
-```
-
-PS C:\\\> Get-D365RestServiceGroup -Token $token
-
-This will list all available Service Groups from the Dynamics 365 Finance & Operations instance.
-It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
-
-It will use the default configuration details that are stored in the configuration store.
+It will use the default OData configuration details that are stored in the configuration store.
 
 ## PARAMETERS
 
-### -Name
-Name of the Service Group that you are looking for
-
-The parameter supports wildcards.
-E.g.
--Name "*Timesheet*"
-
-Default value is "*" to list all service groups
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 1
-Default value: *
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Tenant
-Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is connected to, that you want to access
+Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is connected to, that you want to access through OData
 
 ```yaml
 Type: String
@@ -85,14 +53,14 @@ Parameter Sets: (All)
 Aliases: $AADGuid
 
 Required: False
-Position: 2
+Position: 1
 Default value: $Script:ODataTenant
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -Url
-URL / URI for the D365FO environment you want to access
+URL / URI for the D365FO environment you want to be working against
 
 If you are working against a D365FO instance, it will be the URL / URI for the instance itself
 
@@ -104,14 +72,14 @@ Parameter Sets: (All)
 Aliases: AuthenticationUrl, Uri
 
 Required: False
-Position: 3
+Position: 2
 Default value: $Script:ODataUrl
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -SystemUrl
-URL / URI for the D365FO instance where the Json Service endpoint is available
+URL / URI for the D365FO instance you want to be working against
 
 If you are working against a D365FO instance, it will be the URL / URI for the instance itself, which is the same as the Url parameter value
 
@@ -123,7 +91,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 4
+Position: 3
 Default value: $Script:ODataSystemUrl
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -138,7 +106,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 5
+Position: 4
 Default value: $Script:ODataClientId
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -153,25 +121,8 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 6
+Position: 5
 Default value: $Script:ODataClientSecret
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Token
-Pass a bearer token string that you want to use for while working against the endpoint
-
-This can improve performance if you are iterating over a large collection/array
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 7
-Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -193,24 +144,7 @@ Accept wildcard characters: False
 ```
 
 ### -RawOutput
-Instructs the cmdlet to include the outer structure of the response received from Json Service endpoint
-
-The output will still be a PSCustomObject
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -OutputAsJson
-Instructs the cmdlet to convert the output to a Json string
+Instructs the cmdlet to output the raw token object and all its properties
 
 ```yaml
 Type: SwitchParameter
@@ -232,7 +166,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
-Tags: Json, Data, Service, Operations
+Tags: OData, OAuth, Token, JWT
 
 Author: Mötz Jensen (@Splaxi)
 

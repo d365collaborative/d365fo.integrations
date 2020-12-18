@@ -48,6 +48,11 @@
     .PARAMETER ClientSecret
         The ClientSecret obtained from the Azure Portal when you created a Registered Application
         
+    .PARAMETER Token
+        Pass a bearer token string that you want to use for while working against the endpoint
+        
+        This can improve performance if you are iterating over a large collection/array
+        
     .PARAMETER EnableException
         This parameters disables user-friendly warnings and enables the throwing of exceptions
         This is less user friendly, but allows catching exceptions in calling scripts
@@ -56,6 +61,17 @@
         PS C:\> Remove-D365ODataEntity -EntityName ExchangeRates -Key "RateTypeName='TEST',FromCurrency='DKK',ToCurrency='EUR',StartDate=2019-01-13T12:00:00Z"
         
         This will remove a Data Entity from the D365FO environment through OData.
+        It will use the ExchangeRate entity, and its EntitySetName / CollectionName "ExchangeRates".
+        It will use the "RateTypeName='TEST',FromCurrency='DKK',ToCurrency='EUR',StartDate=2019-01-13T12:00:00Z" as the unique key for the entity.
+        
+        It will use the default OData configuration details that are stored in the configuration store.
+        
+    .EXAMPLE
+        PS C:\> $token = Get-D365ODataToken
+        PS C:\> Remove-D365ODataEntity -EntityName ExchangeRates -Key "RateTypeName='TEST',FromCurrency='DKK',ToCurrency='EUR',StartDate=2019-01-13T12:00:00Z" -Token $token
+        
+        This will remove a Data Entity from the D365FO environment through OData.
+        It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
         It will use the ExchangeRate entity, and its EntitySetName / CollectionName "ExchangeRates".
         It will use the "RateTypeName='TEST',FromCurrency='DKK',ToCurrency='EUR',StartDate=2019-01-13T12:00:00Z" as the unique key for the entity.
         
@@ -97,6 +113,8 @@ function Remove-D365ODataEntity {
         [Parameter(Mandatory = $false)]
         [string] $ClientSecret = $Script:ODataClientSecret,
 
+        [string] $Token,
+        
         [switch] $EnableException
 
     )
@@ -124,15 +142,20 @@ function Remove-D365ODataEntity {
             $SystemUrl = $SystemUrl.Substring(0, $SystemUrl.Length - 1)
         }
         
-        $bearerParms = @{
-            Url          = $Url
-            ClientId     = $ClientId
-            ClientSecret = $ClientSecret
-            Tenant       = $Tenant
+        if (-not $Token) {
+            $bearerParms = @{
+                Url          = $Url
+                ClientId     = $ClientId
+                ClientSecret = $ClientSecret
+                Tenant       = $Tenant
+            }
+
+            $bearer = New-BearerToken @bearerParms
         }
-
-        $bearer = New-BearerToken @bearerParms
-
+        else {
+            $bearer = $Token
+        }
+        
         $headerParms = @{
             URL         = $Url
             BearerToken = $bearer

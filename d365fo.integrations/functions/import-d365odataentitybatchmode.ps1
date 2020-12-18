@@ -42,6 +42,11 @@
     .PARAMETER RawOutput
         Instructs the cmdlet to output the raw json string directly
         
+    .PARAMETER Token
+        Pass a bearer token string that you want to use for while working against the endpoint
+        
+        This can improve performance if you are iterating over a large collection/array
+        
     .PARAMETER EnableException
         This parameters disables user-friendly warnings and enables the throwing of exceptions
         This is less user friendly, but allows catching exceptions in calling scripts
@@ -61,6 +66,15 @@
         First the desired json data is put into the $Payload variable.
         The EntityName used for the import is ExchangeRates.
         The $Payload variable is passed to the cmdlet.
+        
+    .EXAMPLE
+        PS C:\> $token = Get-D365ODataToken
+        PS C:\> Import-D365ODataEntityBatchMode -EntityName "ExchangeRates" -Payload '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}','{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-04T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}' -Token $token
+        
+        This will import a set of Data Entities into Dynamics 365 Finance & Operations using the OData endpoint.
+        It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
+        The EntityName used for the import is ExchangeRates.
+        The Payload is an array containing valid json strings, each containing all the needed properties.
         
     .NOTES
         Tags: OData, Data, Entity, Import, Upload
@@ -97,23 +111,30 @@ function Import-D365ODataEntityBatchMode {
         [string] $ClientSecret = $Script:ODataClientSecret,
 
         [switch] $RawOutput,
-
+        
+        [string] $Token,
+        
         [switch] $EnableException
 
     )
 
     begin {
-        $bearerParms = @{
-            Url          = $Url
-            ClientId     = $ClientId
-            ClientSecret = $ClientSecret
-            Tenant       = $Tenant
+        if (-not $Token) {
+            $bearerParms = @{
+                Url          = $Url
+                ClientId     = $ClientId
+                ClientSecret = $ClientSecret
+                Tenant       = $Tenant
+            }
+
+            $bearer = New-BearerToken @bearerParms
         }
-
-        $bearer = New-BearerToken @bearerParms
-
+        else {
+            $bearer = $Token
+        }
+        
         $headerParms = @{
-            URL         = $URL
+            URL         = $Url
             BearerToken = $bearer
         }
 

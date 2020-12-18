@@ -15,7 +15,7 @@ Update a Data Entity in Dynamics 365 Finance & Operations
 ```
 Update-D365ODataEntity [-EntityName] <String> [-Key] <String> [-Payload] <String> [[-PayloadCharset] <String>]
  [-CrossCompany] [[-Tenant] <String>] [[-Url] <String>] [[-SystemUrl] <String>] [[-ClientId] <String>]
- [[-ClientSecret] <String>] [-EnableException] [<CommonParameters>]
+ [[-ClientSecret] <String>] [[-Token] <String>] [-EnableException] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -49,6 +49,22 @@ The EntityName used for the update is "CustomersV3".
 It will use the "dataAreaId='DAT',CustomerAccount='123456789'" as key to identify the unique Customer record.
 The $Payload variable is passed to the cmdlet.
 It will NOT look across companies.
+
+It will use the default OData configuration details that are stored in the configuration store.
+
+### EXAMPLE 3
+```
+$token = Get-D365ODataToken
+```
+
+PS C:\\\> Update-D365ODataEntity -EntityName "CustomersV3" -Key "dataAreaId='DAT',CustomerAccount='123456789'" -Payload '{"NameAlias": "CustomerA"}' -CrossCompany -Token $token
+
+This will update a Data Entity in Dynamics 365 Finance & Operations using the OData endpoint.
+It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
+The EntityName used for the update is "CustomersV3".
+It will use the "dataAreaId='DAT',CustomerAccount='123456789'" as key to identify the unique Customer record.
+The Payload is a valid json string, containing the needed properties that we want to update.
+It will make sure to search across all legal entities / companies inside the D365FO environment.
 
 It will use the default OData configuration details that are stored in the configuration store.
 
@@ -225,6 +241,23 @@ Aliases:
 Required: False
 Position: 9
 Default value: $Script:ODataClientSecret
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Token
+Pass a bearer token string that you want to use for while working against the endpoint
+
+This can improve performance if you are iterating over a large collection/array
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 10
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

@@ -38,6 +38,11 @@
     .PARAMETER ClientSecret
         The ClientSecret obtained from the Azure Portal when you created a Registered Application
         
+    .PARAMETER Token
+        Pass a bearer token string that you want to use for while working against the endpoint
+        
+        This can improve performance if you are iterating over a large collection/array
+        
     .PARAMETER EnableException
         This parameters disables user-friendly warnings and enables the throwing of exceptions
         This is less user friendly, but allows catching exceptions in calling scripts
@@ -64,6 +69,23 @@
         PS C:\> Get-D365RestServiceGroup -Name "ERWebServices" | Get-D365RestService | Get-D365RestServiceOperation | Get-D365RestServiceOperationDetails
         
         This will list all available Operation details from the Service Group "ERWebServices", all available services, and all available operations for each service, from the Dynamics 365 Finance & Operations instance.
+        
+        It will use the default configuration details that are stored in the configuration store.
+        
+        Sample output:
+        
+        ServiceGroupName : ERWebServices
+        ServiceName      : ERPullSolutionFromRepositoryService
+        OperationName    : Execute
+        Parameters       : {@{Name=_request; Type=PullSolutionFromRepositoryRequest}}
+        Return           : @{Name=return; Type=PullSolutionFromRepositoryResponse}
+        
+    .EXAMPLE
+        PS C:\> $token = Get-D365ODataToken
+        PS C:\> Get-D365RestServiceOperationDetails -ServiceGroupName "ERWebServices" -ServiceName "ERPullSolutionFromRepositoryService" -OperationName "Execute" -Token $token
+        
+        This will list all available Operation details from the Service Group "ERWebServices", ServiceName "ERPullSolutionFromRepositoryService" and OperationName "Execute" combinantion, from the Dynamics 365 Finance & Operations instance.
+        It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
         
         It will use the default configuration details that are stored in the configuration store.
         
@@ -128,6 +150,8 @@ function Get-D365RestServiceOperationDetails {
 
         [string] $ClientSecret = $Script:ODataClientSecret,
 
+        [string] $Token,
+        
         [switch] $EnableException,
 
         [switch] $OutputAsJson
@@ -157,17 +181,22 @@ function Get-D365RestServiceOperationDetails {
             $SystemUrl = $SystemUrl.Substring(0, $SystemUrl.Length - 1)
         }
 
-        $bearerParms = @{
-            Url          = $Url
-            ClientId     = $ClientId
-            ClientSecret = $ClientSecret
-            Tenant       = $Tenant
+        if (-not $Token) {
+            $bearerParms = @{
+                Url          = $Url
+                ClientId     = $ClientId
+                ClientSecret = $ClientSecret
+                Tenant       = $Tenant
+            }
+
+            $bearer = New-BearerToken @bearerParms
         }
-
-        $bearer = New-BearerToken @bearerParms
-
+        else {
+            $bearer = $Token
+        }
+        
         $headerParms = @{
-            URL         = $URL
+            URL         = $Url
             BearerToken = $bearer
         }
 

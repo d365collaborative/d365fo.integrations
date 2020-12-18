@@ -61,6 +61,11 @@
     .PARAMETER ClientSecret
         The ClientSecret obtained from the Azure Portal when you created a Registered Application
         
+    .PARAMETER Token
+        Pass a bearer token string that you want to use for while working against the endpoint
+        
+        This can improve performance if you are iterating over a large collection/array
+        
     .PARAMETER EnableException
         This parameters disables user-friendly warnings and enables the throwing of exceptions
         This is less user friendly, but allows catching exceptions in calling scripts
@@ -85,6 +90,18 @@
         It will use the "CustomerV3" entity, and its EntitySetName / CollectionName "CustomersV3".
         It will use the "dataAreaId='DAT',CustomerAccount='123456789'" as key to identify the unique Customer record.
         It will make sure to search across all legal entities / companies inside the D365FO environment.
+        
+        It will use the default OData configuration details that are stored in the configuration store.
+        
+    .EXAMPLE
+        PS C:\> $token = Get-D365ODataToken
+        PS C:\> Get-D365ODataEntityDataByKey -EntityName CustomersV3 -Key "dataAreaId='DAT',CustomerAccount='123456789'" -Token $token
+        
+        This will get the specific Customer from the OData endpoint.
+        It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
+        It will use the "CustomerV3" entity, and its EntitySetName / CollectionName "CustomersV3".
+        It will use the "dataAreaId='DAT',CustomerAccount='123456789'" as key to identify the unique Customer record.
+        It will NOT look across companies.
         
         It will use the default OData configuration details that are stored in the configuration store.
         
@@ -144,6 +161,8 @@ function Get-D365ODataEntityDataByKey {
         [Parameter(Mandatory = $false)]
         [string] $ClientSecret = $Script:ODataClientSecret,
 
+        [string] $Token,
+        
         [switch] $EnableException,
 
         [switch] $OutputAsJson
@@ -172,15 +191,20 @@ function Get-D365ODataEntityDataByKey {
             $SystemUrl = $SystemUrl.Substring(0, $SystemUrl.Length - 1)
         }
         
-        $bearerParms = @{
-            Url          = $Url
-            ClientId     = $ClientId
-            ClientSecret = $ClientSecret
-            Tenant       = $Tenant
+        if (-not $Token) {
+            $bearerParms = @{
+                Url          = $Url
+                ClientId     = $ClientId
+                ClientSecret = $ClientSecret
+                Tenant       = $Tenant
+            }
+
+            $bearer = New-BearerToken @bearerParms
         }
-
-        $bearer = New-BearerToken @bearerParms
-
+        else {
+            $bearer = $Token
+        }
+        
         $headerParms = @{
             URL         = $Url
             BearerToken = $bearer

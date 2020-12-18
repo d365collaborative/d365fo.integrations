@@ -15,7 +15,8 @@ Get Service Group from the Json Service endpoint
 ```
 Get-D365RestServiceOperation [-ServiceGroupName] <String> [-ServiceName] <String> [[-OperationName] <String>]
  [[-Tenant] <String>] [[-Url] <String>] [[-SystemUrl] <String>] [[-ClientId] <String>]
- [[-ClientSecret] <String>] [-EnableException] [-RawOutput] [-OutputAsJson] [<CommonParameters>]
+ [[-ClientSecret] <String>] [[-Token] <String>] [-EnableException] [-RawOutput] [-OutputAsJson]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -70,6 +71,29 @@ Get-D365RestServiceGroup -Name "BIServices" | Get-D365RestService | Get-D365Rest
 
 This will list all available Service Groups, which matches the "BIServices" pattern, from the Dynamics 365 Finance & Operations instance.
 It will pipe all Service Groups into the Get-D365RestService cmdlet, and pipe all Services available into the Get-D365RestServiceOperation cmdlet.
+
+It will use the default configuration details that are stored in the configuration store.
+
+Sample output:
+
+ServiceGroupName ServiceName         OperationName
+---------------- -----------         -------------
+BIServices       SRSFrameworkService addReportServerConfiguration
+BIServices       SRSFrameworkService clearReportRDLCache
+BIServices       SRSFrameworkService getAccountsForBrowserRole
+BIServices       SRSFrameworkService getAosUtcNow
+BIServices       SRSFrameworkService getApplicationObjectServers
+BIServices       SRSFrameworkService getAssemblies
+
+### EXAMPLE 4
+```
+$token = Get-D365ODataToken
+```
+
+PS C:\\\> Get-D365RestServiceOperation -ServiceGroupName "BIServices" -ServiceName "SRSFrameworkService" -Token $token
+
+This will list all available Operations from the Service Group "DMFService" and ServiceName "SRSFrameworkService" combinantion, from the Dynamics 365 Finance & Operations instance.
+It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
 
 It will use the default configuration details that are stored in the configuration store.
 
@@ -216,6 +240,23 @@ Aliases:
 Required: False
 Position: 8
 Default value: $Script:ODataClientSecret
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Token
+Pass a bearer token string that you want to use for while working against the endpoint
+
+This can improve performance if you are iterating over a large collection/array
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 9
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

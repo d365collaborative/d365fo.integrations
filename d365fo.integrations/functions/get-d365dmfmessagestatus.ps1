@@ -24,6 +24,11 @@
     .PARAMETER WaitForCompletion
         Instruct the cmdlet to wait until the Message Status is in a terminating state
         
+    .PARAMETER Token
+        Pass a bearer token string that you want to use for while working against the endpoint
+        
+        This can improve performance if you are iterating over a large collection/array
+        
     .PARAMETER EnableException
         This parameters disables user-friendly warnings and enables the throwing of exceptions
         This is less user friendly, but allows catching exceptions in calling scripts
@@ -45,6 +50,16 @@
         It will use "https://usnconeboxax1aos.cloud.onebox.dynamics.com" as the base D365FO environment url.
         It will use "dea8d7a9-1602-4429-b138-111111111111" as the ClientId.
         It will use "Vja/VmdxaLOPR+alkjfsadffelkjlfw234522" as ClientSecret.
+        
+    .EXAMPLE
+        PS C:\> $token = Get-D365ODataToken
+        PS C:\> Get-D365DmfMessageStatus -MessageId "84a383c8-336d-45e4-9933-0c3e8bfb734a" -Token $token
+        
+        This will get the message status through the DMF endpoint.
+        It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
+        It will use "84a383c8-336d-45e4-9933-0c3e8bfb734a" as the MessageId parameter passed to the DMF endpoint.
+        
+        It will use the default OData configuration details that are stored in the configuration store.
         
     .LINK
         Add-D365ODataConfig
@@ -87,21 +102,28 @@ function Get-D365DmfMessageStatus {
 
         [switch] $WaitForCompletion,
 
+        [string] $Token,
+
         [switch] $EnableException
     )
 
     begin {
-        $bearerParms = @{
-            Url          = $Url
-            ClientId     = $ClientId
-            ClientSecret = $ClientSecret
-            Tenant       = $Tenant
+        if (-not $Token) {
+            $bearerParms = @{
+                Url          = $Url
+                ClientId     = $ClientId
+                ClientSecret = $ClientSecret
+                Tenant       = $Tenant
+            }
+
+            $bearer = New-BearerToken @bearerParms
         }
-
-        $bearer = New-BearerToken @bearerParms
-
+        else {
+            $bearer = $Token
+        }
+        
         $headerParms = @{
-            URL         = $URL
+            URL         = $Url
             BearerToken = $bearer
         }
 
@@ -120,10 +142,10 @@ function Get-D365DmfMessageStatus {
         $odataEndpoint.Path = "data/DataManagementDefinitionGroups/Microsoft.Dynamics.DataEntities.GetMessageStatus"
 
         try {
-            do{
+            do {
                 $res = $null
                 
-                if($WaitForCompletion) {
+                if ($WaitForCompletion) {
                     Start-Sleep -Seconds 60
                 }
                 
@@ -142,7 +164,7 @@ function Get-D365DmfMessageStatus {
         catch {
             $messageString = "Something went wrong while retrieving data from the Message Status OData endpoint for MessageId: $MessageId"
             Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $MessageId
-            Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>',''))) -ErrorRecord $_
+            Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>', ''))) -ErrorRecord $_
             return
         }
 

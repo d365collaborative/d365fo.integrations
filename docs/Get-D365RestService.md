@@ -14,8 +14,8 @@ Get Service Group from the Json Service endpoint
 
 ```
 Get-D365RestService [-ServiceGroupName] <String> [[-ServiceName] <String>] [[-Tenant] <String>]
- [[-Url] <String>] [[-SystemUrl] <String>] [[-ClientId] <String>] [[-ClientSecret] <String>] [-EnableException]
- [-RawOutput] [-OutputAsJson] [<CommonParameters>]
+ [[-Url] <String>] [[-SystemUrl] <String>] [[-ClientId] <String>] [[-ClientSecret] <String>]
+ [[-Token] <String>] [-EnableException] [-RawOutput] [-OutputAsJson] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -67,6 +67,28 @@ Get-D365RestServiceGroup -Name "DMFService" | Get-D365RestService
 
 This will list all available Service Groups, which matches the "DMFService" pattern, from the Dynamics 365 Finance & Operations instance.
 It will pipe all Service Groups into the Get-D365RestService cmdlet, and have it output all Services available from the Service Group.
+
+It will use the default configuration details that are stored in the configuration store.
+
+Sample output:
+
+ServiceGroupName ServiceName
+---------------- -----------
+DMFService       DMFDataPackager
+DMFService       DMFDefinitionGroupService
+DMFService       DMFEntityWriterService
+DMFService       DMFProcessGrpService
+DMFService       DMFStagingService
+
+### EXAMPLE 4
+```
+$token = Get-D365ODataToken
+```
+
+PS C:\\\> Get-D365RestService -ServiceGroupName "DMFService" -Token $token
+
+This will list all services that are available from the Service Group "DMFService", from the Dynamics 365 Finance & Operations instance.
+It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
 
 It will use the default configuration details that are stored in the configuration store.
 
@@ -197,6 +219,23 @@ Aliases:
 Required: False
 Position: 7
 Default value: $Script:ODataClientSecret
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Token
+Pass a bearer token string that you want to use for while working against the endpoint
+
+This can improve performance if you are iterating over a large collection/array
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 8
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
