@@ -67,6 +67,15 @@
         The EntityName used for the import is ExchangeRates.
         The $Payload variable is passed to the cmdlet.
         
+    .EXAMPLE
+        PS C:\> $token = Get-D365ODataToken
+        PS C:\> Import-D365ODataEntityBatchMode -EntityName "ExchangeRates" -Payload '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}','{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-04T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}' -Token $token
+        
+        This will import a set of Data Entities into Dynamics 365 Finance & Operations using the OData endpoint.
+        It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
+        The EntityName used for the import is ExchangeRates.
+        The Payload is an array containing valid json strings, each containing all the needed properties.
+        
     .NOTES
         Tags: OData, Data, Entity, Import, Upload
         

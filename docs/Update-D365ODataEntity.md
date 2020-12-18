@@ -52,6 +52,22 @@ It will NOT look across companies.
 
 It will use the default OData configuration details that are stored in the configuration store.
 
+### EXAMPLE 3
+```
+$token = Get-D365ODataToken
+```
+
+PS C:\\\> Update-D365ODataEntity -EntityName "CustomersV3" -Key "dataAreaId='DAT',CustomerAccount='123456789'" -Payload '{"NameAlias": "CustomerA"}' -CrossCompany -Token $token
+
+This will update a Data Entity in Dynamics 365 Finance & Operations using the OData endpoint.
+It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
+The EntityName used for the update is "CustomersV3".
+It will use the "dataAreaId='DAT',CustomerAccount='123456789'" as key to identify the unique Customer record.
+The Payload is a valid json string, containing the needed properties that we want to update.
+It will make sure to search across all legal entities / companies inside the D365FO environment.
+
+It will use the default OData configuration details that are stored in the configuration store.
+
 ## PARAMETERS
 
 ### -EntityName

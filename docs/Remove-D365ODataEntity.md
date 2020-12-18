@@ -34,6 +34,20 @@ It will use the "RateTypeName='TEST',FromCurrency='DKK',ToCurrency='EUR',StartDa
 
 It will use the default OData configuration details that are stored in the configuration store.
 
+### EXAMPLE 2
+```
+$token = Get-D365ODataToken
+```
+
+PS C:\\\> Remove-D365ODataEntity -EntityName ExchangeRates -Key "RateTypeName='TEST',FromCurrency='DKK',ToCurrency='EUR',StartDate=2019-01-13T12:00:00Z" -Token $token
+
+This will remove a Data Entity from the D365FO environment through OData.
+It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
+It will use the ExchangeRate entity, and its EntitySetName / CollectionName "ExchangeRates".
+It will use the "RateTypeName='TEST',FromCurrency='DKK',ToCurrency='EUR',StartDate=2019-01-13T12:00:00Z" as the unique key for the entity.
+
+It will use the default OData configuration details that are stored in the configuration store.
+
 ## PARAMETERS
 
 ### -EntityName

@@ -114,6 +114,26 @@
         BIServices       SRSFrameworkService getApplicationObjectServers
         BIServices       SRSFrameworkService getAssemblies
         
+    .EXAMPLE
+        PS C:\> $token = Get-D365ODataToken
+        PS C:\> Get-D365RestServiceOperation -ServiceGroupName "BIServices" -ServiceName "SRSFrameworkService" -Token $token
+        
+        This will list all available Operations from the Service Group "DMFService" and ServiceName "SRSFrameworkService" combinantion, from the Dynamics 365 Finance & Operations instance.
+        It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
+        
+        It will use the default configuration details that are stored in the configuration store.
+        
+        Sample output:
+        
+        ServiceGroupName ServiceName         OperationName
+        ---------------- -----------         -------------
+        BIServices       SRSFrameworkService addReportServerConfiguration
+        BIServices       SRSFrameworkService clearReportRDLCache
+        BIServices       SRSFrameworkService getAccountsForBrowserRole
+        BIServices       SRSFrameworkService getAosUtcNow
+        BIServices       SRSFrameworkService getApplicationObjectServers
+        BIServices       SRSFrameworkService getAssemblies
+        
     .LINK
         Add-D365ODataConfig
         

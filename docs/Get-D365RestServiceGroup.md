@@ -41,6 +41,18 @@ This will list all available Service Groups, which matches the "*service*" patte
 
 It will use the default configuration details that are stored in the configuration store.
 
+### EXAMPLE 3
+```
+$token = Get-D365ODataToken
+```
+
+PS C:\\\> Get-D365RestServiceGroup -Token $token
+
+This will list all available Service Groups from the Dynamics 365 Finance & Operations instance.
+It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
+
+It will use the default configuration details that are stored in the configuration store.
+
 ## PARAMETERS
 
 ### -Name

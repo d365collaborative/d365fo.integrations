@@ -118,6 +118,14 @@
         All key fields will be extracted and displayed.
         The output will be formatted as a list.
         
+    .EXAMPLE
+        PS C:\> $token = Get-D365ODataToken
+        PS C:\> Get-D365ODataPublicEntity -EntityName customersv3 -Token $token
+        
+        This will get Data Entities from the OData endpoint.
+        It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
+        This will search for the Data Entities that are named "customersv3".
+        
     .LINK
         Get-D365ODataEntityKey
         

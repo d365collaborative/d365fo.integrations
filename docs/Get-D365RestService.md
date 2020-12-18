@@ -80,6 +80,28 @@ DMFService       DMFEntityWriterService
 DMFService       DMFProcessGrpService
 DMFService       DMFStagingService
 
+### EXAMPLE 4
+```
+$token = Get-D365ODataToken
+```
+
+PS C:\\\> Get-D365RestService -ServiceGroupName "DMFService" -Token $token
+
+This will list all services that are available from the Service Group "DMFService", from the Dynamics 365 Finance & Operations instance.
+It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
+
+It will use the default configuration details that are stored in the configuration store.
+
+Sample output:
+
+ServiceGroupName ServiceName
+---------------- -----------
+DMFService       DMFDataPackager
+DMFService       DMFDefinitionGroupService
+DMFService       DMFEntityWriterService
+DMFService       DMFProcessGrpService
+DMFService       DMFStagingService
+
 ## PARAMETERS
 
 ### -ServiceGroupName

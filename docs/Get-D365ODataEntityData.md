@@ -88,6 +88,20 @@ It will traverse all NextLink that will occur while fetching data from the OData
 
 It will use the default OData configuration details that are stored in the configuration store.
 
+### EXAMPLE 5
+```
+$token = Get-D365ODataToken
+```
+
+PS C:\\\> Get-D365ODataEntityData -EntityName CustomersV3 -ODataQuery '$top=1' -Token $token
+
+This will get Customers from the OData endpoint.
+It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
+It will use the CustomerV3 entity, and its EntitySetName / CollectionName "CustomersV3".
+It will get the top 1 results from the list of customers.
+
+It will use the default OData configuration details that are stored in the configuration store.
+
 ## PARAMETERS
 
 ### -EntityName

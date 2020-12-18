@@ -45,6 +45,18 @@ First the desired json data is put into the $Payload variable.
 The ServiceName used for the import is "UserSessionService/AifUserSessionService/GetUserSessionInfo".
 The $Payload variable is passed to the cmdlet.
 
+### EXAMPLE 3
+```
+$token = Get-D365ODataToken
+```
+
+PS C:\\\> Invoke-D365RestEndpoint -ServiceName "UserSessionService/AifUserSessionService/GetUserSessionInfo" -Payload "{"RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}" -Token $token
+
+This will invoke the REST endpoint in the  Dynamics 365 Finance & Operations environment.
+It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
+The ServiceName used for the import is "UserSessionService/AifUserSessionService/GetUserSessionInfo".
+The Payload is a valid json string, containing all the needed properties.
+
 ## PARAMETERS
 
 ### -ServiceName

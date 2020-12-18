@@ -67,6 +67,15 @@
         
         It will use the default configuration details that are stored in the configuration store.
         
+    .EXAMPLE
+        PS C:\> $token = Get-D365ODataToken
+        PS C:\> Get-D365RestServiceGroup -Token $token
+        
+        This will list all available Service Groups from the Dynamics 365 Finance & Operations instance.
+        It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
+        
+        It will use the default configuration details that are stored in the configuration store.
+        
     .LINK
         Add-D365ODataConfig
         

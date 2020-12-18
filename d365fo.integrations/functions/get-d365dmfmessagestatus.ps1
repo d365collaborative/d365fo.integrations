@@ -51,6 +51,16 @@
         It will use "dea8d7a9-1602-4429-b138-111111111111" as the ClientId.
         It will use "Vja/VmdxaLOPR+alkjfsadffelkjlfw234522" as ClientSecret.
         
+    .EXAMPLE
+        PS C:\> $token = Get-D365ODataToken
+        PS C:\> Get-D365DmfMessageStatus -MessageId "84a383c8-336d-45e4-9933-0c3e8bfb734a" -Token $token
+        
+        This will get the message status through the DMF endpoint.
+        It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
+        It will use "84a383c8-336d-45e4-9933-0c3e8bfb734a" as the MessageId parameter passed to the DMF endpoint.
+        
+        It will use the default OData configuration details that are stored in the configuration store.
+        
     .LINK
         Add-D365ODataConfig
         

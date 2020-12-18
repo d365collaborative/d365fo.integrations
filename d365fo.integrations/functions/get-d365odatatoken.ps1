@@ -41,7 +41,7 @@
         
         This will get a bearetrtoken string.
         The output will be a formal formatted bearer token, ready to be used right away.
-
+        
         It will use the default OData configuration details that are stored in the configuration store.
         
     .EXAMPLE

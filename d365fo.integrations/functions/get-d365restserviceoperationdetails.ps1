@@ -80,6 +80,23 @@
         Parameters       : {@{Name=_request; Type=PullSolutionFromRepositoryRequest}}
         Return           : @{Name=return; Type=PullSolutionFromRepositoryResponse}
         
+    .EXAMPLE
+        PS C:\> $token = Get-D365ODataToken
+        PS C:\> Get-D365RestServiceOperationDetails -ServiceGroupName "ERWebServices" -ServiceName "ERPullSolutionFromRepositoryService" -OperationName "Execute" -Token $token
+        
+        This will list all available Operation details from the Service Group "ERWebServices", ServiceName "ERPullSolutionFromRepositoryService" and OperationName "Execute" combinantion, from the Dynamics 365 Finance & Operations instance.
+        It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
+        
+        It will use the default configuration details that are stored in the configuration store.
+        
+        Sample output:
+        
+        ServiceGroupName : ERWebServices
+        ServiceName      : ERPullSolutionFromRepositoryService
+        OperationName    : Execute
+        Parameters       : {@{Name=_request; Type=PullSolutionFromRepositoryRequest}}
+        Return           : @{Name=return; Type=PullSolutionFromRepositoryResponse}
+        
     .LINK
         Add-D365ODataConfig
         

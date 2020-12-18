@@ -57,7 +57,6 @@
         Instructs the cmdlet to convert the output to a Json string
         
     .EXAMPLE
-        
         PS C:\> Get-D365RestService -ServiceGroupName "DMFService"
         
         This will list all services that are available from the Service Group "DMFService", from the Dynamics 365 Finance & Operations instance.
@@ -95,6 +94,25 @@
         
         This will list all available Service Groups, which matches the "DMFService" pattern, from the Dynamics 365 Finance & Operations instance.
         It will pipe all Service Groups into the Get-D365RestService cmdlet, and have it output all Services available from the Service Group.
+        
+        It will use the default configuration details that are stored in the configuration store.
+        
+        Sample output:
+        
+        ServiceGroupName ServiceName
+        ---------------- -----------
+        DMFService       DMFDataPackager
+        DMFService       DMFDefinitionGroupService
+        DMFService       DMFEntityWriterService
+        DMFService       DMFProcessGrpService
+        DMFService       DMFStagingService
+        
+    .EXAMPLE
+        PS C:\> $token = Get-D365ODataToken
+        PS C:\> Get-D365RestService -ServiceGroupName "DMFService" -Token $token
+        
+        This will list all services that are available from the Service Group "DMFService", from the Dynamics 365 Finance & Operations instance.
+        It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
         
         It will use the default configuration details that are stored in the configuration store.
         
