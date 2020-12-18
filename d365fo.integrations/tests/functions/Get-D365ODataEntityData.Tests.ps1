@@ -205,6 +205,19 @@
 			$parameter.ParameterSets['NextLink'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['NextLink'].ValueFromRemainingArguments | Should -Be $False
 		}
+		It 'Should have the expected parameter Token' {
+			$parameter = (Get-Command Get-D365ODataEntityData).Parameters['Token']
+			$parameter.Name | Should -Be 'Token'
+			$parameter.ParameterType.ToString() | Should -Be System.String
+			$parameter.IsDynamic | Should -Be $False
+			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
+			$parameter.ParameterSets.Keys | Should -Contain '__AllParameterSets'
+			$parameter.ParameterSets['__AllParameterSets'].IsMandatory | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be -2147483648
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipeline | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
+		}
 		It 'Should have the expected parameter EnableException' {
 			$parameter = (Get-Command Get-D365ODataEntityData).Parameters['EnableException']
 			$parameter.Name | Should -Be 'EnableException'
@@ -255,19 +268,19 @@
 	Describe "Testing parameterset Default" {
 		<#
 		Default -EntitySetName
-		Default -EntitySetName -Top -Filter -Select -Expand -ODataQuery -CrossCompany -Tenant -Url -SystemUrl -ClientId -ClientSecret -EnableException -RawOutput -OutputAsJson
+		Default -EntitySetName -Top -Filter -Select -Expand -ODataQuery -CrossCompany -Tenant -Url -SystemUrl -ClientId -ClientSecret -Token -EnableException -RawOutput -OutputAsJson
 		#>
 	}
  	Describe "Testing parameterset NextLink" {
 		<#
 		NextLink -TraverseNextLink
-		NextLink -EntityName -EntitySetName -Top -Filter -Select -Expand -ODataQuery -CrossCompany -Tenant -Url -SystemUrl -ClientId -ClientSecret -TraverseNextLink -EnableException -OutputAsJson
+		NextLink -EntityName -EntitySetName -Top -Filter -Select -Expand -ODataQuery -CrossCompany -Tenant -Url -SystemUrl -ClientId -ClientSecret -TraverseNextLink -Token -EnableException -OutputAsJson
 		#>
 	}
  	Describe "Testing parameterset Specific" {
 		<#
 		Specific -EntityName
-		Specific -EntityName -Top -Filter -Select -Expand -ODataQuery -CrossCompany -Tenant -Url -SystemUrl -ClientId -ClientSecret -EnableException -RawOutput -OutputAsJson
+		Specific -EntityName -Top -Filter -Select -Expand -ODataQuery -CrossCompany -Tenant -Url -SystemUrl -ClientId -ClientSecret -Token -EnableException -RawOutput -OutputAsJson
 		#>
 	}
 

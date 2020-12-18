@@ -115,6 +115,19 @@
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
 		}
+		It 'Should have the expected parameter Token' {
+			$parameter = (Get-Command Remove-D365ODataEntity).Parameters['Token']
+			$parameter.Name | Should -Be 'Token'
+			$parameter.ParameterType.ToString() | Should -Be System.String
+			$parameter.IsDynamic | Should -Be $False
+			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
+			$parameter.ParameterSets.Keys | Should -Contain '__AllParameterSets'
+			$parameter.ParameterSets['__AllParameterSets'].IsMandatory | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 7
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipeline | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
+		}
 		It 'Should have the expected parameter EnableException' {
 			$parameter = (Get-Command Remove-D365ODataEntity).Parameters['EnableException']
 			$parameter.Name | Should -Be 'EnableException'
@@ -133,7 +146,7 @@
 	Describe "Testing parameterset __AllParameterSets" {
 		<#
 		__AllParameterSets -EntityName -Key
-		__AllParameterSets -EntityName -Key -CrossCompany -Tenant -URL -SystemUrl -ClientId -ClientSecret -EnableException
+		__AllParameterSets -EntityName -Key -CrossCompany -Tenant -URL -SystemUrl -ClientId -ClientSecret -Token -EnableException
 		#>
 	}
 
