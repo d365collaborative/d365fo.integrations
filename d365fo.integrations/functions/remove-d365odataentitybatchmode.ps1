@@ -1,12 +1,12 @@
 ﻿
 <#
     .SYNOPSIS
-        Import a set of Data Entities into Dynamics 365 Finance & Operations
+        Remove a set of Data Entities from Dynamics 365 Finance & Operations
         
     .DESCRIPTION
-        Imports a set of Data Entities, defined as a json payloads, using the OData endpoint of the Dynamics 365 Finance & Operations
+        Remove a set of Data Entities, by their keys, using the OData endpoint of the Dynamics 365 Finance & Operations
         
-        The entire payload will be batched into a single request against the OData endpoint
+        The collection of keys will be batched into a single request against the OData endpoint
         
     .PARAMETER EntityName
         Name of the Data Entity you want to work against
@@ -19,10 +19,14 @@
         
         Look at the Get-D365ODataPublicEntity cmdlet to help you obtain the correct name
         
-    .PARAMETER Payload
-        The entire string contain the json objects that you want to import into the D365FO environment
+    .PARAMETER Key
+        The array of keys that you want to delete from the D365FO environment
         
-        Payload supports multiple json objects, that needs to be batched together
+        Note that a key can be made up by several parts, for a given entity
+        
+        E.g. CustomersV3 is "dataAreaId='DAT',CustomerAccount='Customer1'"
+        
+        Please note the single quotes, for each key field
         
     .PARAMETER CrossCompany
         Instruct the cmdlet / function to ensure the request against the OData endpoint will work across all companies
@@ -52,37 +56,33 @@
         This is less user friendly, but allows catching exceptions in calling scripts
         
     .EXAMPLE
-        PS C:\> Import-D365ODataEntityBatchMode -EntityName "ExchangeRates" -Payload '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}','{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-04T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}'
+        PS C:\> Remove-D365ODataEntityBatchMode -EntityName "CustomersV3" -Key "dataAreaId='USMF',CustomerAccount='Customer1'","dataAreaId='USMF',CustomerAccount='Customer2'"
         
-        This will import a set of Data Entities into Dynamics 365 Finance & Operations using the OData endpoint.
-        The EntityName used for the import is ExchangeRates.
-        The Payload is an array containing valid json strings, each containing all the needed properties.
+        This will delete both customers, in a single request, from the Dynamics 365 Finance & Operations using the OData endpoint.
+        The EntityName used for the deletion is CustomersV3.
+        The Key is an array containing valid keys, each containing referencing a single entity.
         
-    .EXAMPLE
-        PS C:\> $Payload = '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}','{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-04T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}'
-        PS C:\> Import-D365ODataEntityBatchMode -EntityName "ExchangeRates" -Payload $Payload
-        
-        This will import a set of Data Entities into Dynamics 365 Finance & Operations using the OData endpoint.
-        First the desired json data is put into the $Payload variable.
-        The EntityName used for the import is ExchangeRates.
-        The $Payload variable is passed to the cmdlet.
+        It will use the default OData configuration details that are stored in the configuration store.
         
     .EXAMPLE
         PS C:\> $token = Get-D365ODataToken
-        PS C:\> Import-D365ODataEntityBatchMode -EntityName "ExchangeRates" -Payload '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}','{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-04T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}' -Token $token
+        PS C:\> Remove-D365ODataEntityBatchMode -EntityName "CustomersV3" -Key "dataAreaId='USMF',CustomerAccount='Customer1'","dataAreaId='USMF',CustomerAccount='Customer2'" -Token $token
         
-        This will import a set of Data Entities into Dynamics 365 Finance & Operations using the OData endpoint.
+        This will delete both customers, in a single request, from the Dynamics 365 Finance & Operations using the OData endpoint.
         It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
-        The EntityName used for the import is ExchangeRates.
-        The Payload is an array containing valid json strings, each containing all the needed properties.
+        The EntityName used for the deletion is CustomersV3.
+        The Key is an array containing valid keys, each containing referencing a single entity.
+        
+        It will use the default OData configuration details that are stored in the configuration store.
         
     .NOTES
-        Tags: OData, Data, Entity, Import, Upload
+        Tags: OData, Data, Entity, Delete, Remove, Batch
         
         Author: Mötz Jensen (@Splaxi)
 #>
 
-function Import-D365ODataEntityBatchMode {
+function Remove-D365ODataEntityBatchMode {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
     [CmdletBinding()]
     [OutputType('System.String')]
     param (
@@ -91,7 +91,7 @@ function Import-D365ODataEntityBatchMode {
 
         [Parameter(Mandatory = $true)]
         [Alias('Json')]
-        [string[]] $Payload,
+        [string[]] $Key,
 
         [Parameter(Mandatory = $false)]
         [switch] $CrossCompany,
@@ -140,7 +140,7 @@ function Import-D365ODataEntityBatchMode {
             Write-PSFMessage -Level Verbose -Message "The SystemUrl parameter had a tailing slash, which shouldn't be there. Removing the tailling slash." -Target $Url
             $SystemUrl = $SystemUrl.Substring(0, $SystemUrl.Length - 1)
         }
-        
+
         if (-not $Token) {
             $bearerParms = @{
                 Url          = $Url
@@ -188,19 +188,17 @@ function Import-D365ODataEntityBatchMode {
         $dataBuilder.AppendLine("Content-Type: multipart/mixed; boundary=changeset_$idchangeset {0}" -f [System.Environment]::NewLine) > $null
         $dataBuilder.AppendLine("--$changeSetPayLoad ") > $null #Space is important!
 
-        $localEntity = $EntityName
-        $payLoadEnumerator = $PayLoad.GetEnumerator()
+        $payLoadEnumerator = $Key.GetEnumerator()
         $counter = 0
         while ($payLoadEnumerator.MoveNext()) {
 
             Write-PSFMessage -Level Verbose -Message "Parsing the payload for the batch request."
 
             $counter ++
-            $localPayload = $payLoadEnumerator.Current.Trim()
+            $localEntity = "$EntityName($($payLoadEnumerator.Current.Trim()))"
+            $dataBuilder.Append((New-BatchKey -Url "$URL/data/$localEntity" -Count $counter -Method "DELETE")) > $null
 
-            $dataBuilder.Append((New-BatchContent -Url "$URL/data/$localEntity" -Payload $LocalPayload -Count $counter)) > $null
-
-            if ($PayLoad.Count -eq $counter) {
+            if ($Key.Count -eq $counter) {
                 $dataBuilder.AppendLine("--$changesetPayload--") > $null
             }
             else {

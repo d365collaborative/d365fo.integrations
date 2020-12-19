@@ -1,10 +1,10 @@
 ﻿
 <#
     .SYNOPSIS
-        Import a set of Data Entities into Dynamics 365 Finance & Operations
+        Update a set of Data Entities in Dynamics 365 Finance & Operations
         
     .DESCRIPTION
-        Imports a set of Data Entities, defined as a json payloads, using the OData endpoint of the Dynamics 365 Finance & Operations
+        Updates a set of Data Entities, defined as a json payloads, using the OData endpoint of the Dynamics 365 Finance & Operations
         
         The entire payload will be batched into a single request against the OData endpoint
         
@@ -20,9 +20,19 @@
         Look at the Get-D365ODataPublicEntity cmdlet to help you obtain the correct name
         
     .PARAMETER Payload
-        The entire string contain the json objects that you want to import into the D365FO environment
+        The array of PSCustomObjects that you want to update in the D365FO environment
         
-        Payload supports multiple json objects, that needs to be batched together
+        Each PSCustomObject needs to have a Key and a Payload property
+        
+        The Key must be a string
+        The Payload must be a json string
+        
+    .PARAMETER PayloadCharset
+        The charset / encoding that you want the cmdlet to use while updating the odata entity
+        
+        The default value is: "UTF8"
+        
+        The charset has to be a valid http charset like: ASCII, ANSI, ISO-8859-1, UTF-8
         
     .PARAMETER CrossCompany
         Instruct the cmdlet / function to ensure the request against the OData endpoint will work across all companies
@@ -52,37 +62,41 @@
         This is less user friendly, but allows catching exceptions in calling scripts
         
     .EXAMPLE
-        PS C:\> Import-D365ODataEntityBatchMode -EntityName "ExchangeRates" -Payload '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}','{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-04T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}'
+        PS C:\> $payload = '{"SalesTaxGroup":"DK"}'
+        PS C:\> $updates = @([PSCustomObject]@{Key = "dataAreaId='USMF',CustomerAccount='Customer1'"; Payload = $payload})
+        PS C:\> $updates += [PSCustomObject]@{Key = "dataAreaId='USMF',CustomerAccount='Customer2'"; Payload = $payload}
+        PS C:\> Update-D365ODataEntityBatchMode -EntityName "CustomersV3" -Payload $($updates.ToArray())
         
-        This will import a set of Data Entities into Dynamics 365 Finance & Operations using the OData endpoint.
-        The EntityName used for the import is ExchangeRates.
-        The Payload is an array containing valid json strings, each containing all the needed properties.
+        This will update a set of Data Entities in Dynamics 365 Finance & Operations using the OData endpoint.
+        The payload that needs to be updated for all entities is saved in the $payload variable.
+        The desired customers that needs to be updated are saved into the $updates, with their unique key and the payload.
+        The $updates variable is passed to the cmdlet.
         
-    .EXAMPLE
-        PS C:\> $Payload = '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}','{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-04T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}'
-        PS C:\> Import-D365ODataEntityBatchMode -EntityName "ExchangeRates" -Payload $Payload
-        
-        This will import a set of Data Entities into Dynamics 365 Finance & Operations using the OData endpoint.
-        First the desired json data is put into the $Payload variable.
-        The EntityName used for the import is ExchangeRates.
-        The $Payload variable is passed to the cmdlet.
+        It will use the default OData configuration details that are stored in the configuration store.
         
     .EXAMPLE
         PS C:\> $token = Get-D365ODataToken
-        PS C:\> Import-D365ODataEntityBatchMode -EntityName "ExchangeRates" -Payload '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}','{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-04T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}' -Token $token
+        PS C:\> $payload = '{"SalesTaxGroup":"DK"}'
+        PS C:\> $updates = @([PSCustomObject]@{Key = "dataAreaId='USMF',CustomerAccount='Customer1'"; Payload = $payload})
+        PS C:\> $updates += [PSCustomObject]@{Key = "dataAreaId='USMF',CustomerAccount='Customer2'"; Payload = $payload}
+        PS C:\> Update-D365ODataEntityBatchMode -EntityName "CustomersV3" -Payload $($updates.ToArray()) -Token $token
         
-        This will import a set of Data Entities into Dynamics 365 Finance & Operations using the OData endpoint.
+        This will update a set of Data Entities in Dynamics 365 Finance & Operations using the OData endpoint.
         It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
-        The EntityName used for the import is ExchangeRates.
-        The Payload is an array containing valid json strings, each containing all the needed properties.
+        The payload that needs to be updated for all entities is saved in the $payload variable.
+        The desired customers that needs to be updated are saved into the $updates, with their unique key and the payload.
+        The $updates variable is passed to the cmdlet.
+        
+        It will use the default OData configuration details that are stored in the configuration store.
         
     .NOTES
-        Tags: OData, Data, Entity, Import, Upload
+        Tags: OData, Data, Entity, Update, Upload, Batch
         
         Author: Mötz Jensen (@Splaxi)
 #>
 
-function Import-D365ODataEntityBatchMode {
+function Update-D365ODataEntityBatchMode {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
     [CmdletBinding()]
     [OutputType('System.String')]
     param (
@@ -90,24 +104,19 @@ function Import-D365ODataEntityBatchMode {
         [string] $EntityName,
 
         [Parameter(Mandatory = $true)]
-        [Alias('Json')]
-        [string[]] $Payload,
+        [PsCustomObject[]] $Payload,
 
-        [Parameter(Mandatory = $false)]
+        [string] $PayloadCharset = "UTF-8",
+
         [switch] $CrossCompany,
 
-        [Parameter(Mandatory = $false)]
-        [Alias('$AADGuid')]
         [string] $Tenant = $Script:ODataTenant,
 
-        [Parameter(Mandatory = $false)]
         [Alias('URI')]
         [string] $URL = $Script:ODataUrl,
 
-        [Parameter(Mandatory = $false)]
         [string] $ClientId = $Script:ODataClientId,
 
-        [Parameter(Mandatory = $false)]
         [string] $ClientSecret = $Script:ODataClientSecret,
 
         [switch] $RawOutput,
@@ -140,7 +149,7 @@ function Import-D365ODataEntityBatchMode {
             Write-PSFMessage -Level Verbose -Message "The SystemUrl parameter had a tailing slash, which shouldn't be there. Removing the tailling slash." -Target $Url
             $SystemUrl = $SystemUrl.Substring(0, $SystemUrl.Length - 1)
         }
-        
+
         if (-not $Token) {
             $bearerParms = @{
                 Url          = $Url
@@ -188,17 +197,19 @@ function Import-D365ODataEntityBatchMode {
         $dataBuilder.AppendLine("Content-Type: multipart/mixed; boundary=changeset_$idchangeset {0}" -f [System.Environment]::NewLine) > $null
         $dataBuilder.AppendLine("--$changeSetPayLoad ") > $null #Space is important!
 
-        $localEntity = $EntityName
         $payLoadEnumerator = $PayLoad.GetEnumerator()
         $counter = 0
         while ($payLoadEnumerator.MoveNext()) {
+            $key = $payLoadEnumerator.Current.Key
+
+            $localEntity = "$EntityName($key)"
 
             Write-PSFMessage -Level Verbose -Message "Parsing the payload for the batch request."
 
             $counter ++
-            $localPayload = $payLoadEnumerator.Current.Trim()
+            $localPayload = $payLoadEnumerator.Current.Payload.Trim()
 
-            $dataBuilder.Append((New-BatchContent -Url "$URL/data/$localEntity" -Payload $LocalPayload -Count $counter)) > $null
+            $dataBuilder.Append((New-BatchContent -Url "$URL/data/$localEntity" -Payload $LocalPayload -Count $counter -Method "PATCH")) > $null
 
             if ($PayLoad.Count -eq $counter) {
                 $dataBuilder.AppendLine("--$changesetPayload--") > $null

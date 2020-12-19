@@ -11,6 +11,9 @@
         
         Normally the final URL / URI for the OData endpoint that the content is to be imported into
         
+    .PARAMETER AuthenticationToken
+        The token value that should be used to authenticate against the URL / URI endpoint
+        
     .PARAMETER Payload
         The entire string contain the json object that you want to import into the D365FO environment
         
@@ -42,22 +45,16 @@
         Tags: OData, Data Entity, Batchmode, Batch, Batch Content, Multiple
         
         Author: Mötz Jensen (@Splaxi)
-        Author: Rasmus Andersen (@ITRasmus)
         
 #>
 
-function New-BatchContent {
+function New-BatchKey {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
     param(
         
         [Parameter(Mandatory = $true)]
         [string] $Url,
-
-        [Parameter(Mandatory = $true)]
-        [string] $Payload,
-
-        [string] $PayloadCharset = "UTF-8",
-
+        
         [Parameter(Mandatory = $true)]
         [string] $Count,
 
@@ -69,18 +66,10 @@ function New-BatchContent {
     $null = $dataBuilder.AppendLine("Content-Type: application/http")
     $null = $dataBuilder.AppendLine("Content-Transfer-Encoding: binary")
     $null = $dataBuilder.AppendLine("Content-ID: $Count")
+
     $null = $dataBuilder.AppendLine("") #On purpose!
     $null = $dataBuilder.AppendLine("$Method $Url HTTP/1.1")
-    
-    $null = $dataBuilder.AppendLine("OData-Version: 4.0")
-    $null = $dataBuilder.AppendLine("OData-MaxVersion: 4.0")
-
-    $null = $dataBuilder.AppendLine("Content-Type: application/json;odata.metadata=minimal;charset=$PayloadCharset")
-    
-    # $null = $dataBuilder.AppendLine("Authorization: $AuthenticationToken")
     $null = $dataBuilder.AppendLine("") #On purpose!
-    
-    $null = $dataBuilder.AppendLine("$Payload")
 
     $dataBuilder.ToString()
 }
