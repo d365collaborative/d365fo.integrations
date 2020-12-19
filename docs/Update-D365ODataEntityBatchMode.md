@@ -106,7 +106,11 @@ Accept wildcard characters: False
 ```
 
 ### -PayloadCharset
-{{ Fill PayloadCharset Description }}
+The charset / encoding that you want the cmdlet to use while updating the odata entity
+
+The default value is: "UTF8"
+
+The charset has to be a valid http charset like: ASCII, ANSI, ISO-8859-1, UTF-8
 
 ```yaml
 Type: String

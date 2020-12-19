@@ -17,8 +17,20 @@
     .PARAMETER Payload
         The entire string contain the json object that you want to import into the D365FO environment
         
+    .PARAMETER PayloadCharset
+        The charset / encoding that you want the cmdlet to use while updating the odata entity
+        
+        The default value is: "UTF8"
+        
+        The charset has to be a valid http charset like: ASCII, ANSI, ISO-8859-1, UTF-8
+        
     .PARAMETER Count
         The index number that the content should be stamped with, to be valid in the entire batch request content
+        
+    .PARAMETER Method
+        Specify the HTTP method that you want the batch payload to perform
+        
+        Default value is: "POST"
         
     .EXAMPLE
         PS C:\> New-BatchContent -Url "https://usnconeboxax1aos.cloud.onebox.dynamics.com/data/ExchangeRates" -AuthenticationToken "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOi....." -Payload '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}' -Count 1

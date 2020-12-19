@@ -27,6 +27,13 @@
         The Key must be a string
         The Payload must be a json string
         
+    .PARAMETER PayloadCharset
+        The charset / encoding that you want the cmdlet to use while updating the odata entity
+        
+        The default value is: "UTF8"
+        
+        The charset has to be a valid http charset like: ASCII, ANSI, ISO-8859-1, UTF-8
+        
     .PARAMETER CrossCompany
         Instruct the cmdlet / function to ensure the request against the OData endpoint will work across all companies
         
@@ -89,6 +96,7 @@
 #>
 
 function Update-D365ODataEntityBatchMode {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
     [CmdletBinding()]
     [OutputType('System.String')]
     param (
