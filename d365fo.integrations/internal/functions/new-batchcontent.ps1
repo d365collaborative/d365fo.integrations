@@ -11,9 +11,6 @@
         
         Normally the final URL / URI for the OData endpoint that the content is to be imported into
         
-    .PARAMETER AuthenticationToken
-        The token value that should be used to authenticate against the URL / URI endpoint
-        
     .PARAMETER Payload
         The entire string contain the json object that you want to import into the D365FO environment
         
@@ -31,9 +28,9 @@
         Specify the HTTP method that you want the batch payload to perform
         
         Default value is: "POST"
-        
+
     .EXAMPLE
-        PS C:\> New-BatchContent -Url "https://usnconeboxax1aos.cloud.onebox.dynamics.com/data/ExchangeRates" -AuthenticationToken "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOi....." -Payload '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}' -Count 1
+        PS C:\> New-BatchContent -Url "https://usnconeboxax1aos.cloud.onebox.dynamics.com/data/ExchangeRates" -Payload '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}' -Count 1
         
         This will create a new batch content string.
         It will use "https://usnconeboxax1aos.cloud.onebox.dynamics.com/data/ExchangeRates" as the endpoint for the content.
@@ -55,10 +52,7 @@ function New-BatchContent {
         
         [Parameter(Mandatory = $true)]
         [string] $Url,
-        
-        # [Parameter(Mandatory = $true)]
-        # [string] $AuthenticationToken,
-        
+
         [Parameter(Mandatory = $true)]
         [string] $Payload,
 
