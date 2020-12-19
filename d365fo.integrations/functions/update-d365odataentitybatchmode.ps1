@@ -23,10 +23,10 @@
         The array of PSCustomObjects that you want to update in the D365FO environment
         
         Each PSCustomObject needs to have a Key and a Payload property
-
+        
         The Key must be a string
         The Payload must be a json string
-
+        
     .PARAMETER CrossCompany
         Instruct the cmdlet / function to ensure the request against the OData endpoint will work across all companies
         
@@ -53,7 +53,7 @@
     .PARAMETER EnableException
         This parameters disables user-friendly warnings and enables the throwing of exceptions
         This is less user friendly, but allows catching exceptions in calling scripts
-            
+        
     .EXAMPLE
         PS C:\> $payload = '{"SalesTaxGroup":"DK"}'
         PS C:\> $updates = @([PSCustomObject]@{Key = "dataAreaId='USMF',CustomerAccount='Customer1'"; Payload = $payload})
@@ -66,7 +66,7 @@
         The $updates variable is passed to the cmdlet.
         
         It will use the default OData configuration details that are stored in the configuration store.
-
+        
     .EXAMPLE
         PS C:\> $token = Get-D365ODataToken
         PS C:\> $payload = '{"SalesTaxGroup":"DK"}'
@@ -81,7 +81,7 @@
         The $updates variable is passed to the cmdlet.
         
         It will use the default OData configuration details that are stored in the configuration store.
-
+        
     .NOTES
         Tags: OData, Data, Entity, Update, Upload, Batch
         
