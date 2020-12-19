@@ -41,14 +41,21 @@ function New-BatchContent {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
     param(
         
-        [Parameter(Mandatory = $true, Position = 1)]
+        [Parameter(Mandatory = $true)]
         [string] $Url,
-        [Parameter(Mandatory = $true, Position = 2)]
+        
+        [Parameter(Mandatory = $true)]
         [string] $AuthenticationToken,
-        [Parameter(Mandatory = $true, Position = 3)]
+        
+        [Parameter(Mandatory = $true)]
         [string] $Payload,
-        [Parameter(Mandatory = $true, Position = 4)]
-        [string] $Count
+
+        [string] $PayloadCharset = "UTF-8",
+
+        [Parameter(Mandatory = $true)]
+        [string] $Count,
+
+        [string] $Method = "POST"
     )
 
     $dataBuilder = [System.Text.StringBuilder]::new()
@@ -57,12 +64,12 @@ function New-BatchContent {
     $null = $dataBuilder.AppendLine("Content-Transfer-Encoding: binary")
     $null = $dataBuilder.AppendLine("Content-ID: $Count")
     $null = $dataBuilder.AppendLine("") #On purpose!
-    $null = $dataBuilder.AppendLine("POST $Url HTTP/1.1")
+    $null = $dataBuilder.AppendLine("$Method $Url HTTP/1.1")
     
     $null = $dataBuilder.AppendLine("OData-Version: 4.0")
     $null = $dataBuilder.AppendLine("OData-MaxVersion: 4.0")
 
-    $null = $dataBuilder.AppendLine("Content-Type: application/json;odata.metadata=minimal")
+    $null = $dataBuilder.AppendLine("Content-Type: application/json;odata.metadata=minimal;charset=$PayloadCharset")
     
     $null = $dataBuilder.AppendLine("Authorization: $AuthenticationToken")
     $null = $dataBuilder.AppendLine("") #On purpose!

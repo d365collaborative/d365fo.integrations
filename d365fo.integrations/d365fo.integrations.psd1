@@ -72,6 +72,7 @@
         ,   'Remove-D365ODataEntity'
         ,	'Set-D365ActiveODataConfig'
         ,   'Update-D365ODataEntity'
+        ,   'Update-D365ODataEntityBatchMode'
     )
 	
     # Cmdlets to export from this module
