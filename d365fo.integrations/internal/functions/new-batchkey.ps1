@@ -45,7 +45,6 @@
         Tags: OData, Data Entity, Batchmode, Batch, Batch Content, Multiple
         
         Author: Mötz Jensen (@Splaxi)
-        Author: Rasmus Andersen (@ITRasmus)
         
 #>
 
