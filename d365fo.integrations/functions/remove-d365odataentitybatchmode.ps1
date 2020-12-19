@@ -23,9 +23,9 @@
         The array of keys that you want to delete from the D365FO environment
         
         Note that a key can be made up by several parts, for a given entity
-
+        
         E.g. CustomersV3 is "dataAreaId='DAT',CustomerAccount='Customer1'"
-
+        
         Please note the single quotes, for each key field
         
     .PARAMETER CrossCompany
