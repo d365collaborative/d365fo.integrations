@@ -33,7 +33,7 @@
         Default value is: "POST"
         
     .EXAMPLE
-        PS C:\> New-BatchContent -Url "https://usnconeboxax1aos.cloud.onebox.dynamics.com/data/ExchangeRates" -AuthenticationToken "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOi....." -Payload '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}' -Count 1
+        PS C:\> New-BatchContent -Url "https://usnconeboxax1aos.cloud.onebox.dynamics.com/data/ExchangeRates" -Payload '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}' -Count 1
         
         This will create a new batch content string.
         It will use "https://usnconeboxax1aos.cloud.onebox.dynamics.com/data/ExchangeRates" as the endpoint for the content.
@@ -49,21 +49,13 @@
         
 #>
 
-function New-BatchContent {
+function New-BatchKey {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
     param(
         
         [Parameter(Mandatory = $true)]
         [string] $Url,
         
-        # [Parameter(Mandatory = $true)]
-        # [string] $AuthenticationToken,
-        
-        [Parameter(Mandatory = $true)]
-        [string] $Payload,
-
-        [string] $PayloadCharset = "UTF-8",
-
         [Parameter(Mandatory = $true)]
         [string] $Count,
 
@@ -75,18 +67,10 @@ function New-BatchContent {
     $null = $dataBuilder.AppendLine("Content-Type: application/http")
     $null = $dataBuilder.AppendLine("Content-Transfer-Encoding: binary")
     $null = $dataBuilder.AppendLine("Content-ID: $Count")
+
     $null = $dataBuilder.AppendLine("") #On purpose!
     $null = $dataBuilder.AppendLine("$Method $Url HTTP/1.1")
-    
-    $null = $dataBuilder.AppendLine("OData-Version: 4.0")
-    $null = $dataBuilder.AppendLine("OData-MaxVersion: 4.0")
-
-    $null = $dataBuilder.AppendLine("Content-Type: application/json;odata.metadata=minimal;charset=$PayloadCharset")
-    
-    # $null = $dataBuilder.AppendLine("Authorization: $AuthenticationToken")
     $null = $dataBuilder.AppendLine("") #On purpose!
-    
-    $null = $dataBuilder.AppendLine("$Payload")
 
     $dataBuilder.ToString()
 }

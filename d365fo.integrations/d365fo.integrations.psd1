@@ -70,6 +70,8 @@
         ,   'Invoke-D365RestEndpoint'
         
         ,   'Remove-D365ODataEntity'
+        ,   'Remove-D365ODataEntityBatchMode'
+        
         ,	'Set-D365ActiveODataConfig'
         ,   'Update-D365ODataEntity'
         ,   'Update-D365ODataEntityBatchMode'

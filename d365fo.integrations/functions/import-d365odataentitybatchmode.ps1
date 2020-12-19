@@ -119,6 +119,28 @@ function Import-D365ODataEntityBatchMode {
     )
 
     begin {
+        if ([System.String]::IsNullOrEmpty($SystemUrl)) {
+            Write-PSFMessage -Level Verbose -Message "The SystemUrl parameter was empty, using the Url parameter as the OData endpoint base address." -Target $SystemUrl
+            $SystemUrl = $Url
+        }
+        
+        if ([System.String]::IsNullOrEmpty($Url) -or [System.String]::IsNullOrEmpty($SystemUrl)) {
+            $messageString = "It seems that you didn't supply a valid value for the Url parameter. You need specify the Url parameter or add a configuration with the <c='em'>Add-D365ODataConfig</c> cmdlet."
+            Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $entityName
+            Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>', ''))) -ErrorRecord $_
+            return
+        }
+        
+        if ($Url.Substring($Url.Length - 1) -eq "/") {
+            Write-PSFMessage -Level Verbose -Message "The Url parameter had a tailing slash, which shouldn't be there. Removing the tailling slash." -Target $Url
+            $Url = $Url.Substring(0, $Url.Length - 1)
+        }
+    
+        if ($SystemUrl.Substring($SystemUrl.Length - 1) -eq "/") {
+            Write-PSFMessage -Level Verbose -Message "The SystemUrl parameter had a tailing slash, which shouldn't be there. Removing the tailling slash." -Target $Url
+            $SystemUrl = $SystemUrl.Substring(0, $SystemUrl.Length - 1)
+        }
+        
         if (-not $Token) {
             $bearerParms = @{
                 Url          = $Url
@@ -152,19 +174,19 @@ function Import-D365ODataEntityBatchMode {
         $idbatch = $(New-Guid).ToString()
         $idchangeset = $(New-Guid).ToString()
     
-        $batchPayload = "--batch_$idbatch"
-        $changesetPayload = "--changeset_$idchangeset"
+        $batchPayload = "batch_$idbatch"
+        $changesetPayload = "changeset_$idchangeset"
         
         $request = [System.Net.WebRequest]::Create("$URL/data/`$batch")
         $request.Headers["Authorization"] = $headers.Authorization
         $request.Method = "POST"
         $request.ContentType = "multipart/mixed; boundary=batch_$idBatch"
 
-        $dataBuilder.Clear()
+        $dataBuilder.Clear() > $null
 
-        $null = $dataBuilder.AppendLine("--$batchPayLoad ") #Space is important!
-        $null = $dataBuilder.AppendLine("Content-Type: multipart/mixed; boundary=changeset_$idchangeset {0}" -f [System.Environment]::NewLine)
-        $null = $dataBuilder.AppendLine("$changeSetPayLoad ") #Space is important!
+        $dataBuilder.AppendLine("--$batchPayLoad ") > $null #Space is important!
+        $dataBuilder.AppendLine("Content-Type: multipart/mixed; boundary=changeset_$idchangeset {0}" -f [System.Environment]::NewLine) > $null
+        $dataBuilder.AppendLine("--$changeSetPayLoad ") > $null #Space is important!
 
         $localEntity = $EntityName
         $payLoadEnumerator = $PayLoad.GetEnumerator()
@@ -176,17 +198,17 @@ function Import-D365ODataEntityBatchMode {
             $counter ++
             $localPayload = $payLoadEnumerator.Current.Trim()
 
-            $null = $dataBuilder.Append((New-BatchContent -Url "$URL/data/$localEntity" -AuthenticationToken $bearer -Payload $LocalPayload -Count $counter))
+            $dataBuilder.Append((New-BatchContent -Url "$URL/data/$localEntity" -Payload $LocalPayload -Count $counter)) > $null
 
             if ($PayLoad.Count -eq $counter) {
-                $null = $dataBuilder.AppendLine("$changesetPayload--")
+                $dataBuilder.AppendLine("--$changesetPayload--") > $null
             }
             else {
-                $null = $dataBuilder.AppendLine("$changesetPayload")
+                $dataBuilder.AppendLine("--$changesetPayload") > $null
             }
         }
     
-        $null = $dataBuilder.Append("$batchPayload--")
+        $dataBuilder.Append("--$batchPayload--") > $null
         $data = $dataBuilder.ToString()
 
         Write-PSFMessage -Level Debug -Message "Parsing data to debug log next."
