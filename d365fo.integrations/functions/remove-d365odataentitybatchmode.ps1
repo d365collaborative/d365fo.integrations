@@ -82,6 +82,7 @@
 #>
 
 function Remove-D365ODataEntityBatchMode {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
     [CmdletBinding()]
     [OutputType('System.String')]
     param (
