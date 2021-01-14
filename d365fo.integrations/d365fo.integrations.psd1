@@ -48,6 +48,7 @@
 		,	'Export-D365DmfPackage'
 		
         ,   'Get-D365ActiveODataConfig'
+        ,   'Get-D365DmfDataEntity'
         ,   'Get-D365DmfMessageStatus'
         ,	'Get-D365ODataConfig'
         ,   'Get-D365ODataEntityData'
