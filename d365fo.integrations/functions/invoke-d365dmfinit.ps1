@@ -1,7 +1,7 @@
 ﻿
 <#
     .SYNOPSIS
-        Invoke DMF Initialize
+        Invoke DMF Initialize, which will refresh all Data Management Entities
         
     .DESCRIPTION
         Invokes the DMF initialization from the DMF Endpoint of the Dynamics 365 for Finance & Operations environment
@@ -28,7 +28,7 @@
         This is less user friendly, but allows catching exceptions in calling scripts
         
     .EXAMPLE
-        PS C:\> Invoke-D365DmfInit 
+        PS C:\> Invoke-D365DmfInit
         
         This will invoke the DMF initialization through the DMF endpoint.
         
