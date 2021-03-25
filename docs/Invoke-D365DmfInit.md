@@ -37,7 +37,6 @@ Invoke-D365DmfInit -Tenant "e674da86-7ee5-40a7-b777-1111111111111" -Url "https:/
 ```
 
 This will invoke the DMF initialization through the DMF endpoint.
-It will use "84a383c8-336d-45e4-9933-0c3e8bfb734a" as the MessageId parameter passed to the DMF endpoint.
 It will use "e674da86-7ee5-40a7-b777-1111111111111" as the Azure Active Directory guid.
 It will use "https://usnconeboxax1aos.cloud.onebox.dynamics.com" as the base D365FO environment url.
 It will use "dea8d7a9-1602-4429-b138-111111111111" as the ClientId.
@@ -52,7 +51,6 @@ PS C:\\\> Invoke-D365DmfInit -Token $token
 
 This will invoke the DMF initialization through the DMF endpoint.
 It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
-It will use "84a383c8-336d-45e4-9933-0c3e8bfb734a" as the MessageId parameter passed to the DMF endpoint.
 
 It will use the default OData configuration details that are stored in the configuration store.
 
@@ -159,7 +157,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
-Tags: Import, Upload, DMF, Package, Packages, Init, Initialize
+Tags: DMF, Entities, Enitity, Init, Initialize, Refresh
 
 Author: Mötz Jensen (@Splaxi), Gert Van Der Heyden (@gertvdheyden)
 
