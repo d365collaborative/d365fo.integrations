@@ -68,6 +68,7 @@
         ,   'Import-D365ODataEntityBatchMode'
 
         ,   'Invoke-D365RestEndpoint'
+        ,   'Invoke-D365DmfInit'
         
         ,   'Remove-D365ODataEntity'
         ,   'Remove-D365ODataEntityBatchMode'
