@@ -110,7 +110,7 @@ function Invoke-D365RestEndpoint {
         [switch] $EnableException,
 
         [Parameter(Mandatory = $false)]
-        [int32] $TimeoutSec = 0,
+        [int32] $TimeoutSec = 0
     )
 
     begin {
