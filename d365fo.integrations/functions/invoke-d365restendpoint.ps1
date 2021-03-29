@@ -159,7 +159,7 @@ function Invoke-D365RestEndpoint {
         }
 
         # set timeout when specified
-        if ($TimeoutSec > 0) {
+        if ($TimeoutSec -gt 0) {
             $params.TimeoutSec = $TimeoutSec
         }
         
