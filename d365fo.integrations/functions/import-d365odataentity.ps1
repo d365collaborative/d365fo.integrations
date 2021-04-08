@@ -188,10 +188,10 @@ function Import-D365ODataEntity {
         [System.UriBuilder] $odataEndpoint = $SystemUrl
         
         if ($odataEndpoint.Path -eq "/") {
-            $odataEndpoint.Path = "data/$EntityName($Key)"
+            $odataEndpoint.Path = "data/$EntityName"
         }
         else {
-            $odataEndpoint.Path += "/data/$EntityName($Key)"
+            $odataEndpoint.Path += "/data/$EntityName"
         }
 
         if ($CrossCompany) {
