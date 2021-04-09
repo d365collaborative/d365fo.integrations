@@ -33,6 +33,13 @@
     .PARAMETER Url
         URL / URI for the D365FO environment you want to access through OData
         
+    .PARAMETER SystemUrl
+        URL / URI for the D365FO instance where the OData endpoint is available
+        
+        If you are working against a D365FO instance, it will be the URL / URI for the instance itself, which is the same as the Url parameter value
+        
+        If you are working against a D365 Talent / HR instance, this will to be full instance URL / URI like "https://aos-rts-sf-b1b468164ee-prod-northeurope.hr.talent.dynamics.com/namespaces/0ab49d18-6325-4597-97b3-c7f2321aa80c"
+        
     .PARAMETER ClientId
         The ClientId obtained from the Azure Portal when you created a Registered Application
         
@@ -93,21 +100,18 @@ function Import-D365ODataEntityBatchMode {
         [Alias('Json')]
         [string[]] $Payload,
 
-        [Parameter(Mandatory = $false)]
         [switch] $CrossCompany,
 
-        [Parameter(Mandatory = $false)]
         [Alias('$AADGuid')]
         [string] $Tenant = $Script:ODataTenant,
 
-        [Parameter(Mandatory = $false)]
         [Alias('URI')]
         [string] $URL = $Script:ODataUrl,
 
-        [Parameter(Mandatory = $false)]
+        [string] $SystemUrl = $Script:ODataSystemUrl,
+
         [string] $ClientId = $Script:ODataClientId,
 
-        [Parameter(Mandatory = $false)]
         [string] $ClientSecret = $Script:ODataClientSecret,
 
         [switch] $RawOutput,
@@ -177,7 +181,7 @@ function Import-D365ODataEntityBatchMode {
         $batchPayload = "batch_$idbatch"
         $changesetPayload = "changeset_$idchangeset"
         
-        $request = [System.Net.WebRequest]::Create("$URL/data/`$batch")
+        $request = [System.Net.WebRequest]::Create("$SystemUrl/data/`$batch")
         $request.Headers["Authorization"] = $headers.Authorization
         $request.Method = "POST"
         $request.ContentType = "multipart/mixed; boundary=batch_$idBatch"
@@ -198,7 +202,7 @@ function Import-D365ODataEntityBatchMode {
             $counter ++
             $localPayload = $payLoadEnumerator.Current.Trim()
 
-            $dataBuilder.Append((New-BatchContent -Url "$URL/data/$localEntity" -Payload $LocalPayload -Count $counter)) > $null
+            $dataBuilder.Append((New-BatchContent -Url "$SystemUrl/data/$localEntity" -Payload $LocalPayload -Count $counter)) > $null
 
             if ($PayLoad.Count -eq $counter) {
                 $dataBuilder.AppendLine("--$changesetPayload--") > $null
@@ -247,7 +251,7 @@ function Import-D365ODataEntityBatchMode {
             $res
         }
         else {
-            
+            $res | ConvertTo-Json
         }
 
         Invoke-TimeSignal -End
