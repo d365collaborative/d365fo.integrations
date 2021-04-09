@@ -19,7 +19,7 @@
         
     .PARAMETER Action
         Name of the action that you want to execute on the desired entity
-
+        
     .PARAMETER Payload
         The entire string contain the json object that you want to pass to the action of the desired entity
         
@@ -70,26 +70,26 @@
         
     .PARAMETER OutputAsJson
         Instructs the cmdlet to convert the output to a Json string
-
+        
     .PARAMETER EnableException
         This parameters disables user-friendly warnings and enables the throwing of exceptions
         This is less user friendly, but allows catching exceptions in calling scripts
         
     .EXAMPLE
         PS C:\> Invoke-D365ODataAction -EntityName DualWriteProjectConfigurations -Action ValidateCurrentUserRole
-
+        
         This will invoke a Data Entity Action in Dynamics 365 Finance & Operations using the OData endpoint.
         The EntityName is DualWriteProjectConfigurations.
         The Action that is invoked is ValidateCurrentUserRole.
-
+        
     .EXAMPLE
         PS C:\> Invoke-D365ODataAction -EntityName BusinessEventsCatalogs -Action getBusinessEventsCatalog -Payload '{"_businessEventsCategory" : "Alerts"}'
-
+        
         This will invoke a Data Entity Action in Dynamics 365 Finance & Operations using the OData endpoint, passing a payload to it.
         The EntityName is BusinessEventsCatalogs.
         The Action that is invoked is getBusinessEventsCatalog.
         The Payload is {"_businessEventsCategory" : "Alerts"}.
-
+        
     .EXAMPLE
         PS C:\> $token = Get-D365ODataToken
         PS C:\> Invoke-D365ODataAction -EntityName DualWriteProjectConfigurations -Action ValidateCurrentUserRole -Token $token
@@ -98,7 +98,7 @@
         It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
         The EntityName used for the import is ExchangeRates.
         The Payload is a valid json string, containing all the needed properties.
-
+        
     .NOTES
         Tags: OData, Data, Entity, Invoke, Action
         

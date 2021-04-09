@@ -14,7 +14,7 @@
         
     .PARAMETER OutputSample
         Instruct the cmdlet to output a sample of the key
-
+        
     .EXAMPLE
         PS C:\> Get-D365ODataPublicEntity -EntityName CustomersV3 | Get-D365ODataEntityKey | Format-List
         
@@ -26,12 +26,12 @@
         
     .EXAMPLE
         PS C:\> Get-D365ODataPublicEntity -EntityName CustomersV3 | Get-D365ODataEntityKey
-
+        
         This will output a sample of the key from the Data Entity.
         The "CustomersV3" value is used to get the desired Data Entity.
         The output from Get-D365ODataPublicEntity is piped into Get-D365ODataEntityKey.
         All key fields will be concatenated and displayed.
-
+        
     .LINK
         Get-D365ODataPublicEntity
         
