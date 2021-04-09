@@ -5,53 +5,52 @@ online version:
 schema: 2.0.0
 ---
 
-# Import-D365ODataEntity
+# Invoke-D365ODataAction
 
 ## SYNOPSIS
-Import a Data Entity into Dynamics 365 Finance & Operations
+Invoke a Data Entity Action in Dynamics 365 Finance & Operations
 
 ## SYNTAX
 
 ```
-Import-D365ODataEntity [-EntityName] <String> [-Payload] <String> [[-PayloadCharset] <String>] [-CrossCompany]
- [[-Tenant] <String>] [[-Url] <String>] [[-SystemUrl] <String>] [[-ClientId] <String>]
- [[-ClientSecret] <String>] [[-Token] <String>] [-EnableException] [<CommonParameters>]
+Invoke-D365ODataAction [-EntityName] <String> [-Action] <String> [[-Payload] <String>]
+ [[-PayloadCharset] <String>] [-CrossCompany] [[-Tenant] <String>] [[-Url] <String>] [[-SystemUrl] <String>]
+ [[-ClientId] <String>] [[-ClientSecret] <String>] [[-Token] <String>] [-RawOutput] [-OutputAsJson]
+ [-EnableException] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Imports a Data Entity, defined as a json payload, using the OData endpoint of the Dynamics 365 Finance & Operations platform
+Invokes a Data Entity Action, supporting a json payload as the parameters, using the OData endpoint of the Dynamics 365 Finance & Operations platform
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Import-D365ODataEntity -EntityName "ExchangeRates" -Payload '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}'
+Invoke-D365ODataAction -EntityName DualWriteProjectConfigurations -Action ValidateCurrentUserRole
 ```
 
-This will import a Data Entity into Dynamics 365 Finance & Operations using the OData endpoint.
-The EntityName used for the import is ExchangeRates.
-The Payload is a valid json string, containing all the needed properties.
+This will invoke a Data Entity Action in Dynamics 365 Finance & Operations using the OData endpoint.
+The EntityName is DualWriteProjectConfigurations.
+The Action that is invoked is ValidateCurrentUserRole.
 
 ### EXAMPLE 2
 ```
-$Payload = '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}'
+Invoke-D365ODataAction -EntityName BusinessEventsCatalogs -Action getBusinessEventsCatalog -Payload '{"_businessEventsCategory" : "Alerts"}'
 ```
 
-PS C:\\\> Import-D365ODataEntity -EntityName "ExchangeRates" -Payload $Payload
-
-This will import a Data Entity into Dynamics 365 Finance & Operations using the OData endpoint.
-First the desired json data is put into the $Payload variable.
-The EntityName used for the import is ExchangeRates.
-The $Payload variable is passed to the cmdlet.
+This will invoke a Data Entity Action in Dynamics 365 Finance & Operations using the OData endpoint, passing a payload to it.
+The EntityName is BusinessEventsCatalogs.
+The Action that is invoked is getBusinessEventsCatalog.
+The Payload is {"_businessEventsCategory" : "Alerts"}.
 
 ### EXAMPLE 3
 ```
 $token = Get-D365ODataToken
 ```
 
-PS C:\\\> Import-D365ODataEntity -EntityName "ExchangeRates" -Payload '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}' -Token $token
+PS C:\\\> Invoke-D365ODataAction -EntityName DualWriteProjectConfigurations -Action ValidateCurrentUserRole -Token $token
 
-This will import a Data Entity into Dynamics 365 Finance & Operations using the OData endpoint.
+This will invoke a Data Entity Action in Dynamics 365 Finance & Operations using the OData endpoint.
 It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
 The EntityName used for the import is ExchangeRates.
 The Payload is a valid json string, containing all the needed properties.
@@ -82,15 +81,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Payload
-The entire string contain the json object that you want to import into the D365FO environment
-
-Remember that json is text based and can use either single quotes (') or double quotes (") as the text qualifier, so you might need to escape the different quotes in your payload before passing it in
+### -Action
+Name of the action that you want to execute on the desired entity
 
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: Json
+Aliases:
 
 Required: True
 Position: 2
@@ -99,8 +96,25 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Payload
+The entire string contain the json object that you want to pass to the action of the desired entity
+
+Remember that json is text based and can use either single quotes (') or double quotes (") as the text qualifier, so you might need to escape the different quotes in your payload before passing it in
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: Json
+
+Required: False
+Position: 3
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -PayloadCharset
-The charset / encoding that you want the cmdlet to use while importing the odata entity
+The charset / encoding that you want the cmdlet to use while invoking the odata entity action
 
 The default value is: "UTF8"
 
@@ -112,7 +126,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 3
+Position: 4
 Default value: UTF-8
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -142,7 +156,7 @@ Parameter Sets: (All)
 Aliases: $AADGuid
 
 Required: False
-Position: 4
+Position: 5
 Default value: $Script:ODataTenant
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -161,7 +175,7 @@ Parameter Sets: (All)
 Aliases: AuthenticationUrl, Uri
 
 Required: False
-Position: 5
+Position: 6
 Default value: $Script:ODataUrl
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -180,7 +194,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 6
+Position: 7
 Default value: $Script:ODataSystemUrl
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -195,7 +209,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 7
+Position: 8
 Default value: $Script:ODataClientId
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -210,7 +224,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 8
+Position: 9
 Default value: $Script:ODataClientSecret
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -227,8 +241,40 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 9
+Position: 10
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -RawOutput
+Instructs the cmdlet to include the outer structure of the response received from OData endpoint
+
+The output will still be a PSCustomObject
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -OutputAsJson
+Instructs the cmdlet to convert the output to a Json string
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -257,7 +303,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
-Tags: OData, Data, Entity, Import, Upload
+Tags: OData, Data, Entity, Invoke, Action
 
 Author: Mötz Jensen (@Splaxi)
 
