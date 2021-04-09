@@ -1,10 +1,10 @@
 ﻿
 <#
     .SYNOPSIS
-        Import a Data Entity into Dynamics 365 Finance & Operations
+        Invoke a Data Entity Action in Dynamics 365 Finance & Operations
         
     .DESCRIPTION
-        Imports a Data Entity, defined as a json payload, using the OData endpoint of the Dynamics 365 Finance & Operations platform
+        Invokes a Data Entity Action, supporting a json payload as the parameters, using the OData endpoint of the Dynamics 365 Finance & Operations platform
         
     .PARAMETER EntityName
         Name of the Data Entity you want to work against
@@ -17,13 +17,16 @@
         
         Look at the Get-D365ODataPublicEntity cmdlet to help you obtain the correct name
         
+    .PARAMETER Action
+        Name of the action that you want to execute on the desired entity
+
     .PARAMETER Payload
-        The entire string contain the json object that you want to import into the D365FO environment
+        The entire string contain the json object that you want to pass to the action of the desired entity
         
         Remember that json is text based and can use either single quotes (') or double quotes (") as the text qualifier, so you might need to escape the different quotes in your payload before passing it in
         
     .PARAMETER PayloadCharset
-        The charset / encoding that you want the cmdlet to use while importing the odata entity
+        The charset / encoding that you want the cmdlet to use while invoking the odata entity action
         
         The default value is: "UTF8"
         
@@ -60,42 +63,49 @@
         
         This can improve performance if you are iterating over a large collection/array
         
+    .PARAMETER RawOutput
+        Instructs the cmdlet to include the outer structure of the response received from OData endpoint
+        
+        The output will still be a PSCustomObject
+        
+    .PARAMETER OutputAsJson
+        Instructs the cmdlet to convert the output to a Json string
+
     .PARAMETER EnableException
         This parameters disables user-friendly warnings and enables the throwing of exceptions
         This is less user friendly, but allows catching exceptions in calling scripts
         
     .EXAMPLE
-        PS C:\> Import-D365ODataEntity -EntityName "ExchangeRates" -Payload '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}'
-        
-        This will import a Data Entity into Dynamics 365 Finance & Operations using the OData endpoint.
-        The EntityName used for the import is ExchangeRates.
-        The Payload is a valid json string, containing all the needed properties.
-        
+        PS C:\> Invoke-D365ODataAction -EntityName DualWriteProjectConfigurations -Action ValidateCurrentUserRole
+
+        This will invoke a Data Entity Action in Dynamics 365 Finance & Operations using the OData endpoint.
+        The EntityName is DualWriteProjectConfigurations.
+        The Action that is invoked is ValidateCurrentUserRole.
+
     .EXAMPLE
-        PS C:\> $Payload = '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}'
-        PS C:\> Import-D365ODataEntity -EntityName "ExchangeRates" -Payload $Payload
-        
-        This will import a Data Entity into Dynamics 365 Finance & Operations using the OData endpoint.
-        First the desired json data is put into the $Payload variable.
-        The EntityName used for the import is ExchangeRates.
-        The $Payload variable is passed to the cmdlet.
-        
+        PS C:\> Invoke-D365ODataAction -EntityName BusinessEventsCatalogs -Action getBusinessEventsCatalog -Payload '{"_businessEventsCategory" : "Alerts"}'
+
+        This will invoke a Data Entity Action in Dynamics 365 Finance & Operations using the OData endpoint, passing a payload to it.
+        The EntityName is BusinessEventsCatalogs.
+        The Action that is invoked is getBusinessEventsCatalog.
+        The Payload is {"_businessEventsCategory" : "Alerts"}.
+
     .EXAMPLE
         PS C:\> $token = Get-D365ODataToken
-        PS C:\> Import-D365ODataEntity -EntityName "ExchangeRates" -Payload '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}' -Token $token
+        PS C:\> Invoke-D365ODataAction -EntityName DualWriteProjectConfigurations -Action ValidateCurrentUserRole -Token $token
         
-        This will import a Data Entity into Dynamics 365 Finance & Operations using the OData endpoint.
+        This will invoke a Data Entity Action in Dynamics 365 Finance & Operations using the OData endpoint.
         It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
         The EntityName used for the import is ExchangeRates.
         The Payload is a valid json string, containing all the needed properties.
-        
+
     .NOTES
-        Tags: OData, Data, Entity, Import, Upload
+        Tags: OData, Data, Entity, Invoke, Action
         
         Author: Mötz Jensen (@Splaxi)
 #>
 
-function Import-D365ODataEntity {
+function Invoke-D365ODataAction {
     [CmdletBinding()]
     [OutputType()]
     param (
@@ -103,6 +113,8 @@ function Import-D365ODataEntity {
         [string] $EntityName,
 
         [Parameter(Mandatory = $true)]
+        [string] $Action,
+
         [Alias('Json')]
         [string] $Payload,
 
@@ -124,6 +136,10 @@ function Import-D365ODataEntity {
         [string] $ClientSecret = $Script:ODataClientSecret,
 
         [string] $Token,
+        
+        [switch] $RawOutput,
+
+        [switch] $OutputAsJson,
         
         [switch] $EnableException
     )
@@ -188,10 +204,10 @@ function Import-D365ODataEntity {
         [System.UriBuilder] $odataEndpoint = $SystemUrl
         
         if ($odataEndpoint.Path -eq "/") {
-            $odataEndpoint.Path = "data/$EntityName"
+            $odataEndpoint.Path = "data/$EntityName/Microsoft.Dynamics.DataEntities.$Action"
         }
         else {
-            $odataEndpoint.Path += "/data/$EntityName"
+            $odataEndpoint.Path += "/data/$EntityName/Microsoft.Dynamics.DataEntities.$Action"
         }
 
         if ($CrossCompany) {
@@ -200,7 +216,29 @@ function Import-D365ODataEntity {
 
         try {
             Write-PSFMessage -Level Verbose -Message "Executing http request against the OData endpoint." -Target $($odataEndpoint.Uri.AbsoluteUri)
-            Invoke-RestMethod -Method POST -Uri $odataEndpoint.Uri.AbsoluteUri -Headers $headers -ContentType "application/json;charset=$PayloadCharset" -Body $Payload
+
+            $parms = @{}
+            $parms.Method = "POST"
+            $parms.Uri = $odataEndpoint.Uri.AbsoluteUri
+            $parms.Headers = $headers
+            $parms.ContentType = "application/json;charset=$PayloadCharset"
+
+            if ($Payload) {
+                $parms.Body = $Payload
+            }
+
+            $res = Invoke-RestMethod @parms
+
+            if (-not $RawOutput) {
+                $res = $res.Value
+            }
+
+            if ($OutputAsJson) {
+                $res | ConvertTo-Json -Depth 10
+            }
+            else {
+                $res
+            }
         }
         catch {
             $messageString = "Something went wrong while importing data through the OData endpoint for the entity: $EntityName"
