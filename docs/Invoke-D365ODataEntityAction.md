@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# Invoke-D365ODataAction
+# Invoke-D365ODataEntityAction
 
 ## SYNOPSIS
 Invoke a Data Entity Action in Dynamics 365 Finance & Operations
@@ -13,7 +13,7 @@ Invoke a Data Entity Action in Dynamics 365 Finance & Operations
 ## SYNTAX
 
 ```
-Invoke-D365ODataAction [-EntityName] <String> [-Action] <String> [[-Payload] <String>]
+Invoke-D365ODataEntityAction [-EntityName] <String> [-Action] <String> [[-Payload] <String>]
  [[-PayloadCharset] <String>] [-CrossCompany] [[-Tenant] <String>] [[-Url] <String>] [[-SystemUrl] <String>]
  [[-ClientId] <String>] [[-ClientSecret] <String>] [[-Token] <String>] [-RawOutput] [-OutputAsJson]
  [-EnableException] [<CommonParameters>]
@@ -26,7 +26,7 @@ Invokes a Data Entity Action, supporting a json payload as the parameters, using
 
 ### EXAMPLE 1
 ```
-Invoke-D365ODataAction -EntityName DualWriteProjectConfigurations -Action ValidateCurrentUserRole
+Invoke-D365ODataEntityAction -EntityName DualWriteProjectConfigurations -Action ValidateCurrentUserRole
 ```
 
 This will invoke a Data Entity Action in Dynamics 365 Finance & Operations using the OData endpoint.
@@ -35,7 +35,7 @@ The Action that is invoked is ValidateCurrentUserRole.
 
 ### EXAMPLE 2
 ```
-Invoke-D365ODataAction -EntityName BusinessEventsCatalogs -Action getBusinessEventsCatalog -Payload '{"_businessEventsCategory" : "Alerts"}'
+Invoke-D365ODataEntityAction -EntityName BusinessEventsCatalogs -Action getBusinessEventsCatalog -Payload '{"_businessEventsCategory" : "Alerts"}'
 ```
 
 This will invoke a Data Entity Action in Dynamics 365 Finance & Operations using the OData endpoint, passing a payload to it.
@@ -48,7 +48,7 @@ The Payload is {"_businessEventsCategory" : "Alerts"}.
 $token = Get-D365ODataToken
 ```
 
-PS C:\\\> Invoke-D365ODataAction -EntityName DualWriteProjectConfigurations -Action ValidateCurrentUserRole -Token $token
+PS C:\\\> Invoke-D365ODataEntityAction -EntityName DualWriteProjectConfigurations -Action ValidateCurrentUserRole -Token $token
 
 This will invoke a Data Entity Action in Dynamics 365 Finance & Operations using the OData endpoint.
 It will get a fresh token, saved it into the token variable and pass it to the cmdlet.

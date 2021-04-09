@@ -76,14 +76,14 @@
         This is less user friendly, but allows catching exceptions in calling scripts
         
     .EXAMPLE
-        PS C:\> Invoke-D365ODataAction -EntityName DualWriteProjectConfigurations -Action ValidateCurrentUserRole
+        PS C:\> Invoke-D365ODataEntityAction -EntityName DualWriteProjectConfigurations -Action ValidateCurrentUserRole
         
         This will invoke a Data Entity Action in Dynamics 365 Finance & Operations using the OData endpoint.
         The EntityName is DualWriteProjectConfigurations.
         The Action that is invoked is ValidateCurrentUserRole.
         
     .EXAMPLE
-        PS C:\> Invoke-D365ODataAction -EntityName BusinessEventsCatalogs -Action getBusinessEventsCatalog -Payload '{"_businessEventsCategory" : "Alerts"}'
+        PS C:\> Invoke-D365ODataEntityAction -EntityName BusinessEventsCatalogs -Action getBusinessEventsCatalog -Payload '{"_businessEventsCategory" : "Alerts"}'
         
         This will invoke a Data Entity Action in Dynamics 365 Finance & Operations using the OData endpoint, passing a payload to it.
         The EntityName is BusinessEventsCatalogs.
@@ -92,7 +92,7 @@
         
     .EXAMPLE
         PS C:\> $token = Get-D365ODataToken
-        PS C:\> Invoke-D365ODataAction -EntityName DualWriteProjectConfigurations -Action ValidateCurrentUserRole -Token $token
+        PS C:\> Invoke-D365ODataEntityAction -EntityName DualWriteProjectConfigurations -Action ValidateCurrentUserRole -Token $token
         
         This will invoke a Data Entity Action in Dynamics 365 Finance & Operations using the OData endpoint.
         It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
@@ -105,7 +105,7 @@
         Author: Mötz Jensen (@Splaxi)
 #>
 
-function Invoke-D365ODataAction {
+function Invoke-D365ODataEntityAction {
     [CmdletBinding()]
     [OutputType()]
     param (
