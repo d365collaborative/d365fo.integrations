@@ -63,9 +63,9 @@
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
 		}
-		It 'Should have the expected parameter URL' {
-			$parameter = (Get-Command Remove-D365ODataEntityBatchMode).Parameters['URL']
-			$parameter.Name | Should -Be 'URL'
+		It 'Should have the expected parameter Url' {
+			$parameter = (Get-Command Remove-D365ODataEntityBatchMode).Parameters['Url']
+			$parameter.Name | Should -Be 'Url'
 			$parameter.ParameterType.ToString() | Should -Be System.String
 			$parameter.IsDynamic | Should -Be $False
 			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
@@ -159,7 +159,7 @@
 	Describe "Testing parameterset __AllParameterSets" {
 		<#
 		__AllParameterSets -EntityName -Key
-		__AllParameterSets -EntityName -Key -CrossCompany -Tenant -URL -SystemUrl -ClientId -ClientSecret -RawOutput -Token -EnableException
+		__AllParameterSets -EntityName -Key -CrossCompany -Tenant -Url -SystemUrl -ClientId -ClientSecret -RawOutput -Token -EnableException
 		#>
 	}
 

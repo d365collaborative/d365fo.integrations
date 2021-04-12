@@ -50,9 +50,9 @@
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
 		}
-		It 'Should have the expected parameter URL' {
-			$parameter = (Get-Command Invoke-D365RestEndpoint).Parameters['URL']
-			$parameter.Name | Should -Be 'URL'
+		It 'Should have the expected parameter Url' {
+			$parameter = (Get-Command Invoke-D365RestEndpoint).Parameters['Url']
+			$parameter.Name | Should -Be 'Url'
 			$parameter.ParameterType.ToString() | Should -Be System.String
 			$parameter.IsDynamic | Should -Be $False
 			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
@@ -133,7 +133,7 @@
 	Describe "Testing parameterset __AllParameterSets" {
 		<#
 		__AllParameterSets -ServiceName
-		__AllParameterSets -ServiceName -Payload -Tenant -URL -ClientId -ClientSecret -Token -EnableException -TimeoutSec
+		__AllParameterSets -ServiceName -Payload -Tenant -Url -ClientId -ClientSecret -Token -EnableException -TimeoutSec
 		#>
 	}
 
