@@ -14,7 +14,7 @@ Update a set of Data Entities in Dynamics 365 Finance & Operations
 
 ```
 Update-D365ODataEntityBatchMode [-EntityName] <String> [-Payload] <PSObject[]> [[-PayloadCharset] <String>]
- [-CrossCompany] [[-Tenant] <String>] [[-URL] <String>] [[-ClientId] <String>] [[-ClientSecret] <String>]
+ [-CrossCompany] [[-Tenant] <String>] [[-Url] <String>] [[-ClientId] <String>] [[-ClientSecret] <String>]
  [-RawOutput] [[-Token] <String>] [-EnableException] [<CommonParameters>]
 ```
 
@@ -145,7 +145,7 @@ Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is con
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases:
+Aliases: $AadGuid
 
 Required: False
 Position: 4
@@ -154,13 +154,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -URL
+### -Url
 URL / URI for the D365FO environment you want to access through OData
 
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: URI
+Aliases: Uri
 
 Required: False
 Position: 5

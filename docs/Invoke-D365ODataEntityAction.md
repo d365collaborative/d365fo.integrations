@@ -153,7 +153,7 @@ Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is con
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: $AADGuid
+Aliases: $AadGuid
 
 Required: False
 Position: 5
@@ -172,7 +172,7 @@ If you are working against a D365 Talent / HR instance, this will have to be "ht
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: AuthenticationUrl, Uri
+Aliases: Uri
 
 Required: False
 Position: 6
