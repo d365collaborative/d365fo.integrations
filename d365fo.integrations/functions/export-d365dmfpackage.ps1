@@ -74,18 +74,14 @@ function Export-D365DmfPackage {
         [Parameter(Mandatory = $true)]
         [String] $JobId,
 
-        [Parameter(Mandatory = $false)]
-        [Alias('$AADGuid')]
+        [Alias('$AadGuid')]
         [string] $Tenant = $Script:ODataTenant,
 
-        [Parameter(Mandatory = $false)]
         [Alias('Uri')]
         [string] $Url = $Script:ODataUrl,
 
-        [Parameter(Mandatory = $false)]
         [string] $ClientId = $Script:ODataClientId,
 
-        [Parameter(Mandatory = $false)]
         [string] $ClientSecret = $Script:ODataClientSecret,
 
         [switch] $EnableException

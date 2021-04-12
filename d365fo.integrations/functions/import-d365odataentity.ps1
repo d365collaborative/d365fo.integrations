@@ -110,11 +110,10 @@ function Import-D365ODataEntity {
 
         [switch] $CrossCompany,
 
-        [Alias('$AADGuid')]
+        [Alias('$AadGuid')]
         [string] $Tenant = $Script:ODataTenant,
 
         [Alias('Uri')]
-        [Alias('AuthenticationUrl')]
         [string] $Url = $Script:ODataUrl,
 
         [string] $SystemUrl = $Script:ODataSystemUrl,

@@ -77,10 +77,10 @@ function Import-D365DmfPackage {
         [Parameter(Mandatory = $true)]
         [String] $JobId,
 
-        [Alias('$AADGuid')]
+        [Alias('$AadGuid')]
         [string] $Tenant = $Script:ODataTenant,
 
-        [Alias('URI')]
+        [Alias('Uri')]
         [string] $Url = $Script:ODataUrl,
 
         [string] $ClientId = $Script:ODataClientId,

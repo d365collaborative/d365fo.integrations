@@ -207,11 +207,10 @@ function Get-D365ODataEntityData {
 
         [switch] $CrossCompany,
 
-        [Alias('$AADGuid')]
+        [Alias('$AadGuid')]
         [string] $Tenant = $Script:ODataTenant,
 
         [Alias('Uri')]
-        [Alias('AuthenticationUrl')]
         [string] $Url = $Script:ODataUrl,
 
         [string] $SystemUrl = $Script:ODataSystemUrl,

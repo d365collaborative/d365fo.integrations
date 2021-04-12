@@ -71,18 +71,14 @@ function Invoke-D365DmfInit {
     [CmdletBinding()]
     [OutputType()]
     param (
-        [Parameter(Mandatory = $false)]
-        [Alias('$AADGuid')]
+        [Alias('$AadGuid')]
         [string] $Tenant = $Script:ODataTenant,
 
-        [Parameter(Mandatory = $false)]
-        [Alias('URI')]
+        [Alias('Uri')]
         [string] $Url = $Script:ODataUrl,
 
-        [Parameter(Mandatory = $false)]
         [string] $ClientId = $Script:ODataClientId,
 
-        [Parameter(Mandatory = $false)]
         [string] $ClientSecret = $Script:ODataClientSecret,
 
         [string] $Token,

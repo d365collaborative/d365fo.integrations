@@ -98,11 +98,10 @@ function Get-D365RestServiceGroup {
     param (
         [string] $Name = "*",
 
-        [Alias('$AADGuid')]
+        [Alias('$AadGuid')]
         [string] $Tenant = $Script:ODataTenant,
 
         [Alias('Uri')]
-        [Alias('AuthenticationUrl')]
         [string] $Url = $Script:ODataUrl,
 
         [string] $SystemUrl = $Script:ODataSystemUrl,
@@ -171,9 +170,14 @@ function Get-D365RestServiceGroup {
 
         Write-PSFMessage -Level Verbose -Message "Building request for the Json Services endpoint"
         
-        [System.UriBuilder] $restEndpoint = $URL
+        [System.UriBuilder] $restEndpoint = $SystemUrl
 
-        $restEndpoint.Path = "api/services"
+        if ($restEndpoint.Path -eq "/") {
+            $restEndpoint.Path = "api/services"
+        }
+        else {
+            $restEndpoint.Path += "/api/services"
+        }
 
         $params = @{ }
         $params.Uri = $restEndpoint.Uri.AbsoluteUri

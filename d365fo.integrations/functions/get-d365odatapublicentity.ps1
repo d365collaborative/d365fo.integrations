@@ -162,11 +162,10 @@ function Get-D365ODataPublicEntity {
         [Parameter(Mandatory = $true, ParameterSetName = "Query")]
         [string] $ODataQuery,
 
-        [Alias('$AADGuid')]
+        [Alias('$AadGuid')]
         [string] $Tenant = $Script:ODataTenant,
 
         [Alias('Uri')]
-        [Alias('AuthenticationUrl')]
         [string] $Url = $Script:ODataUrl,
 
         [string] $SystemUrl = $Script:ODataSystemUrl,

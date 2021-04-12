@@ -110,10 +110,11 @@ function Update-D365ODataEntityBatchMode {
 
         [switch] $CrossCompany,
 
+        [Alias('$AadGuid')]
         [string] $Tenant = $Script:ODataTenant,
 
-        [Alias('URI')]
-        [string] $URL = $Script:ODataUrl,
+        [Alias('Uri')]
+        [string] $Url = $Script:ODataUrl,
 
         [string] $ClientId = $Script:ODataClientId,
 

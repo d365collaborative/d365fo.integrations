@@ -94,23 +94,18 @@ function Remove-D365ODataEntity {
         [Parameter(Mandatory = $true)]
         [string] $Key,
 
-        [Parameter(Mandatory = $false)]
         [switch] $CrossCompany,
 
-        [Parameter(Mandatory = $false)]
-        [Alias('$AADGuid')]
+        [Alias('$AadGuid')]
         [string] $Tenant = $Script:ODataTenant,
 
-        [Parameter(Mandatory = $false)]
-        [Alias('URI')]
-        [string] $URL = $Script:ODataUrl,
+        [Alias('Uri')]
+        [string] $Url = $Script:ODataUrl,
 
         [string] $SystemUrl = $Script:ODataSystemUrl,
         
-        [Parameter(Mandatory = $false)]
         [string] $ClientId = $Script:ODataClientId,
 
-        [Parameter(Mandatory = $false)]
         [string] $ClientSecret = $Script:ODataClientSecret,
 
         [string] $Token,

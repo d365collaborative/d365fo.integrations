@@ -91,13 +91,11 @@ function Invoke-D365RestEndpoint {
         [Alias('Json')]
         [string] $Payload,
 
-        [Parameter(Mandatory = $false)]
-        [Alias('$AADGuid')]
+        [Alias('$AadGuid')]
         [string] $Tenant = $Script:ODataTenant,
 
-        [Parameter(Mandatory = $false)]
-        [Alias('URI')]
-        [string] $URL = $Script:ODataUrl,
+        [Alias('Uri')]
+        [string] $Url = $Script:ODataUrl,
 
         [Parameter(Mandatory = $false)]
         [string] $ClientId = $Script:ODataClientId,
