@@ -42,7 +42,14 @@
         
     .PARAMETER Url
         URL / URI for the D365FO environment you want to access through OData
+
+    .PARAMETER SystemUrl
+        URL / URI for the D365FO instance where the OData endpoint is available
         
+        If you are working against a D365FO instance, it will be the URL / URI for the instance itself, which is the same as the Url parameter value
+        
+        If you are working against a D365 Talent / HR instance, this will to be full instance URL / URI like "https://aos-rts-sf-b1b468164ee-prod-northeurope.hr.talent.dynamics.com/namespaces/0ab49d18-6325-4597-97b3-c7f2321aa80c"
+
     .PARAMETER ClientId
         The ClientId obtained from the Azure Portal when you created a Registered Application
         
@@ -110,11 +117,15 @@ function Update-D365ODataEntityBatchMode {
 
         [switch] $CrossCompany,
 
+        [int] $ThrottleSeed,
+
         [Alias('$AadGuid')]
         [string] $Tenant = $Script:ODataTenant,
 
         [Alias('Uri')]
         [string] $Url = $Script:ODataUrl,
+
+        [string] $SystemUrl = $Script:ODataSystemUrl,
 
         [string] $ClientId = $Script:ODataClientId,
 
@@ -187,7 +198,7 @@ function Update-D365ODataEntityBatchMode {
         $batchPayload = "batch_$idbatch"
         $changesetPayload = "changeset_$idchangeset"
         
-        $request = [System.Net.WebRequest]::Create("$URL/data/`$batch")
+        $request = [System.Net.WebRequest]::Create("$SystemUrl/data/`$batch")
         $request.Headers["Authorization"] = $headers.Authorization
         $request.Method = "POST"
         $request.ContentType = "multipart/mixed; boundary=batch_$idBatch"
@@ -210,7 +221,7 @@ function Update-D365ODataEntityBatchMode {
             $counter ++
             $localPayload = $payLoadEnumerator.Current.Payload.Trim()
 
-            $dataBuilder.Append((New-BatchContent -Url "$URL/data/$localEntity" -Payload $LocalPayload -Count $counter -Method "PATCH")) > $null
+            $dataBuilder.Append((New-BatchContent -Url "$SystemUrl/data/$localEntity" -Payload $LocalPayload -Count $counter -Method "PATCH")) > $null
 
             if ($PayLoad.Count -eq $counter) {
                 $dataBuilder.AppendLine("--$changesetPayload--") > $null
@@ -259,9 +270,13 @@ function Update-D365ODataEntityBatchMode {
             $res
         }
         else {
-            
+            $res | ConvertTo-Json
         }
 
+        if ($ThrottleSeed) {
+            Start-Sleep -Seconds $(Get-Random -Minimum 1 -Maximum $ThrottleSeed)
+        }
+        
         Invoke-TimeSignal -End
     }
 }

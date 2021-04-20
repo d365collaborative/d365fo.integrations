@@ -146,6 +146,8 @@ function Get-D365ODataEntityDataByKey {
 
         [switch] $CrossCompany,
 
+        [int] $ThrottleSeed,
+
         [Alias('$AadGuid')]
         [string] $Tenant = $Script:ODataTenant,
 
@@ -272,6 +274,10 @@ function Get-D365ODataEntityDataByKey {
             return
         }
 
+        if ($ThrottleSeed) {
+            Start-Sleep -Seconds $(Get-Random -Minimum 1 -Maximum $ThrottleSeed)
+        }
+        
         Invoke-TimeSignal -End
     }
 }

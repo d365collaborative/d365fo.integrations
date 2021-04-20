@@ -101,6 +101,8 @@ function Remove-D365ODataEntityBatchMode {
 
         [switch] $CrossCompany,
 
+        [int] $ThrottleSeed,
+
         [Alias('$AadGuid')]
         [string] $Tenant = $Script:ODataTenant,
 
@@ -249,6 +251,10 @@ function Remove-D365ODataEntityBatchMode {
         }
         else {
             $res | ConvertTo-Json
+        }
+
+        if ($ThrottleSeed) {
+            Start-Sleep -Seconds $(Get-Random -Minimum 1 -Maximum $ThrottleSeed)
         }
 
         Invoke-TimeSignal -End

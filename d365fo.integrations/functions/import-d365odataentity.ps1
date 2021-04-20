@@ -110,6 +110,8 @@ function Import-D365ODataEntity {
 
         [switch] $CrossCompany,
 
+        [int] $ThrottleSeed,
+
         [Alias('$AadGuid')]
         [string] $Tenant = $Script:ODataTenant,
 
@@ -208,6 +210,10 @@ function Import-D365ODataEntity {
             return
         }
 
+        if ($ThrottleSeed) {
+            Start-Sleep -Seconds $(Get-Random -Minimum 1 -Maximum $ThrottleSeed)
+        }
+        
         Invoke-TimeSignal -End
     }
 }

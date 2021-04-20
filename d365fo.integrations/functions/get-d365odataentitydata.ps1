@@ -222,6 +222,9 @@ function Get-D365ODataEntityData {
         [Parameter(Mandatory = $true, ParameterSetName = "NextLink")]
         [switch] $TraverseNextLink,
 
+        [Parameter(ParameterSetName = "NextLink")]
+        [int] $ThrottleSeed,
+
         [string] $Token,
         
         [switch] $EnableException,
@@ -358,6 +361,10 @@ function Get-D365ODataEntityData {
                 
                 if ($($resGet.'@odata.nextLink') -match ".*(/data/.*)") {
                     $localUri = "$SystemUrl$($Matches[1])"
+                }
+
+                if ($ThrottleSeed) {
+                    Start-Sleep -Seconds $(Get-Random -Minimum 1 -Maximum $ThrottleSeed)
                 }
             } while ($TraverseNextLink -and $resGet.'@odata.nextLink')
 

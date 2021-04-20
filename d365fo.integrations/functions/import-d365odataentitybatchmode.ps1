@@ -102,6 +102,8 @@ function Import-D365ODataEntityBatchMode {
 
         [switch] $CrossCompany,
 
+        [int] $ThrottleSeed,
+
         [Alias('$AadGuid')]
         [string] $Tenant = $Script:ODataTenant,
 
@@ -223,8 +225,39 @@ function Import-D365ODataEntityBatchMode {
     
         try {
             Write-PSFMessage -Level Verbose -Message "Executing batch http request against the OData endpoint."
-
+           
             $response = $request.GetResponse()
+
+            $stream = $response.GetResponseStream()
+    
+            $streamReader = New-Object System.IO.StreamReader($stream)
+            
+            $res = $streamReader.ReadToEnd()
+            $streamReader.Close();
+
+            $regex = [regex] "Content-ID: (?<ContentId>[0-9]*)(?:\r\n)*HTTP/(?:1\.1|2\.0) (?<StatusCode>[0-9]*) .*"
+            $matchStatus = $regex.Matches($res)
+
+            if (($matchStatus.groups | Where-Object Name -eq "StatusCode").Value -contains "429") {
+                $regex = [regex] "Retry-After: (?<RetryValue>[0-9]*)"
+                $matchRetry = $regex.Matches($res).groups
+
+                $maxRetryValue = ($matchRetry.groups | Where-Object Name -eq "RetryValue").Value | Sort-Object -Descending | Select-Object -First 1
+
+                $matchThrottled = $matchStatus | Where-Object { $_.Groups.Name -eq "StatusCode" -and $_.Groups.Value -eq "429" }
+
+                foreach ($item in $matchThrottled) {
+                    [int]$index = $item.Groups | Where-Object Name -eq "ContentId" | Select-Object -ExpandProperty "Value"
+                    $messageString = "The following payload was throttled by the system. The system stated that you should retry in: <c='em'>$maxRetryValue</c>"
+                    Write-PSFMessage -Level Host -Message $messageString
+                    Write-PSFHostColor -Level Host -String $Payload[$index - 1] -DefaultColor Green
+                }
+
+                $res
+                
+                Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>', ''))) -ErrorRecord $_
+                return
+            }
         }
         catch {
             $messageString = "Something went wrong while importing batch data through the OData endpoint for the entity: $EntityName"
@@ -240,18 +273,15 @@ function Import-D365ODataEntityBatchMode {
             return
         }
 
-        $stream = $response.GetResponseStream()
-    
-        $streamReader = New-Object System.IO.StreamReader($stream)
-        
-        $res = $streamReader.ReadToEnd()
-        $streamReader.Close();
-
         if ($RawOutput) {
             $res
         }
         else {
             $res | ConvertTo-Json
+        }
+
+        if ($ThrottleSeed) {
+            Start-Sleep -Seconds $(Get-Random -Minimum 1 -Maximum $ThrottleSeed)
         }
 
         Invoke-TimeSignal -End
