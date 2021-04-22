@@ -116,7 +116,7 @@
         This will get Data Entities from the OData endpoint.
         It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
         This will search for the Data Entities that are named "customersv3".
-                
+        
     .NOTES
         The OData standard is using the $ (dollar sign) for many functions and features, which in PowerShell is normally used for variables.
         
