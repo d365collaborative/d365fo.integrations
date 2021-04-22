@@ -41,10 +41,11 @@ function Add-WebRequestContent {
         [string] $Payload
     )
 
-    Write-PSFMessage -Level Verbose -Message "Parsing the payload and adding it to the web request." -Target $JobId
+    Write-PSFMessage -Level Verbose -Message "Parsing the payload and adding it to the web request." -Target $Payload
 
     try {
         $WebRequest.ContentLength = [System.Text.Encoding]::UTF8.GetByteCount($Payload)
+
         $stream = $WebRequest.GetRequestStream()
         $streamWriter = new-object System.IO.StreamWriter($stream)
         $streamWriter.Write([string]$Payload)

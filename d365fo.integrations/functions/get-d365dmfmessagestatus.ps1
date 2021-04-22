@@ -86,18 +86,14 @@ function Get-D365DmfMessageStatus {
         [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
         [string] $MessageId,
 
-        [Parameter(Mandatory = $false)]
-        [Alias('$AADGuid')]
+        [Alias('$AadGuid')]
         [string] $Tenant = $Script:ODataTenant,
 
-        [Parameter(Mandatory = $false)]
-        [Alias('URI')]
+        [Alias('Uri')]
         [string] $Url = $Script:ODataUrl,
 
-        [Parameter(Mandatory = $false)]
         [string] $ClientId = $Script:ODataClientId,
 
-        [Parameter(Mandatory = $false)]
         [string] $ClientSecret = $Script:ODataClientSecret,
 
         [switch] $WaitForCompletion,

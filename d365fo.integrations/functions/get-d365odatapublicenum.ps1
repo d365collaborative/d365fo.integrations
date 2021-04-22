@@ -1,30 +1,30 @@
 ﻿
 <#
     .SYNOPSIS
-        Get public OData Data Entity and their metadata
+        Get public enumerations (enums) and their metadata
         
     .DESCRIPTION
-        Get a list with all the public available OData Data Entities,and their metadata, that are exposed through the OData endpoint of the Dynamics 365 Finance & Operations environment
+        Get a list with all the public available enumerations (enums), and their metadata, that are exposed through the OData endpoint of the Dynamics 365 Finance & Operations environment
         
-        The cmdlet will search across the singular names for the Data Entities and across the collection names (plural)
+        The cmdlet will search across the names for the enumerations (enums) and across the labelid
         
-    .PARAMETER EntityName
-        Name of the Data Entity you are searching for
+    .PARAMETER EnumName
+        Name of the enumerations (enums) you are searching for
         
-        The parameter is Case Insensitive, to make it easier for the user to locate the correct Data Entity
+        The parameter is Case Insensitive, to make it easier for the user to locate the correct enumerations (enums)
         
-    .PARAMETER EntityNameContains
-        Name of the Data Entity you are searching for, but instructing the cmdlet to use search logic
+    .PARAMETER EnumNameContains
+        Name of the enumerations (enums) you are searching for, but instructing the cmdlet to use search logic
         
-        Using this parameter enables you to supply only a portion of the name for the entity you are looking for, and still a valid result back
+        Using this parameter enables you to supply only a portion of the name for the enumerations (enums) you are looking for, and still get a valid result back
         
-        The parameter is Case Insensitive, to make it easier for the user to locate the correct Data Entity
+        The parameter is Case Insensitive, to make it easier for the user to locate the correct enumerations (enums)
         
     .PARAMETER ODataQuery
         Valid OData query string that you want to pass onto the D365 OData endpoint while retrieving data
         
         Important note:
-        If you are using -EntityName or -EntityNameContains along with the -ODataQuery, you need to understand that the "$filter" query is already started. Then you need to start with -ODataQuery ' and XYZ eq XYZ', e.g. -ODataQuery ' and IsReadOnly eq false'
+        If you are using -EnumName or -EnumNameContains along with the -ODataQuery, you need to understand that the "$filter" query is already started. Then you need to start with -ODataQuery ' and XYZ eq XYZ', e.g. -ODataQuery ' and IsReadOnly eq false'
         If you are using the -ODataQuery alone, you need to start the OData Query string correctly. -ODataQuery '$filter=IsReadOnly eq false'
         
         OData specific query options are:
@@ -41,14 +41,14 @@
         Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is connected to, that you want to access through OData
         
     .PARAMETER Url
-        URL / URI for the D365FO environment you want to access through OData
+        URL / URI for the D365FO environment you want to access through MetaData
         
         If you are working against a D365FO instance, it will be the URL / URI for the instance itself
         
         If you are working against a D365 Talent / HR instance, this will have to be "http://hr.talent.dynamics.com"
         
     .PARAMETER SystemUrl
-        URL / URI for the D365FO instance where the OData endpoint is available
+        URL / URI for the D365FO instance where the MetaData endpoint is available
         
         If you are working against a D365FO instance, it will be the URL / URI for the instance itself, which is the same as the Url parameter value
         
@@ -70,64 +70,68 @@
         This is less user friendly, but allows catching exceptions in calling scripts
         
     .PARAMETER RawOutput
-        Instructs the cmdlet to include the outer structure of the response received from OData endpoint
+        Instructs the cmdlet to include the outer structure of the response received from MetaData endpoint
         
         The output will still be a PSCustomObject
-        
-    .PARAMETER OutNamesOnly
-        Instructs the cmdlet to only display the DataEntityName and the EntityName from the response received from OData endpoint
-        
-        DataEntityName is the (logical) name of the entity from a code perspective.
-        EntityName is the public OData endpoint name of the entity.
         
     .PARAMETER OutputAsJson
         Instructs the cmdlet to convert the output to a Json string
         
     .EXAMPLE
-        PS C:\> Get-D365ODataPublicEntity -EntityName customersv3
+        PS C:\> Get-D365ODataPublicEnum
         
-        This will get Data Entities from the OData endpoint.
-        This will search for the Data Entities that are named "customersv3".
+        This will list all available enumerations (enums).
         
-    .EXAMPLE
-        PS C:\> (Get-D365ODataPublicEntity -EntityName customersv3).Value
-        
-        This will get Data Entities from the OData endpoint.
-        This will search for the Data Entities that are named "customersv3".
-        This will output the content of the "Value" property directly and list all found Data Entities and their metadata.
+        It will use the default OData configuration details that are stored in the configuration store.
         
     .EXAMPLE
-        PS C:\> Get-D365ODataPublicEntity -EntityNameContains customers
+        PS C:\> Get-D365ODataPublicEnum -Tenant "e674da86-7ee5-40a7-b777-1111111111111" -Url "https://usnconeboxax1aos.cloud.onebox.dynamics.com" -ClientId "dea8d7a9-1602-4429-b138-111111111111" -ClientSecret "Vja/VmdxaLOPR+alkjfsadffelkjlfw234522"
         
-        This will get Data Entities from the OData endpoint.
-        It will use the search string "customers" to search for any entity in their singular & plural name contains that search term.
+        This will list all available enumerations (enums).
         
-    .EXAMPLE
-        PS C:\> Get-D365ODataPublicEntity -EntityNameContains customer -ODataQuery ' and IsReadOnly eq true'
-        
-        This will get Data Entities from the OData endpoint.
-        It will use the search string "customer" to search for any entity in their singular & plural name contains that search term.
-        It will utilize the OData Query capabilities to filter for Data Entities that are "IsReadOnly = $true".
+        It will use "e674da86-7ee5-40a7-b777-1111111111111" as the Azure Active Directory guid.
+        It will use "https://usnconeboxax1aos.cloud.onebox.dynamics.com" as the base D365FO environment url.
+        It will use "dea8d7a9-1602-4429-b138-111111111111" as the ClientId.
+        It will use "Vja/VmdxaLOPR+alkjfsadffelkjlfw234522" as ClientSecret.
         
     .EXAMPLE
-        PS C:\> Get-D365ODataPublicEntity -EntityName CustomersV3 | Get-D365ODataEntityKey | Format-List
+        PS C:\> Get-D365ODataPublicEnum -EnumName VendRequestRoleType
         
-        This will extract all the relevant key fields from the Data Entity.
-        The "CustomersV3" value is used to get the desired Data Entity.
-        The output from Get-D365ODataPublicEntity is piped into Get-D365ODataEntityKey.
-        All key fields will be extracted and displayed.
-        The output will be formatted as a list.
+        This will list the VendRequestRoleType enumerations (enums).
+        
+        It will use the default OData configuration details that are stored in the configuration store.
+        
+        Sample output:
+        
+        EnumName            EnumValueName EnumIntValue EnumValueLabelId
+        --------            ------------- ------------ ----------------
+        VendRequestRoleType None                     0 @SYS1369
+        VendRequestRoleType Admin                    1 @SYS20515
+        VendRequestRoleType Clerk                    2 @SYS130176
+        
+    .EXAMPLE
+        PS C:\> Get-D365ODataPublicEnum -EnumNameContains VendRequestRole
+        
+        This will search for all enumerations (enums) that matches the VendRequestRole search pattern.
+        
+        It will use the default OData configuration details that are stored in the configuration store.
+        
+        Sample output:
+        
+        EnumName            EnumValueName EnumIntValue EnumValueLabelId
+        --------            ------------- ------------ ----------------
+        VendRequestRoleType None                     0 @SYS1369
+        VendRequestRoleType Admin                    1 @SYS20515
+        VendRequestRoleType Clerk                    2 @SYS130176
         
     .EXAMPLE
         PS C:\> $token = Get-D365ODataToken
-        PS C:\> Get-D365ODataPublicEntity -EntityName customersv3 -Token $token
+        PS C:\> Get-D365ODataPublicEnum -Token $token
         
-        This will get Data Entities from the OData endpoint.
+        This will list all available enumerations (enums).
         It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
-        This will search for the Data Entities that are named "customersv3".
         
-    .LINK
-        Get-D365ODataEntityKey
+        It will use the default OData configuration details that are stored in the configuration store.
         
     .NOTES
         The OData standard is using the $ (dollar sign) for many functions and features, which in PowerShell is normally used for variables.
@@ -140,22 +144,21 @@
         
         -ODataQuery '$top=1&$filter=dataAreaId eq ''Comp1'''
         
-        Tags: OData, Data, Entity, Query
+        Tags: OData, MetaData, Enum, Enumerations
         
         Author: Mötz Jensen (@Splaxi)
-        
 #>
-
-function Get-D365ODataPublicEntity {
+function Get-D365ODataPublicEnum {
     [CmdletBinding(DefaultParameterSetName = "Default")]
     [OutputType()]
     param (
 
         [Parameter(Mandatory = $false, ParameterSetName = "Default")]
-        [string] $EntityName,
+        [Alias('LabelId')]
+        [string] $EnumName,
 
         [Parameter(Mandatory = $true, ParameterSetName = "NameContains")]
-        [string] $EntityNameContains,
+        [string] $EnumNameContains,
 
         [Parameter(Mandatory = $false, ParameterSetName = "Default")]
         [Parameter(Mandatory = $false, ParameterSetName = "NameContains")]
@@ -179,8 +182,6 @@ function Get-D365ODataPublicEntity {
         [switch] $EnableException,
 
         [switch] $RawOutput,
-        
-        [switch] $OutNamesOnly,
 
         [switch] $OutputAsJson
     )
@@ -194,7 +195,7 @@ function Get-D365ODataPublicEntity {
 
         if ([System.String]::IsNullOrEmpty($Url) -or [System.String]::IsNullOrEmpty($SystemUrl)) {
             $messageString = "It seems that you didn't supply a valid value for the Url parameter. You need specify the Url parameter or add a configuration with the <c='em'>Add-D365ODataConfig</c> cmdlet."
-            Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $entityName
+            Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $EnumName
             Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>', ''))) -ErrorRecord $_
             return
         }
@@ -233,10 +234,10 @@ function Get-D365ODataPublicEntity {
         [System.UriBuilder] $odataEndpoint = $SystemUrl
         
         if ($odataEndpoint.Path -eq "/") {
-            $odataEndpoint.Path = "metadata/PublicEntities"
+            $odataEndpoint.Path = "metadata/PublicEnumerations"
         }
         else {
-            $odataEndpoint.Path += "/metadata/PublicEntities"
+            $odataEndpoint.Path += "/metadata/PublicEnumerations"
         }
     }
 
@@ -247,17 +248,17 @@ function Get-D365ODataPublicEntity {
 
         $odataEndpoint.Query = ""
         
-        if (-not ([string]::IsNullOrEmpty($EntityName))) {
-            Write-PSFMessage -Level Verbose -Message "Building request for the Metadata OData endpoint for entity named: $EntityName." -Target $EntityName
+        if (-not ([string]::IsNullOrEmpty($EnumName))) {
+            Write-PSFMessage -Level Verbose -Message "Building request for the Metadata OData endpoint for enum named: $EnumName." -Target $EnumName
 
-            $searchEntityName = $EntityName
-            $odataEndpoint.Query = "`$filter=(tolower(Name) eq tolower('$EntityName') or tolower(EntitySetName) eq tolower('$EntityName'))"
+            $searchEnumName = $EnumName
+            $odataEndpoint.Query = "`$filter=(tolower(Name) eq tolower('$EnumName') or tolower(LabelId) eq tolower('$EnumName'))"
         }
-        elseif (-not ([string]::IsNullOrEmpty($EntityNameContains))) {
-            Write-PSFMessage -Level Verbose -Message "Building request for the Metadata OData endpoint for entity that contains: $EntityNameContains." -Target $EntityNameContains
+        elseif (-not ([string]::IsNullOrEmpty($EnumNameContains))) {
+            Write-PSFMessage -Level Verbose -Message "Building request for the Metadata OData endpoint for enum that contains: $EnumNameContains." -Target $EnumNameContains
 
-            $searchEntityName = $EntityNameContains
-            $odataEndpoint.Query = "`$filter=(contains(tolower(Name), tolower('$EntityNameContains')) or contains(tolower(EntitySetName), tolower('$EntityNameContains')))"
+            $searchEnumName = $EnumNameContains
+            $odataEndpoint.Query = "`$filter=(contains(tolower(Name), tolower('$EnumNameContains')) or contains(tolower(LabelId), tolower('$EnumNameContains')))"
         }
 
         if (-not ([string]::IsNullOrEmpty($ODataQuery))) {
@@ -270,22 +271,20 @@ function Get-D365ODataPublicEntity {
 
             if (-not ($RawOutput)) {
                 $res = $res.Value | Sort-Object -Property Name
-
-                if ($OutNamesOnly) {
-                    $res = $res | Select-PSFObject "Name as DataEntityName", "EntitySetName as EntityName"
-                }
             }
 
             if ($OutputAsJson) {
                 $res | ConvertTo-Json -Depth 10
             }
             else {
-                $res
+                foreach ($item in $res) {
+                    $item.Members | Sort-Object Value | Select-PSFObject @{Name = "EnumName"; Expression = { $item.Name } }, "Name as EnumValueName", "Value as EnumIntValue", "LabelId as EnumValueLabelId"
+                }
             }
         }
         catch {
-            $messageString = "Something went wrong while searching the Metadata OData endpoint for the entity: $searchEntityName"
-            Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $entityName
+            $messageString = "Something went wrong while searching the Metadata OData endpoint for the entity: $searchEnumName"
+            Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $EnumName
             Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>', ''))) -ErrorRecord $_
             return
         }

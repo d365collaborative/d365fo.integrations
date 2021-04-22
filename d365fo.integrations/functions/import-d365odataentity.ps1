@@ -23,7 +23,7 @@
         Remember that json is text based and can use either single quotes (') or double quotes (") as the text qualifier, so you might need to escape the different quotes in your payload before passing it in
         
     .PARAMETER PayloadCharset
-        The charset / encoding that you want the cmdlet to use while updating the odata entity
+        The charset / encoding that you want the cmdlet to use while importing the odata entity
         
         The default value is: "UTF8"
         
@@ -110,11 +110,10 @@ function Import-D365ODataEntity {
 
         [switch] $CrossCompany,
 
-        [Alias('$AADGuid')]
+        [Alias('$AadGuid')]
         [string] $Tenant = $Script:ODataTenant,
 
         [Alias('Uri')]
-        [Alias('AuthenticationUrl')]
         [string] $Url = $Script:ODataUrl,
 
         [string] $SystemUrl = $Script:ODataSystemUrl,
@@ -188,10 +187,10 @@ function Import-D365ODataEntity {
         [System.UriBuilder] $odataEndpoint = $SystemUrl
         
         if ($odataEndpoint.Path -eq "/") {
-            $odataEndpoint.Path = "data/$EntityName($Key)"
+            $odataEndpoint.Path = "data/$EntityName"
         }
         else {
-            $odataEndpoint.Path += "/data/$EntityName($Key)"
+            $odataEndpoint.Path += "/data/$EntityName"
         }
 
         if ($CrossCompany) {

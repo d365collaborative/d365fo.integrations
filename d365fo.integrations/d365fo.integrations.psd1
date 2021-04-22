@@ -3,7 +3,7 @@
     RootModule   = 'd365fo.integrations.psm1'
 	
     # Version number of this module.
-    ModuleVersion     = '0.4.23'
+    ModuleVersion     = '0.4.29'
 	
     # ID used to uniquely identify this module
     GUID              = 'd2667b62-1436-42b3-a840-ab6b4a0e5aa0'
@@ -57,6 +57,7 @@
         ,   'Get-D365ODataEntityMandatoryField'
         ,   'Get-D365ODataEntityUrl'
         ,	'Get-D365ODataPublicEntity'
+        ,   'Get-D365ODataPublicEnum'
         ,   'Get-D365ODataToken'
         
         ,   'Get-D365RestServiceGroup'
@@ -68,6 +69,8 @@
         ,   'Import-D365ODataEntity'
         ,   'Import-D365ODataEntityBatchMode'
 
+        ,   'Invoke-D365DmfInit'
+        ,   'Invoke-D365ODataEntityAction',
         ,   'Invoke-D365RestEndpoint'
         
         ,   'Remove-D365ODataEntity'

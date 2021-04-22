@@ -5,105 +5,137 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-D365ODataEntityDataByKey
+# Get-D365ODataPublicEnum
 
 ## SYNOPSIS
-Get data from an Data Entity using OData, providing a key
+Get public enumerations (enums) and their metadata
 
 ## SYNTAX
 
 ### Default (Default)
 ```
-Get-D365ODataEntityDataByKey [-ODataQuery <String>] [-CrossCompany] [-Tenant <String>] [-Url <String>]
+Get-D365ODataPublicEnum [-EnumName <String>] [-ODataQuery <String>] [-Tenant <String>] [-Url <String>]
  [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>] [-Token <String>] [-EnableException]
+ [-RawOutput] [-OutputAsJson] [<CommonParameters>]
+```
+
+### NameContains
+```
+Get-D365ODataPublicEnum -EnumNameContains <String> [-ODataQuery <String>] [-Tenant <String>] [-Url <String>]
+ [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>] [-Token <String>] [-EnableException]
+ [-RawOutput] [-OutputAsJson] [<CommonParameters>]
+```
+
+### Query
+```
+Get-D365ODataPublicEnum -ODataQuery <String> [-Tenant <String>] [-Url <String>] [-SystemUrl <String>]
+ [-ClientId <String>] [-ClientSecret <String>] [-Token <String>] [-EnableException] [-RawOutput]
  [-OutputAsJson] [<CommonParameters>]
 ```
 
-### Specific
-```
-Get-D365ODataEntityDataByKey -EntityName <String> -Key <String> [-ODataQuery <String>] [-CrossCompany]
- [-Tenant <String>] [-Url <String>] [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>]
- [-Token <String>] [-EnableException] [-OutputAsJson] [<CommonParameters>]
-```
-
 ## DESCRIPTION
-Get data from an Data Entity, by providing a key, using the OData endpoint of the Dynamics 365 Finance & Operations
+Get a list with all the public available enumerations (enums), and their metadata, that are exposed through the OData endpoint of the Dynamics 365 Finance & Operations environment
+
+The cmdlet will search across the names for the enumerations (enums) and across the labelid
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-D365ODataEntityDataByKey -EntityName CustomersV3 -Key "dataAreaId='DAT',CustomerAccount='123456789'"
+Get-D365ODataPublicEnum
 ```
 
-This will get the specific Customer from the OData endpoint.
-It will use the "CustomerV3" entity, and its EntitySetName / CollectionName "CustomersV3".
-It will use the "dataAreaId='DAT',CustomerAccount='123456789'" as key to identify the unique Customer record.
-It will NOT look across companies.
+This will list all available enumerations (enums).
 
 It will use the default OData configuration details that are stored in the configuration store.
 
 ### EXAMPLE 2
 ```
-Get-D365ODataEntityDataByKey -EntityName CustomersV3 -Key "dataAreaId='DAT',CustomerAccount='123456789'"
+Get-D365ODataPublicEnum -Tenant "e674da86-7ee5-40a7-b777-1111111111111" -Url "https://usnconeboxax1aos.cloud.onebox.dynamics.com" -ClientId "dea8d7a9-1602-4429-b138-111111111111" -ClientSecret "Vja/VmdxaLOPR+alkjfsadffelkjlfw234522"
 ```
 
-This will get the specific Customer from the OData endpoint.
-It will use the "CustomerV3" entity, and its EntitySetName / CollectionName "CustomersV3".
-It will use the "dataAreaId='DAT',CustomerAccount='123456789'" as key to identify the unique Customer record.
-It will make sure to search across all legal entities / companies inside the D365FO environment.
+This will list all available enumerations (enums).
+
+It will use "e674da86-7ee5-40a7-b777-1111111111111" as the Azure Active Directory guid.
+It will use "https://usnconeboxax1aos.cloud.onebox.dynamics.com" as the base D365FO environment url.
+It will use "dea8d7a9-1602-4429-b138-111111111111" as the ClientId.
+It will use "Vja/VmdxaLOPR+alkjfsadffelkjlfw234522" as ClientSecret.
+
+### EXAMPLE 3
+```
+Get-D365ODataPublicEnum -EnumName VendRequestRoleType
+```
+
+This will list the VendRequestRoleType enumerations (enums).
 
 It will use the default OData configuration details that are stored in the configuration store.
 
-### EXAMPLE 3
+Sample output:
+
+EnumName            EnumValueName EnumIntValue EnumValueLabelId
+--------            ------------- ------------ ----------------
+VendRequestRoleType None                     0 @SYS1369
+VendRequestRoleType Admin                    1 @SYS20515
+VendRequestRoleType Clerk                    2 @SYS130176
+
+### EXAMPLE 4
+```
+Get-D365ODataPublicEnum -EnumNameContains VendRequestRole
+```
+
+This will search for all enumerations (enums) that matches the VendRequestRole search pattern.
+
+It will use the default OData configuration details that are stored in the configuration store.
+
+Sample output:
+
+EnumName            EnumValueName EnumIntValue EnumValueLabelId
+--------            ------------- ------------ ----------------
+VendRequestRoleType None                     0 @SYS1369
+VendRequestRoleType Admin                    1 @SYS20515
+VendRequestRoleType Clerk                    2 @SYS130176
+
+### EXAMPLE 5
 ```
 $token = Get-D365ODataToken
 ```
 
-PS C:\\\> Get-D365ODataEntityDataByKey -EntityName CustomersV3 -Key "dataAreaId='DAT',CustomerAccount='123456789'" -Token $token
+PS C:\\\> Get-D365ODataPublicEnum -Token $token
 
-This will get the specific Customer from the OData endpoint.
+This will list all available enumerations (enums).
 It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
-It will use the "CustomerV3" entity, and its EntitySetName / CollectionName "CustomersV3".
-It will use the "dataAreaId='DAT',CustomerAccount='123456789'" as key to identify the unique Customer record.
-It will NOT look across companies.
 
 It will use the default OData configuration details that are stored in the configuration store.
 
 ## PARAMETERS
 
-### -EntityName
-Name of the Data Entity you want to work against
+### -EnumName
+Name of the enumerations (enums) you are searching for
 
-The parameter is Case Sensitive, because the OData endpoint in D365FO is Case Sensitive
-
-Remember that most Data Entities in a D365FO environment is named by its singular name, but most be retrieve using the plural name
-
-E.g.
-The version 3 of the customers Data Entity is named CustomerV3, but can only be retrieving using CustomersV3
-
-Look at the Get-D365ODataPublicEntity cmdlet to help you obtain the correct name
+The parameter is Case Insensitive, to make it easier for the user to locate the correct enumerations (enums)
 
 ```yaml
 Type: String
-Parameter Sets: Specific
-Aliases: Name
+Parameter Sets: Default
+Aliases: LabelId
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Key
-A string value that contains all needed fields and value to be a valid OData key
+### -EnumNameContains
+Name of the enumerations (enums) you are searching for, but instructing the cmdlet to use search logic
 
-The key needs to be a valid http encoded value and each datatype needs to handled appropriately
+Using this parameter enables you to supply only a portion of the name for the enumerations (enums) you are looking for, and still get a valid result back
+
+The parameter is Case Insensitive, to make it easier for the user to locate the correct enumerations (enums)
 
 ```yaml
 Type: String
-Parameter Sets: Specific
+Parameter Sets: NameContains
 Aliases:
 
 Required: True
@@ -115,6 +147,13 @@ Accept wildcard characters: False
 
 ### -ODataQuery
 Valid OData query string that you want to pass onto the D365 OData endpoint while retrieving data
+
+Important note:
+If you are using -EnumName or -EnumNameContains along with the -ODataQuery, you need to understand that the "$filter" query is already started.
+Then you need to start with -ODataQuery ' and XYZ eq XYZ', e.g.
+-ODataQuery ' and IsReadOnly eq false'
+If you are using the -ODataQuery alone, you need to start the OData Query string correctly.
+-ODataQuery '$filter=IsReadOnly eq false'
 
 OData specific query options are:
 $filter
@@ -128,7 +167,7 @@ Each option has different characteristics, which is well documented at: http://d
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Default, NameContains
 Aliases:
 
 Required: False
@@ -138,17 +177,14 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -CrossCompany
-Instruct the cmdlet / function to ensure the request against the OData endpoint will search across all companies
-
 ```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
+Type: String
+Parameter Sets: Query
 Aliases:
 
-Required: False
+Required: True
 Position: Named
-Default value: False
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -169,7 +205,7 @@ Accept wildcard characters: False
 ```
 
 ### -Url
-URL / URI for the D365FO environment you want to access through OData
+URL / URI for the D365FO environment you want to access through MetaData
 
 If you are working against a D365FO instance, it will be the URL / URI for the instance itself
 
@@ -188,7 +224,7 @@ Accept wildcard characters: False
 ```
 
 ### -SystemUrl
-URL / URI for the D365FO instance where the OData endpoint is available
+URL / URI for the D365FO instance where the MetaData endpoint is available
 
 If you are working against a D365FO instance, it will be the URL / URI for the instance itself, which is the same as the Url parameter value
 
@@ -269,6 +305,23 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -RawOutput
+Instructs the cmdlet to include the outer structure of the response received from MetaData endpoint
+
+The output will still be a PSCustomObject
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -OutputAsJson
 Instructs the cmdlet to convert the output to a Json string
 
@@ -302,15 +355,8 @@ Because the OData standard is using single quotes as text qualifiers, we need to
 
 -ODataQuery '$top=1&$filter=dataAreaId eq ''Comp1'''
 
-Tags: OData, Data, Entity, Query
+Tags: OData, MetaData, Enum, Enumerations
 
 Author: Mötz Jensen (@Splaxi)
 
 ## RELATED LINKS
-
-[Add-D365ODataConfig]()
-
-[Get-D365ActiveODataConfig]()
-
-[Set-D365ActiveODataConfig]()
-

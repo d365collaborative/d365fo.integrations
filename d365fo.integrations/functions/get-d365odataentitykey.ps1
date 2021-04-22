@@ -12,6 +12,9 @@
     .PARAMETER Properties
         The properties value from the meta data object
         
+    .PARAMETER OutputSample
+        Instruct the cmdlet to output a sample of the key
+        
     .EXAMPLE
         PS C:\> Get-D365ODataPublicEntity -EntityName CustomersV3 | Get-D365ODataEntityKey | Format-List
         
@@ -20,6 +23,14 @@
         The output from Get-D365ODataPublicEntity is piped into Get-D365ODataEntityKey.
         All key fields will be extracted and displayed.
         The output will be formatted as a list.
+        
+    .EXAMPLE
+        PS C:\> Get-D365ODataPublicEntity -EntityName CustomersV3 | Get-D365ODataEntityKey
+        
+        This will output a sample of the key from the Data Entity.
+        The "CustomersV3" value is used to get the desired Data Entity.
+        The output from Get-D365ODataPublicEntity is piped into Get-D365ODataEntityKey.
+        All key fields will be concatenated and displayed.
         
     .LINK
         Get-D365ODataPublicEntity
@@ -39,7 +50,9 @@ function Get-D365ODataEntityKey {
         [string] $Name,
         
         [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
-        [PSCustomObject] $Properties
+        [PSCustomObject] $Properties,
+
+        [switch] $OutputSample
     )
 
     process {
@@ -47,9 +60,26 @@ function Get-D365ODataEntityKey {
 
         $formattedRes = $filteredRes | Select-PSFObject "Name as FieldName", DataType
         
-        [PSCustomObject]@{
-            Name = $Name
-            Keys = $formattedRes
+        if (-not $OutputSample) {
+            [PSCustomObject]@{
+                Name = $Name
+                Keys = $formattedRes
+            }
+        }
+        else {
+            $res = ""
+
+            foreach ($item in $filteredRes) {
+                
+                if ($item.DataType -eq "String") {
+                    $res += "$($item.Name)='',"
+                }
+                else {
+                    $res += "$($item.Name)=,"
+                }
+            }
+
+            $res.Substring(0,$res.Length -1)
         }
     }
 }
