@@ -103,20 +103,11 @@
         It will use the search string "customers" to search for any entity in their singular & plural name contains that search term.
         
     .EXAMPLE
-        PS C:\> Get-D365ODataPublicEntity -EntityNameContains customer -ODataQuery ' and IsReadOnly eq true'
+        PS C:\> Get-D365DmfDataEntity -EntityNameContains customer -ODataQuery ' and IsReadOnly eq true'
         
         This will get Data Entities from the DMF endpoint.
         It will use the search string "customer" to search for any entity in their singular & plural name contains that search term.
         It will utilize the OData Query capabilities to filter for Data Entities that are "IsReadOnly = $true".
-        
-    .EXAMPLE
-        PS C:\> Get-D365ODataPublicEntity -EntityName CustomersV3 | Get-D365ODataEntityKey | Format-List
-        
-        This will extract all the relevant key fields from the Data Entity.
-        The "CustomersV3" value is used to get the desired Data Entity.
-        The output from Get-D365ODataPublicEntity is piped into Get-D365ODataEntityKey.
-        All key fields will be extracted and displayed.
-        The output will be formatted as a list.
         
     .EXAMPLE
         PS C:\> $token = Get-D365ODataToken
@@ -125,10 +116,7 @@
         This will get Data Entities from the OData endpoint.
         It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
         This will search for the Data Entities that are named "customersv3".
-        
-    .LINK
-        Get-D365ODataEntityKey
-        
+                
     .NOTES
         The OData standard is using the $ (dollar sign) for many functions and features, which in PowerShell is normally used for variables.
         
@@ -138,7 +126,7 @@
         This example is using single quotes, to help PowerShell not trying to convert the $ into a variable.
         Because the OData standard is using single quotes as text qualifiers, we need to escape them with multiple single quotes.
         
-        -ODataQuery '$top=1&$filter=dataAreaId eq ''Comp1'''
+        -ODataQuery '$top=1&$filter=EntityCategory eq ''Master'''
         
         Tags: DMF, Data, Entity, Query
         
