@@ -88,6 +88,13 @@
         
         The system default is 10,000 (10 thousands) at the time of writing this feature in December 2020
         
+    .PARAMETER ThrottleSeed
+        Instruct the cmdlet to invoke a thread sleep between 1 and ThrottleSeed value
+
+        This is to help to mitigate the 429 retry throttling on the OData / Custom Service endpoints
+
+        It will only be available in combination with the TraverseNextLink parameter
+
     .PARAMETER Token
         Pass a bearer token string that you want to use for while working against the endpoint
         
