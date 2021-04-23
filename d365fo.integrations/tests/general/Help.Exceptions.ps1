@@ -1,7 +1,8 @@
 ﻿# List of functions that should be ignored
 $global:FunctionHelpTestExceptions = @(
     "Get-D365ODataPublicEntity",
-    "Get-D365ODataEntityData"
+    "Get-D365ODataEntityData",
+    "Get-D365DmfDataEntity"
 )
 
 <#
