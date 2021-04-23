@@ -14,16 +14,16 @@ Get data from an Data Entity using OData, providing a key
 
 ### Default (Default)
 ```
-Get-D365ODataEntityDataByKey [-ODataQuery <String>] [-CrossCompany] [-Tenant <String>] [-Url <String>]
- [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>] [-Token <String>] [-EnableException]
- [-OutputAsJson] [<CommonParameters>]
+Get-D365ODataEntityDataByKey [-ODataQuery <String>] [-CrossCompany] [-ThrottleSeed <Int32>] [-Tenant <String>]
+ [-Url <String>] [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>] [-Token <String>]
+ [-EnableException] [-OutputAsJson] [<CommonParameters>]
 ```
 
 ### Specific
 ```
 Get-D365ODataEntityDataByKey -EntityName <String> -Key <String> [-ODataQuery <String>] [-CrossCompany]
- [-Tenant <String>] [-Url <String>] [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>]
- [-Token <String>] [-EnableException] [-OutputAsJson] [<CommonParameters>]
+ [-ThrottleSeed <Int32>] [-Tenant <String>] [-Url <String>] [-SystemUrl <String>] [-ClientId <String>]
+ [-ClientSecret <String>] [-Token <String>] [-EnableException] [-OutputAsJson] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -149,6 +149,25 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ThrottleSeed
+Instruct the cmdlet to invoke a thread sleep between 1 and ThrottleSeed value
+
+This is to help to mitigate the 429 retry throttling on the OData / Custom Service endpoints
+
+It makes most sense if you are running things a outer loop, where you will hit the OData / Custom Service endpoints with a burst of calls in a short time
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

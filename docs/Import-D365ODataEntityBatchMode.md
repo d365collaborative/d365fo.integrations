@@ -14,8 +14,9 @@ Import a set of Data Entities into Dynamics 365 Finance & Operations
 
 ```
 Import-D365ODataEntityBatchMode [-EntityName] <String> [-Payload] <String[]> [-CrossCompany]
- [[-Tenant] <String>] [[-URL] <String>] [[-SystemUrl] <String>] [[-ClientId] <String>]
- [[-ClientSecret] <String>] [-RawOutput] [[-Token] <String>] [-EnableException] [<CommonParameters>]
+ [[-ThrottleSeed] <Int32>] [[-Tenant] <String>] [[-Url] <String>] [[-SystemUrl] <String>]
+ [[-ClientId] <String>] [[-ClientSecret] <String>] [-RawOutput] [[-Token] <String>] [-EnableException]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -116,31 +117,50 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -ThrottleSeed
+Instruct the cmdlet to invoke a thread sleep between 1 and ThrottleSeed value
+
+This is to help to mitigate the 429 retry throttling on the OData / Custom Service endpoints
+
+It makes most sense if you are running things a outer loop, where you will hit the OData / Custom Service endpoints with a burst of calls in a short time
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 3
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Tenant
 Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is connected to, that you want to access through OData
 
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: $AADGuid
+Aliases: $AadGuid
 
 Required: False
-Position: 3
+Position: 4
 Default value: $Script:ODataTenant
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -URL
+### -Url
 URL / URI for the D365FO environment you want to access through OData
 
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: URI
+Aliases: Uri
 
 Required: False
-Position: 4
+Position: 5
 Default value: $Script:ODataUrl
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -159,7 +179,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 5
+Position: 6
 Default value: $Script:ODataSystemUrl
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -174,7 +194,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 6
+Position: 7
 Default value: $Script:ODataClientId
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -189,7 +209,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 7
+Position: 8
 Default value: $Script:ODataClientSecret
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -221,7 +241,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 8
+Position: 9
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

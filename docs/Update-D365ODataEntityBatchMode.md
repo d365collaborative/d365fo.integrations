@@ -14,8 +14,9 @@ Update a set of Data Entities in Dynamics 365 Finance & Operations
 
 ```
 Update-D365ODataEntityBatchMode [-EntityName] <String> [-Payload] <PSObject[]> [[-PayloadCharset] <String>]
- [-CrossCompany] [[-Tenant] <String>] [[-Url] <String>] [[-ClientId] <String>] [[-ClientSecret] <String>]
- [-RawOutput] [[-Token] <String>] [-EnableException] [<CommonParameters>]
+ [-CrossCompany] [[-ThrottleSeed] <Int32>] [[-Tenant] <String>] [[-Url] <String>] [[-SystemUrl] <String>]
+ [[-ClientId] <String>] [[-ClientSecret] <String>] [-RawOutput] [[-Token] <String>] [-EnableException]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -139,6 +140,25 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -ThrottleSeed
+Instruct the cmdlet to invoke a thread sleep between 1 and ThrottleSeed value
+
+This is to help to mitigate the 429 retry throttling on the OData / Custom Service endpoints
+
+It makes most sense if you are running things a outer loop, where you will hit the OData / Custom Service endpoints with a burst of calls in a short time
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 4
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Tenant
 Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is connected to, that you want to access through OData
 
@@ -148,7 +168,7 @@ Parameter Sets: (All)
 Aliases: $AadGuid
 
 Required: False
-Position: 4
+Position: 5
 Default value: $Script:ODataTenant
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -163,8 +183,27 @@ Parameter Sets: (All)
 Aliases: Uri
 
 Required: False
-Position: 5
+Position: 6
 Default value: $Script:ODataUrl
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SystemUrl
+URL / URI for the D365FO instance where the OData endpoint is available
+
+If you are working against a D365FO instance, it will be the URL / URI for the instance itself, which is the same as the Url parameter value
+
+If you are working against a D365 Talent / HR instance, this will to be full instance URL / URI like "https://aos-rts-sf-b1b468164ee-prod-northeurope.hr.talent.dynamics.com/namespaces/0ab49d18-6325-4597-97b3-c7f2321aa80c"
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 7
+Default value: $Script:ODataSystemUrl
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -178,7 +217,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 6
+Position: 8
 Default value: $Script:ODataClientId
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -193,7 +232,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 7
+Position: 9
 Default value: $Script:ODataClientSecret
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -225,7 +264,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 8
+Position: 10
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

@@ -205,6 +205,19 @@
 			$parameter.ParameterSets['NextLink'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['NextLink'].ValueFromRemainingArguments | Should -Be $False
 		}
+		It 'Should have the expected parameter ThrottleSeed' {
+			$parameter = (Get-Command Get-D365ODataEntityData).Parameters['ThrottleSeed']
+			$parameter.Name | Should -Be 'ThrottleSeed'
+			$parameter.ParameterType.ToString() | Should -Be System.Int32
+			$parameter.IsDynamic | Should -Be $False
+			$parameter.ParameterSets.Keys | Should -Be 'NextLink'
+			$parameter.ParameterSets.Keys | Should -Contain 'NextLink'
+			$parameter.ParameterSets['NextLink'].IsMandatory | Should -Be $False
+			$parameter.ParameterSets['NextLink'].Position | Should -Be -2147483648
+			$parameter.ParameterSets['NextLink'].ValueFromPipeline | Should -Be $False
+			$parameter.ParameterSets['NextLink'].ValueFromPipelineByPropertyName | Should -Be $False
+			$parameter.ParameterSets['NextLink'].ValueFromRemainingArguments | Should -Be $False
+		}
 		It 'Should have the expected parameter Token' {
 			$parameter = (Get-Command Get-D365ODataEntityData).Parameters['Token']
 			$parameter.Name | Should -Be 'Token'
@@ -274,7 +287,7 @@
  	Describe "Testing parameterset NextLink" {
 		<#
 		NextLink -TraverseNextLink
-		NextLink -EntityName -EntitySetName -Top -Filter -Select -Expand -ODataQuery -CrossCompany -Tenant -Url -SystemUrl -ClientId -ClientSecret -TraverseNextLink -Token -EnableException -OutputAsJson
+		NextLink -EntityName -EntitySetName -Top -Filter -Select -Expand -ODataQuery -CrossCompany -Tenant -Url -SystemUrl -ClientId -ClientSecret -TraverseNextLink -ThrottleSeed -Token -EnableException -OutputAsJson
 		#>
 	}
  	Describe "Testing parameterset Specific" {

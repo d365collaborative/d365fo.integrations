@@ -25,7 +25,7 @@ Get-D365ODataEntityData -EntitySetName <String> [-Top <Int32>] [-Filter <String[
 Get-D365ODataEntityData [-EntityName <String>] [-EntitySetName <String>] [-Top <Int32>] [-Filter <String[]>]
  [-Select <String[]>] [-Expand <String[]>] [-ODataQuery <String>] [-CrossCompany] [-Tenant <String>]
  [-Url <String>] [-SystemUrl <String>] [-ClientId <String>] [-ClientSecret <String>] [-TraverseNextLink]
- [-Token <String>] [-EnableException] [-OutputAsJson] [<CommonParameters>]
+ [-ThrottleSeed <Int32>] [-Token <String>] [-EnableException] [-OutputAsJson] [<CommonParameters>]
 ```
 
 ### Specific
@@ -375,6 +375,25 @@ Aliases:
 Required: True
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ThrottleSeed
+Instruct the cmdlet to invoke a thread sleep between 1 and ThrottleSeed value
+
+This is to help to mitigate the 429 retry throttling on the OData / Custom Service endpoints
+
+It will only be available in combination with the TraverseNextLink parameter
+
+```yaml
+Type: Int32
+Parameter Sets: NextLink
+Aliases:
+
+Required: False
+Position: Named
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
