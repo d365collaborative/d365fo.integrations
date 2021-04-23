@@ -1,10 +1,10 @@
 ﻿
 <#
     .SYNOPSIS
-        Remove a Data Entity from Dynamics 365 Finance & Operations
+        Invoke a Data Entity Action in Dynamics 365 Finance & Operations
         
     .DESCRIPTION
-        Removes a Data Entity, defined by the EntityKey, using the OData endpoint of the Dynamics 365 Finance & Operations
+        Invokes a Data Entity Action, supporting a json payload as the parameters, using the OData endpoint of the Dynamics 365 Finance & Operations platform
         
     .PARAMETER EntityName
         Name of the Data Entity you want to work against
@@ -17,10 +17,20 @@
         
         Look at the Get-D365ODataPublicEntity cmdlet to help you obtain the correct name
         
-    .PARAMETER Key
-        The key that will select the desired Data Entity uniquely across the OData endpoint
+    .PARAMETER Action
+        Name of the action that you want to execute on the desired entity
         
-        The key would most likely be made up from multiple values, but can also be a single value
+    .PARAMETER Payload
+        The entire string contain the json object that you want to pass to the action of the desired entity
+        
+        Remember that json is text based and can use either single quotes (') or double quotes (") as the text qualifier, so you might need to escape the different quotes in your payload before passing it in
+        
+    .PARAMETER PayloadCharset
+        The charset / encoding that you want the cmdlet to use while invoking the odata entity action
+        
+        The default value is: "UTF8"
+        
+        The charset has to be a valid http charset like: ASCII, ANSI, ISO-8859-1, UTF-8
         
     .PARAMETER CrossCompany
         Instruct the cmdlet / function to ensure the request against the OData endpoint will work across all companies
@@ -53,38 +63,49 @@
         
         This can improve performance if you are iterating over a large collection/array
         
+    .PARAMETER RawOutput
+        Instructs the cmdlet to include the outer structure of the response received from OData endpoint
+        
+        The output will still be a PSCustomObject
+        
+    .PARAMETER OutputAsJson
+        Instructs the cmdlet to convert the output to a Json string
+        
     .PARAMETER EnableException
         This parameters disables user-friendly warnings and enables the throwing of exceptions
         This is less user friendly, but allows catching exceptions in calling scripts
         
     .EXAMPLE
-        PS C:\> Remove-D365ODataEntity -EntityName ExchangeRates -Key "RateTypeName='TEST',FromCurrency='DKK',ToCurrency='EUR',StartDate=2019-01-13T12:00:00Z"
+        PS C:\> Invoke-D365ODataEntityAction -EntityName DualWriteProjectConfigurations -Action ValidateCurrentUserRole
         
-        This will remove a Data Entity from the D365FO environment through OData.
-        It will use the ExchangeRate entity, and its EntitySetName / CollectionName "ExchangeRates".
-        It will use the "RateTypeName='TEST',FromCurrency='DKK',ToCurrency='EUR',StartDate=2019-01-13T12:00:00Z" as the unique key for the entity.
+        This will invoke a Data Entity Action in Dynamics 365 Finance & Operations using the OData endpoint.
+        The EntityName is DualWriteProjectConfigurations.
+        The Action that is invoked is ValidateCurrentUserRole.
         
-        It will use the default OData configuration details that are stored in the configuration store.
+    .EXAMPLE
+        PS C:\> Invoke-D365ODataEntityAction -EntityName BusinessEventsCatalogs -Action getBusinessEventsCatalog -Payload '{"_businessEventsCategory" : "Alerts"}'
+        
+        This will invoke a Data Entity Action in Dynamics 365 Finance & Operations using the OData endpoint, passing a payload to it.
+        The EntityName is BusinessEventsCatalogs.
+        The Action that is invoked is getBusinessEventsCatalog.
+        The Payload is {"_businessEventsCategory" : "Alerts"}.
         
     .EXAMPLE
         PS C:\> $token = Get-D365ODataToken
-        PS C:\> Remove-D365ODataEntity -EntityName ExchangeRates -Key "RateTypeName='TEST',FromCurrency='DKK',ToCurrency='EUR',StartDate=2019-01-13T12:00:00Z" -Token $token
+        PS C:\> Invoke-D365ODataEntityAction -EntityName DualWriteProjectConfigurations -Action ValidateCurrentUserRole -Token $token
         
-        This will remove a Data Entity from the D365FO environment through OData.
+        This will invoke a Data Entity Action in Dynamics 365 Finance & Operations using the OData endpoint.
         It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
-        It will use the ExchangeRate entity, and its EntitySetName / CollectionName "ExchangeRates".
-        It will use the "RateTypeName='TEST',FromCurrency='DKK',ToCurrency='EUR',StartDate=2019-01-13T12:00:00Z" as the unique key for the entity.
-        
-        It will use the default OData configuration details that are stored in the configuration store.
+        The EntityName used for the import is ExchangeRates.
+        The Payload is a valid json string, containing all the needed properties.
         
     .NOTES
-        Tags: OData, Data, Entity, Import, Upload
+        Tags: OData, Data, Entity, Invoke, Action
         
         Author: Mötz Jensen (@Splaxi)
 #>
 
-function Remove-D365ODataEntity {
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
+function Invoke-D365ODataEntityAction {
     [CmdletBinding()]
     [OutputType()]
     param (
@@ -92,7 +113,12 @@ function Remove-D365ODataEntity {
         [string] $EntityName,
 
         [Parameter(Mandatory = $true)]
-        [string] $Key,
+        [string] $Action,
+
+        [Alias('Json')]
+        [string] $Payload,
+
+        [string] $PayloadCharset = "UTF-8",
 
         [switch] $CrossCompany,
 
@@ -103,15 +129,18 @@ function Remove-D365ODataEntity {
         [string] $Url = $Script:ODataUrl,
 
         [string] $SystemUrl = $Script:ODataSystemUrl,
-        
+
         [string] $ClientId = $Script:ODataClientId,
 
         [string] $ClientSecret = $Script:ODataClientSecret,
 
         [string] $Token,
         
-        [switch] $EnableException
+        [switch] $RawOutput,
 
+        [switch] $OutputAsJson,
+        
+        [switch] $EnableException
     )
 
     begin {
@@ -119,7 +148,7 @@ function Remove-D365ODataEntity {
             Write-PSFMessage -Level Verbose -Message "The SystemUrl parameter was empty, using the Url parameter as the OData endpoint base address." -Target $SystemUrl
             $SystemUrl = $Url
         }
-
+        
         if ([System.String]::IsNullOrEmpty($Url) -or [System.String]::IsNullOrEmpty($SystemUrl)) {
             $messageString = "It seems that you didn't supply a valid value for the Url parameter. You need specify the Url parameter or add a configuration with the <c='em'>Add-D365ODataConfig</c> cmdlet."
             Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $entityName
@@ -136,7 +165,7 @@ function Remove-D365ODataEntity {
             Write-PSFMessage -Level Verbose -Message "The SystemUrl parameter had a tailing slash, which shouldn't be there. Removing the tailling slash." -Target $Url
             $SystemUrl = $SystemUrl.Substring(0, $SystemUrl.Length - 1)
         }
-        
+
         if (-not $Token) {
             $bearerParms = @{
                 Url          = $Url
@@ -157,37 +186,66 @@ function Remove-D365ODataEntity {
         }
 
         $headers = New-AuthorizationHeaderBearerToken @headerParms
+        
+        $PayloadCharset = $PayloadCharset.ToLower()
+        if ($PayloadCharset -like "utf*" -and $PayloadCharset -notlike "utf-*") {
+            $PayloadCharset = $PayloadCharset -replace "utf", "utf-"
+        }
     }
 
     process {
+        if (Test-PSFFunctionInterrupt) { return }
+
         Invoke-TimeSignal -Start
 
-        Write-PSFMessage -Level Verbose -Message "Building request for removing data entity through the OData endpoint for entity named: $EntityName." -Target $EntityName
-
+        Write-PSFMessage -Level Verbose -Message "Building request for the OData endpoint for entity named: $EntityName." -Target $EntityName
+        
         [System.UriBuilder] $odataEndpoint = $SystemUrl
         
         if ($odataEndpoint.Path -eq "/") {
-            $odataEndpoint.Path = "data/$EntityName($Key)"
+            $odataEndpoint.Path = "data/$EntityName/Microsoft.Dynamics.DataEntities.$Action"
         }
         else {
-            $odataEndpoint.Path += "/data/$EntityName($Key)"
+            $odataEndpoint.Path += "/data/$EntityName/Microsoft.Dynamics.DataEntities.$Action"
         }
 
         if ($CrossCompany) {
-            $odataEndpoint.Query = $($odataEndpoint.Query + "&cross-company=true").Replace("?", "")
+            $odataEndpoint.Query = "cross-company=true"
         }
 
         try {
             Write-PSFMessage -Level Verbose -Message "Executing http request against the OData endpoint." -Target $($odataEndpoint.Uri.AbsoluteUri)
-            $null = Invoke-RestMethod -Method DELETE -Uri $odataEndpoint.Uri.AbsoluteUri -Headers $headers -ContentType 'application/json'
+
+            $parms = @{}
+            $parms.Method = "POST"
+            $parms.Uri = $odataEndpoint.Uri.AbsoluteUri
+            $parms.Headers = $headers
+            $parms.ContentType = "application/json;charset=$PayloadCharset"
+
+            if ($Payload) {
+                $parms.Body = $Payload
+            }
+
+            $res = Invoke-RestMethod @parms
+
+            if (-not $RawOutput) {
+                $res = $res.Value
+            }
+
+            if ($OutputAsJson) {
+                $res | ConvertTo-Json -Depth 10
+            }
+            else {
+                $res
+            }
         }
         catch {
-            $messageString = $((ConvertFrom-Json $_).Error.InnerError | ConvertTo-Json -Depth 10)
+            $messageString = "Something went wrong while importing data through the OData endpoint for the entity: $EntityName"
             Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $EntityName
-            Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($messageString)) -ErrorRecord $_
+            Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>', ''))) -ErrorRecord $_
             return
         }
-        
+
         Invoke-TimeSignal -End
     }
 }

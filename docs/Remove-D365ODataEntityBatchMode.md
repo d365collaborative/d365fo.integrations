@@ -14,8 +14,8 @@ Remove a set of Data Entities from Dynamics 365 Finance & Operations
 
 ```
 Remove-D365ODataEntityBatchMode [-EntityName] <String> [-Key] <String[]> [-CrossCompany] [[-Tenant] <String>]
- [[-URL] <String>] [[-ClientId] <String>] [[-ClientSecret] <String>] [-RawOutput] [[-Token] <String>]
- [-EnableException] [<CommonParameters>]
+ [[-URL] <String>] [[-SystemUrl] <String>] [[-ClientId] <String>] [[-ClientSecret] <String>] [-RawOutput]
+ [[-Token] <String>] [-EnableException] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -89,7 +89,7 @@ Please note the single quotes, for each key field
 ```yaml
 Type: String[]
 Parameter Sets: (All)
-Aliases: Json
+Aliases:
 
 Required: True
 Position: 2
@@ -143,6 +143,25 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -SystemUrl
+URL / URI for the D365FO instance where the OData endpoint is available
+
+If you are working against a D365FO instance, it will be the URL / URI for the instance itself, which is the same as the Url parameter value
+
+If you are working against a D365 Talent / HR instance, this will to be full instance URL / URI like "https://aos-rts-sf-b1b468164ee-prod-northeurope.hr.talent.dynamics.com/namespaces/0ab49d18-6325-4597-97b3-c7f2321aa80c"
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 5
+Default value: $Script:ODataSystemUrl
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -ClientId
 The ClientId obtained from the Azure Portal when you created a Registered Application
 
@@ -152,7 +171,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 5
+Position: 6
 Default value: $Script:ODataClientId
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -167,7 +186,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 6
+Position: 7
 Default value: $Script:ODataClientSecret
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -199,7 +218,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 7
+Position: 8
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

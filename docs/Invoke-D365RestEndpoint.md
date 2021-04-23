@@ -14,7 +14,8 @@ Invoke a REST Endpoint in Dynamics 365 Finance & Operations
 
 ```
 Invoke-D365RestEndpoint [-ServiceName] <String> [[-Payload] <String>] [[-Tenant] <String>] [[-URL] <String>]
- [[-ClientId] <String>] [[-ClientSecret] <String>] [[-Token] <String>] [-EnableException] [<CommonParameters>]
+ [[-ClientId] <String>] [[-ClientSecret] <String>] [[-Token] <String>] [-EnableException]
+ [[-TimeoutSec] <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -190,6 +191,25 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -TimeoutSec
+Specifies how long the request can be pending before it times out.
+Enter a value in seconds.
+The default value, 0, specifies an indefinite time-out.
+A Domain Name System (DNS) query can take up to 15 seconds to return or time out.
+If your request contains a host name that requires resolution, and you set TimeoutSec to a value greater than zero, but less than 15 seconds, it can take 15 seconds or more before a WebException is thrown, and your request times out.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 8
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

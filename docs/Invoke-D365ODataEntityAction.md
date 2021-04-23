@@ -5,68 +5,55 @@ online version:
 schema: 2.0.0
 ---
 
-# Update-D365ODataEntity
+# Invoke-D365ODataEntityAction
 
 ## SYNOPSIS
-Update a Data Entity in Dynamics 365 Finance & Operations
+Invoke a Data Entity Action in Dynamics 365 Finance & Operations
 
 ## SYNTAX
 
 ```
-Update-D365ODataEntity [-EntityName] <String> [-Key] <String> [-Payload] <String> [[-PayloadCharset] <String>]
- [-CrossCompany] [[-Tenant] <String>] [[-Url] <String>] [[-SystemUrl] <String>] [[-ClientId] <String>]
- [[-ClientSecret] <String>] [[-Token] <String>] [-EnableException] [<CommonParameters>]
+Invoke-D365ODataEntityAction [-EntityName] <String> [-Action] <String> [[-Payload] <String>]
+ [[-PayloadCharset] <String>] [-CrossCompany] [[-Tenant] <String>] [[-Url] <String>] [[-SystemUrl] <String>]
+ [[-ClientId] <String>] [[-ClientSecret] <String>] [[-Token] <String>] [-RawOutput] [-OutputAsJson]
+ [-EnableException] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Updates a Data Entity, defined as a json payload, using the OData endpoint of the Dynamics 365 Finance & Operations platform
+Invokes a Data Entity Action, supporting a json payload as the parameters, using the OData endpoint of the Dynamics 365 Finance & Operations platform
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Update-D365ODataEntity -EntityName "CustomersV3" -Key "dataAreaId='DAT',CustomerAccount='123456789'" -Payload '{"NameAlias": "CustomerA"}' -CrossCompany
+Invoke-D365ODataEntityAction -EntityName DualWriteProjectConfigurations -Action ValidateCurrentUserRole
 ```
 
-This will update a Data Entity in Dynamics 365 Finance & Operations using the OData endpoint.
-The EntityName used for the update is "CustomersV3".
-It will use the "dataAreaId='DAT',CustomerAccount='123456789'" as key to identify the unique Customer record.
-The Payload is a valid json string, containing the needed properties that we want to update.
-It will make sure to search across all legal entities / companies inside the D365FO environment.
-
-It will use the default OData configuration details that are stored in the configuration store.
+This will invoke a Data Entity Action in Dynamics 365 Finance & Operations using the OData endpoint.
+The EntityName is DualWriteProjectConfigurations.
+The Action that is invoked is ValidateCurrentUserRole.
 
 ### EXAMPLE 2
 ```
-$Payload = '{"NameAlias": "CustomerA"}'
+Invoke-D365ODataEntityAction -EntityName BusinessEventsCatalogs -Action getBusinessEventsCatalog -Payload '{"_businessEventsCategory" : "Alerts"}'
 ```
 
-PS C:\\\> Update-D365ODataEntity -EntityName "accounts" -Key "dataAreaId='DAT',CustomerAccount='123456789'" -Payload $Payload
-
-This will update a Data Entity in Dynamics 365 Finance & Operations using the OData endpoint.
-First the desired json data is put into the $Payload variable.
-The EntityName used for the update is "CustomersV3".
-It will use the "dataAreaId='DAT',CustomerAccount='123456789'" as key to identify the unique Customer record.
-The $Payload variable is passed to the cmdlet.
-It will NOT look across companies.
-
-It will use the default OData configuration details that are stored in the configuration store.
+This will invoke a Data Entity Action in Dynamics 365 Finance & Operations using the OData endpoint, passing a payload to it.
+The EntityName is BusinessEventsCatalogs.
+The Action that is invoked is getBusinessEventsCatalog.
+The Payload is {"_businessEventsCategory" : "Alerts"}.
 
 ### EXAMPLE 3
 ```
 $token = Get-D365ODataToken
 ```
 
-PS C:\\\> Update-D365ODataEntity -EntityName "CustomersV3" -Key "dataAreaId='DAT',CustomerAccount='123456789'" -Payload '{"NameAlias": "CustomerA"}' -CrossCompany -Token $token
+PS C:\\\> Invoke-D365ODataEntityAction -EntityName DualWriteProjectConfigurations -Action ValidateCurrentUserRole -Token $token
 
-This will update a Data Entity in Dynamics 365 Finance & Operations using the OData endpoint.
+This will invoke a Data Entity Action in Dynamics 365 Finance & Operations using the OData endpoint.
 It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
-The EntityName used for the update is "CustomersV3".
-It will use the "dataAreaId='DAT',CustomerAccount='123456789'" as key to identify the unique Customer record.
-The Payload is a valid json string, containing the needed properties that we want to update.
-It will make sure to search across all legal entities / companies inside the D365FO environment.
-
-It will use the default OData configuration details that are stored in the configuration store.
+The EntityName used for the import is ExchangeRates.
+The Payload is a valid json string, containing all the needed properties.
 
 ## PARAMETERS
 
@@ -94,10 +81,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Key
-The key that will select the desired Data Entity uniquely across the OData endpoint
-
-The key would most likely be made up from multiple values, but can also be a single value
+### -Action
+Name of the action that you want to execute on the desired entity
 
 ```yaml
 Type: String
@@ -112,7 +97,7 @@ Accept wildcard characters: False
 ```
 
 ### -Payload
-The entire string contain the json object that you want to import into the D365FO environment
+The entire string contain the json object that you want to pass to the action of the desired entity
 
 Remember that json is text based and can use either single quotes (') or double quotes (") as the text qualifier, so you might need to escape the different quotes in your payload before passing it in
 
@@ -121,7 +106,7 @@ Type: String
 Parameter Sets: (All)
 Aliases: Json
 
-Required: True
+Required: False
 Position: 3
 Default value: None
 Accept pipeline input: False
@@ -129,7 +114,7 @@ Accept wildcard characters: False
 ```
 
 ### -PayloadCharset
-The charset / encoding that you want the cmdlet to use while updating the odata entity
+The charset / encoding that you want the cmdlet to use while invoking the odata entity action
 
 The default value is: "UTF8"
 
@@ -148,7 +133,7 @@ Accept wildcard characters: False
 ```
 
 ### -CrossCompany
-Instruct the cmdlet / function to ensure the request against the OData endpoint will search across all companies
+Instruct the cmdlet / function to ensure the request against the OData endpoint will work across all companies
 
 ```yaml
 Type: SwitchParameter
@@ -262,6 +247,38 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -RawOutput
+Instructs the cmdlet to include the outer structure of the response received from OData endpoint
+
+The output will still be a PSCustomObject
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -OutputAsJson
+Instructs the cmdlet to convert the output to a Json string
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -EnableException
 This parameters disables user-friendly warnings and enables the throwing of exceptions
 This is less user friendly, but allows catching exceptions in calling scripts
@@ -286,15 +303,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
-Tags: OData, Data, Entity, Update, Upload
+Tags: OData, Data, Entity, Invoke, Action
 
 Author: Mötz Jensen (@Splaxi)
 
 ## RELATED LINKS
-
-[Add-D365ODataConfig]()
-
-[Get-D365ActiveODataConfig]()
-
-[Set-D365ActiveODataConfig]()
-

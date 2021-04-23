@@ -100,7 +100,7 @@ Accept wildcard characters: False
 ```
 
 ### -PayloadCharset
-The charset / encoding that you want the cmdlet to use while updating the odata entity
+The charset / encoding that you want the cmdlet to use while importing the odata entity
 
 The default value is: "UTF8"
 
@@ -139,7 +139,7 @@ Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is con
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: $AADGuid
+Aliases: $AadGuid
 
 Required: False
 Position: 4
@@ -158,7 +158,7 @@ If you are working against a D365 Talent / HR instance, this will have to be "ht
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: AuthenticationUrl, Uri
+Aliases: Uri
 
 Required: False
 Position: 5
