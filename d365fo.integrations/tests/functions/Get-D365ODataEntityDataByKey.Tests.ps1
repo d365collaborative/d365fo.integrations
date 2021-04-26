@@ -63,6 +63,19 @@
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
 		}
+		It 'Should have the expected parameter RetryTimeout' {
+			$parameter = (Get-Command Get-D365ODataEntityDataByKey).Parameters['RetryTimeout']
+			$parameter.Name | Should -Be 'RetryTimeout'
+			$parameter.ParameterType.ToString() | Should -Be System.TimeSpan
+			$parameter.IsDynamic | Should -Be $False
+			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
+			$parameter.ParameterSets.Keys | Should -Contain '__AllParameterSets'
+			$parameter.ParameterSets['__AllParameterSets'].IsMandatory | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be -2147483648
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipeline | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
+		}
 		It 'Should have the expected parameter ThrottleSeed' {
 			$parameter = (Get-Command Get-D365ODataEntityDataByKey).Parameters['ThrottleSeed']
 			$parameter.Name | Should -Be 'ThrottleSeed'
@@ -185,13 +198,13 @@
 	Describe "Testing parameterset Default" {
 		<#
 		Default -
-		Default -ODataQuery -CrossCompany -ThrottleSeed -Tenant -Url -SystemUrl -ClientId -ClientSecret -Token -EnableException -OutputAsJson
+		Default -ODataQuery -CrossCompany -RetryTimeout -ThrottleSeed -Tenant -Url -SystemUrl -ClientId -ClientSecret -Token -EnableException -OutputAsJson
 		#>
 	}
  	Describe "Testing parameterset Specific" {
 		<#
 		Specific -EntityName -Key
-		Specific -EntityName -Key -ODataQuery -CrossCompany -ThrottleSeed -Tenant -Url -SystemUrl -ClientId -ClientSecret -Token -EnableException -OutputAsJson
+		Specific -EntityName -Key -ODataQuery -CrossCompany -RetryTimeout -ThrottleSeed -Tenant -Url -SystemUrl -ClientId -ClientSecret -Token -EnableException -OutputAsJson
 		#>
 	}
 
