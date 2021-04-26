@@ -37,6 +37,21 @@
     .PARAMETER CrossCompany
         Instruct the cmdlet / function to ensure the request against the OData endpoint will search across all companies
         
+    .PARAMETER RetryTimeout
+        The retry timeout, before the cmdlet should quit retrying based on the 429 status code
+
+        Needs to be provided in the timspan notation:
+        "hh:mm:ss"
+
+        hh is the number of hours, numerical notation only
+        mm is the number of minutes
+        ss is the numbers of seconds
+
+        Each section of the timeout has to valid, e.g.
+        hh can maximum be 23
+        mm can maximum be 59
+        ss can maximum be 59
+
     .PARAMETER ThrottleSeed
         Instruct the cmdlet to invoke a thread sleep between 1 and ThrottleSeed value
         
@@ -147,6 +162,8 @@ function Update-D365ODataEntity {
 
         [switch] $CrossCompany,
 
+        [Timespan] $RetryTimeout = "00:00:00",
+
         [int] $ThrottleSeed,
 
         [Alias('$AadGuid')]
@@ -239,7 +256,7 @@ function Update-D365ODataEntity {
 
         try {
             Write-PSFMessage -Level Verbose -Message "Executing http request against the OData endpoint." -Target $($odataEndpoint.Uri.AbsoluteUri)
-            Invoke-RestMethod -Method Patch -Uri $odataEndpoint.Uri.AbsoluteUri -Headers $headers -ContentType "application/json;charset=$PayloadCharset" -Body $Payload
+            Invoke-RequestHandler -Method Patch -Uri $odataEndpoint.Uri.AbsoluteUri -Headers $headers -ContentType "application/json;charset=$PayloadCharset" -Body $Payload -RetryTimeout $RetryTimeout
         }
         catch [System.Net.WebException] {
             $webException = $_.Exception
