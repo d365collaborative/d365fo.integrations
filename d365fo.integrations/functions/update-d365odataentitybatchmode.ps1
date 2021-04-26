@@ -103,6 +103,20 @@
         
         It will use the default OData configuration details that are stored in the configuration store.
         
+    .EXAMPLE
+        PS C:\> $payload = '{"SalesTaxGroup":"DK"}'
+        PS C:\> $updates = @([PSCustomObject]@{Key = "dataAreaId='USMF',CustomerAccount='Customer1'"; Payload = $payload})
+        PS C:\> $updates += [PSCustomObject]@{Key = "dataAreaId='USMF',CustomerAccount='Customer2'"; Payload = $payload}
+        PS C:\> Update-D365ODataEntityBatchMode -EntityName "CustomersV3" -Payload $($updates.ToArray()) -ThrottleSeed 2
+        
+        This will update a set of Data Entities in Dynamics 365 Finance & Operations using the OData endpoint, and sleep/pause between 1 and 2 seconds.
+        The payload that needs to be updated for all entities is saved in the $payload variable.
+        The desired customers that needs to be updated are saved into the $updates, with their unique key and the payload.
+        The $updates variable is passed to the cmdlet.
+        It will use the ThrottleSeed 2 to sleep/pause the execution, to mitigate the 429 pushback from the endpoint.
+
+        It will use the default OData configuration details that are stored in the configuration store.
+
     .NOTES
         Tags: OData, Data, Entity, Update, Upload, Batch
         
