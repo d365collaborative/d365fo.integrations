@@ -32,6 +32,21 @@
     .PARAMETER CrossCompany
         Instruct the cmdlet / function to ensure the request against the OData endpoint will work across all companies
         
+    .PARAMETER RetryTimeout
+        The retry timeout, before the cmdlet should quit retrying based on the 429 status code
+
+        Needs to be provided in the timspan notation:
+        "hh:mm:ss"
+
+        hh is the number of hours, numerical notation only
+        mm is the number of minutes
+        ss is the numbers of seconds
+
+        Each section of the timeout has to valid, e.g.
+        hh can maximum be 23
+        mm can maximum be 59
+        ss can maximum be 59
+
     .PARAMETER ThrottleSeed
         Instruct the cmdlet to invoke a thread sleep between 1 and ThrottleSeed value
         
@@ -208,7 +223,7 @@ function Import-D365ODataEntity {
 
         try {
             Write-PSFMessage -Level Verbose -Message "Executing http request against the OData endpoint." -Target $($odataEndpoint.Uri.AbsoluteUri)
-            Invoke-RestMethod -Method POST -Uri $odataEndpoint.Uri.AbsoluteUri -Headers $headers -ContentType "application/json;charset=$PayloadCharset" -Body $Payload
+            Invoke-RequestHandler -Method POST -Uri $odataEndpoint.Uri.AbsoluteUri -Headers $headers -ContentType "application/json;charset=$PayloadCharset" -Body $Payload -RetryTimeout $RetryTimeout
         }
         catch {
             $messageString = "Something went wrong while importing data through the OData endpoint for the entity: $EntityName"
