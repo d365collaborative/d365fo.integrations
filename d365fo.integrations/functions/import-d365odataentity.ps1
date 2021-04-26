@@ -47,6 +47,8 @@
         mm can maximum be 59
         ss can maximum be 59
 
+        Not setting this parameter will result in the cmdlet to try for ever to handle the 429 push back from the endpoint
+
     .PARAMETER ThrottleSeed
         Instruct the cmdlet to invoke a thread sleep between 1 and ThrottleSeed value
         
@@ -111,6 +113,14 @@
         The EntityName used for the import is ExchangeRates.
         The Payload is a valid json string, containing all the needed properties.
         
+    .EXAMPLE
+        PS C:\> Import-D365ODataEntity -EntityName "ExchangeRates" -Payload '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}' -RetryTimeout "00:01:00"
+        
+        This will import a Data Entity into Dynamics 365 Finance & Operations using the OData endpoint, and try for 1 minute to handle 429.
+        The EntityName used for the import is ExchangeRates.
+        The Payload is a valid json string, containing all the needed properties.
+        It will only try to handle 429 retries for 1 minute, before failing.
+
     .NOTES
         Tags: OData, Data, Entity, Import, Upload
         

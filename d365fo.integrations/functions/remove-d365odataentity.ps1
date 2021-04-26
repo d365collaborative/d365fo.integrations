@@ -40,6 +40,8 @@
         mm can maximum be 59
         ss can maximum be 59
 
+        Not setting this parameter will result in the cmdlet to try for ever to handle the 429 push back from the endpoint
+
     .PARAMETER ThrottleSeed
         Instruct the cmdlet to invoke a thread sleep between 1 and ThrottleSeed value
         
@@ -99,6 +101,16 @@
         
         It will use the default OData configuration details that are stored in the configuration store.
         
+    .EXAMPLE
+        PS C:\> Remove-D365ODataEntity -EntityName ExchangeRates -Key "RateTypeName='TEST',FromCurrency='DKK',ToCurrency='EUR',StartDate=2019-01-13T12:00:00Z" -RetryTimeout "00:01:00"
+        
+        This will remove a Data Entity from the D365FO environment through OData, and try for 1 minute to handle 429.
+        It will use the ExchangeRate entity, and its EntitySetName / CollectionName "ExchangeRates".
+        It will use the "RateTypeName='TEST',FromCurrency='DKK',ToCurrency='EUR',StartDate=2019-01-13T12:00:00Z" as the unique key for the entity.
+        It will only try to handle 429 retries for 1 minute, before failing.
+        
+        It will use the default OData configuration details that are stored in the configuration store.
+
     .NOTES
         Tags: OData, Data, Entity, Import, Upload
         

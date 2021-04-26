@@ -53,6 +53,8 @@
         mm can maximum be 59
         ss can maximum be 59
 
+        Not setting this parameter will result in the cmdlet to try for ever to handle the 429 push back from the endpoint
+
     .PARAMETER ThrottleSeed
         Instruct the cmdlet to invoke a thread sleep between 1 and ThrottleSeed value
         
@@ -127,6 +129,17 @@
         
         It will use the default OData configuration details that are stored in the configuration store.
         
+    .EXAMPLE
+        PS C:\> Get-D365ODataEntityDataByKey -EntityName CustomersV3 -Key "dataAreaId='DAT',CustomerAccount='123456789'" -RetryTimeout "00:01:00"
+        
+        This will get the specific Customer from the OData endpoint, and try for 1 minute to handle 429.
+        It will use the "CustomerV3" entity, and its EntitySetName / CollectionName "CustomersV3".
+        It will use the "dataAreaId='DAT',CustomerAccount='123456789'" as key to identify the unique Customer record.
+        It will NOT look across companies.
+        It will only try to handle 429 retries for 1 minute, before failing.
+        
+        It will use the default OData configuration details that are stored in the configuration store.
+
     .LINK
         Add-D365ODataConfig
         

@@ -37,6 +37,8 @@ hh can maximum be 23
 mm can maximum be 59
 ss can maximum be 59
 
+Not setting this parameter will result in the cmdlet to try for ever to handle the 429 push back from the endpoint
+
 .EXAMPLE
 PS C:\> Invoke-RequestHandler -Method "Get" -Uri 'https://usnconeboxax1aos.cloud.onebox.dynamics.com/Data/SystemUsers?$top=1' -ContentType "application/json" -Headers @{Authorization = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOi....." }
 

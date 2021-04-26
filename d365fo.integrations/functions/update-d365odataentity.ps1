@@ -52,6 +52,8 @@
         mm can maximum be 59
         ss can maximum be 59
 
+        Not setting this parameter will result in the cmdlet to try for ever to handle the 429 push back from the endpoint
+        
     .PARAMETER ThrottleSeed
         Instruct the cmdlet to invoke a thread sleep between 1 and ThrottleSeed value
         
@@ -128,6 +130,18 @@
         
         It will use the default OData configuration details that are stored in the configuration store.
         
+    .EXAMPLE
+        PS C:\> Update-D365ODataEntity -EntityName "CustomersV3" -Key "dataAreaId='DAT',CustomerAccount='123456789'" -Payload '{"NameAlias": "CustomerA"}' -CrossCompany -RetryTimeout "00:01:00"
+        
+        This will update a Data Entity in Dynamics 365 Finance & Operations using the OData endpoint, and try for 1 minute to handle 429.
+        The EntityName used for the update is "CustomersV3".
+        It will use the "dataAreaId='DAT',CustomerAccount='123456789'" as key to identify the unique Customer record.
+        The Payload is a valid json string, containing the needed properties that we want to update.
+        It will make sure to search across all legal entities / companies inside the D365FO environment.
+        It will only try to handle 429 retries for 1 minute, before failing.
+        
+        It will use the default OData configuration details that are stored in the configuration store.
+
     .NOTES
         Tags: OData, Data, Entity, Update, Upload
         
