@@ -228,6 +228,8 @@ function Remove-D365ODataEntity {
         try {
             Write-PSFMessage -Level Verbose -Message "Executing http request against the OData endpoint." -Target $($odataEndpoint.Uri.AbsoluteUri)
             $null = Invoke-RequestHandler -Method DELETE -Uri $odataEndpoint.Uri.AbsoluteUri -Headers $headers -ContentType 'application/json' -RetryTimeout $RetryTimeout
+      
+            if (Test-PSFFunctionInterrupt) { return }
         }
         catch {
             $messageString = $((ConvertFrom-Json $_).Error.InnerError | ConvertTo-Json -Depth 10)

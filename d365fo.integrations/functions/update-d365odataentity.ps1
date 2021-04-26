@@ -283,6 +283,8 @@ function Update-D365ODataEntity {
         try {
             Write-PSFMessage -Level Verbose -Message "Executing http request against the OData endpoint." -Target $($odataEndpoint.Uri.AbsoluteUri)
             Invoke-RequestHandler -Method Patch -Uri $odataEndpoint.Uri.AbsoluteUri -Headers $headers -ContentType "application/json;charset=$PayloadCharset" -Body $Payload -RetryTimeout $RetryTimeout
+        
+            if (Test-PSFFunctionInterrupt) { return }
         }
         catch [System.Net.WebException] {
             $webException = $_.Exception

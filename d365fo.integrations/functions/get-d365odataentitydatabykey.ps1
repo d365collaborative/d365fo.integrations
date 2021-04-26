@@ -288,6 +288,8 @@ function Get-D365ODataEntityDataByKey {
             Write-PSFMessage -Level Verbose -Message "Executing http request against the OData endpoint." -Target $($odataEndpoint.Uri.AbsoluteUri)
             $res = Invoke-RequestHandler -Method Get -Uri $odataEndpoint.Uri.AbsoluteUri -Headers $headers -ContentType 'application/json' -RetryTimeout $RetryTimeout
 
+            if (Test-PSFFunctionInterrupt) { return }
+
             if ($OutputAsJson) {
                 $res | ConvertTo-Json -Depth 10
             }
