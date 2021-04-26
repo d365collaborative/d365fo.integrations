@@ -60,6 +60,21 @@
     .PARAMETER CrossCompany
         Instruct the cmdlet / function to ensure the request against the OData endpoint will search across all companies
         
+    .PARAMETER RetryTimeout
+        The retry timeout, before the cmdlet should quit retrying based on the 429 status code
+
+        Needs to be provided in the timspan notation:
+        "hh:mm:ss"
+
+        hh is the number of hours, numerical notation only
+        mm is the number of minutes
+        ss is the numbers of seconds
+
+        Each section of the timeout has to valid, e.g.
+        hh can maximum be 23
+        mm can maximum be 59
+        ss can maximum be 59
+
     .PARAMETER Tenant
         Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is connected to, that you want to access through OData
         
@@ -214,6 +229,8 @@ function Get-D365ODataEntityData {
 
         [switch] $CrossCompany,
 
+        [Timespan] $RetryTimeout = "00:00:00",
+
         [Alias('$AadGuid')]
         [string] $Tenant = $Script:ODataTenant,
 
@@ -357,8 +374,10 @@ function Get-D365ODataEntityData {
             $localUri = $odataEndpoint.Uri.AbsoluteUri
             do {
                 Write-PSFMessage -Level Verbose -Message "Executing http request against the OData endpoint." -Target $localUri
-                $resGet = Invoke-RestMethod -Method Get -Uri $localUri -Headers $headers -ContentType 'application/json'
-
+                $resGet = Invoke-RequestHandler -Method Get -Uri $localUri -Headers $headers -ContentType 'application/json' -RetryTimeout $RetryTimeout
+                
+                if (Test-PSFFunctionInterrupt) { return }
+                
                 if (-not $RawOutput) {
                     $resArray.AddRange($resGet.Value)
                 }
