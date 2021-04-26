@@ -98,7 +98,7 @@
         It will use the ThrottleSeed 2 to sleep/pause the execution, to mitigate the 429 pushback from the endpoint.
         
         It will use the default OData configuration details that are stored in the configuration store.
-
+        
     .NOTES
         Tags: OData, Data, Entity, Delete, Remove, Batch
         

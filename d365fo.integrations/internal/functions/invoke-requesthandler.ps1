@@ -1,52 +1,53 @@
+﻿
 <#
-.SYNOPSIS
-Invoke the Invoke-RestMethod, wrapped in a handler that helps with the 429 issues
-
-.DESCRIPTION
-The OData endpoint will push back on clients, if it feels overwhelmed
-
-This translates into 429 in the status code of the http call and requires local logic to respect the retry timeout advice sent back
-
-.PARAMETER Method
-The http method that you want to utilize
-
-.PARAMETER Uri
-The Uri for the endpoint that you want to work against
-
-.PARAMETER ContentType
-The content type value that you want to utilize while working against the endpoint
-
-.PARAMETER Payload
-The payload, if any, that you want to pass to the endpoint
-
-.PARAMETER Headers
-Headers to be used against the endpoint
-
-.PARAMETER RetryTimeout
-The retry timeout, before the cmdlet should quit retrying based on the 429 status code
-
-Needs to be provided in the timspan notation:
-"hh:mm:ss"
-
-hh is the number of hours, numerical notation only
-mm is the number of minutes
-ss is the numbers of seconds
-
-Each section of the timeout has to valid, e.g.
-hh can maximum be 23
-mm can maximum be 59
-ss can maximum be 59
-
-Not setting this parameter will result in the cmdlet to try for ever to handle the 429 push back from the endpoint
-
-.EXAMPLE
-PS C:\> Invoke-RequestHandler -Method "Get" -Uri 'https://usnconeboxax1aos.cloud.onebox.dynamics.com/Data/SystemUsers?$top=1' -ContentType "application/json" -Headers @{Authorization = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOi....." }
-
-This will fetch the top 1 SystemUsers from the endpoint.
-
-.NOTES
-Author: Mötz Jensen (@Splaxi)
-
+    .SYNOPSIS
+        Invoke the Invoke-RestMethod, wrapped in a handler that helps with the 429 issues
+        
+    .DESCRIPTION
+        The OData endpoint will push back on clients, if it feels overwhelmed
+        
+        This translates into 429 in the status code of the http call and requires local logic to respect the retry timeout advice sent back
+        
+    .PARAMETER Method
+        The http method that you want to utilize
+        
+    .PARAMETER Uri
+        The Uri for the endpoint that you want to work against
+        
+    .PARAMETER ContentType
+        The content type value that you want to utilize while working against the endpoint
+        
+    .PARAMETER Payload
+        The payload, if any, that you want to pass to the endpoint
+        
+    .PARAMETER Headers
+        Headers to be used against the endpoint
+        
+    .PARAMETER RetryTimeout
+        The retry timeout, before the cmdlet should quit retrying based on the 429 status code
+        
+        Needs to be provided in the timspan notation:
+        "hh:mm:ss"
+        
+        hh is the number of hours, numerical notation only
+        mm is the number of minutes
+        ss is the numbers of seconds
+        
+        Each section of the timeout has to valid, e.g.
+        hh can maximum be 23
+        mm can maximum be 59
+        ss can maximum be 59
+        
+        Not setting this parameter will result in the cmdlet to try for ever to handle the 429 push back from the endpoint
+        
+    .EXAMPLE
+        PS C:\> Invoke-RequestHandler -Method "Get" -Uri 'https://usnconeboxax1aos.cloud.onebox.dynamics.com/Data/SystemUsers?$top=1' -ContentType "application/json" -Headers @{Authorization = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOi....." }
+        
+        This will fetch the top 1 SystemUsers from the endpoint.
+        
+    .NOTES
+        Author: MÃ¶tz Jensen (@Splaxi)
+        
 #>
 function Invoke-RequestHandler {
     [CmdletBinding()]

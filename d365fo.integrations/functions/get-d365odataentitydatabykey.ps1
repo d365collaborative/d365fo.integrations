@@ -40,21 +40,21 @@
         
     .PARAMETER RetryTimeout
         The retry timeout, before the cmdlet should quit retrying based on the 429 status code
-
+        
         Needs to be provided in the timspan notation:
         "hh:mm:ss"
-
+        
         hh is the number of hours, numerical notation only
         mm is the number of minutes
         ss is the numbers of seconds
-
+        
         Each section of the timeout has to valid, e.g.
         hh can maximum be 23
         mm can maximum be 59
         ss can maximum be 59
-
+        
         Not setting this parameter will result in the cmdlet to try for ever to handle the 429 push back from the endpoint
-
+        
     .PARAMETER ThrottleSeed
         Instruct the cmdlet to invoke a thread sleep between 1 and ThrottleSeed value
         
@@ -137,9 +137,9 @@
         It will use the "dataAreaId='DAT',CustomerAccount='123456789'" as key to identify the unique Customer record.
         It will NOT look across companies.
         It will only try to handle 429 retries for 1 minute, before failing.
-
+        
         It will use the default OData configuration details that are stored in the configuration store.
-
+        
     .EXAMPLE
         PS C:\> Get-D365ODataEntityDataByKey -EntityName CustomersV3 -Key "dataAreaId='DAT',CustomerAccount='123456789'" -ThrottleSeed 2
         
@@ -150,7 +150,7 @@
         It will use the ThrottleSeed 2 to sleep/pause the execution, to mitigate the 429 pushback from the endpoint.
         
         It will use the default OData configuration details that are stored in the configuration store.
-
+        
     .LINK
         Add-D365ODataConfig
         

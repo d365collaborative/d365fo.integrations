@@ -27,21 +27,21 @@
         
     .PARAMETER RetryTimeout
         The retry timeout, before the cmdlet should quit retrying based on the 429 status code
-
+        
         Needs to be provided in the timspan notation:
         "hh:mm:ss"
-
+        
         hh is the number of hours, numerical notation only
         mm is the number of minutes
         ss is the numbers of seconds
-
+        
         Each section of the timeout has to valid, e.g.
         hh can maximum be 23
         mm can maximum be 59
         ss can maximum be 59
-
+        
         Not setting this parameter will result in the cmdlet to try for ever to handle the 429 push back from the endpoint
-
+        
     .PARAMETER ThrottleSeed
         Instruct the cmdlet to invoke a thread sleep between 1 and ThrottleSeed value
         
@@ -108,7 +108,7 @@
         It will use the ExchangeRate entity, and its EntitySetName / CollectionName "ExchangeRates".
         It will use the "RateTypeName='TEST',FromCurrency='DKK',ToCurrency='EUR',StartDate=2019-01-13T12:00:00Z" as the unique key for the entity.
         It will only try to handle 429 retries for 1 minute, before failing.
-
+        
         It will use the default OData configuration details that are stored in the configuration store.
         
     .EXAMPLE
@@ -120,7 +120,7 @@
         It will use the ThrottleSeed 2 to sleep/pause the execution, to mitigate the 429 pushback from the endpoint.
         
         It will use the default OData configuration details that are stored in the configuration store.
-
+        
     .NOTES
         Tags: OData, Data, Entity, Import, Upload
         

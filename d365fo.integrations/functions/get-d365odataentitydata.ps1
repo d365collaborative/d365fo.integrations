@@ -62,21 +62,21 @@
         
     .PARAMETER RetryTimeout
         The retry timeout, before the cmdlet should quit retrying based on the 429 status code
-
+        
         Needs to be provided in the timspan notation:
         "hh:mm:ss"
-
+        
         hh is the number of hours, numerical notation only
         mm is the number of minutes
         ss is the numbers of seconds
-
+        
         Each section of the timeout has to valid, e.g.
         hh can maximum be 23
         mm can maximum be 59
         ss can maximum be 59
-
+        
         Not setting this parameter will result in the cmdlet to try for ever to handle the 429 push back from the endpoint
-
+        
     .PARAMETER Tenant
         Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is connected to, that you want to access through OData
         
@@ -175,9 +175,9 @@
         It will use the CustomerV3 entity, and its EntitySetName / CollectionName "CustomersV3".
         It will traverse all NextLink that will occur while fetching data from the OData endpoint.
         It will use the ThrottleSeed 2 to sleep/pause the execution, to mitigate the 429 pushback from the endpoint.
-
+        
         It will use the default OData configuration details that are stored in the configuration store.
-
+        
     .EXAMPLE
         PS C:\> $token = Get-D365ODataToken
         PS C:\> Get-D365ODataEntityData -EntityName CustomersV3 -ODataQuery '$top=1' -Token $token
@@ -196,9 +196,9 @@
         It will use the CustomerV3 entity, and its EntitySetName / CollectionName "CustomersV3".
         It will get the top 1 results from the list of customers.
         It will only try to handle 429 retries for 1 minute, before failing.
-
+        
         It will use the default OData configuration details that are stored in the configuration store.
-
+        
     .LINK
         Add-D365ODataConfig
         
