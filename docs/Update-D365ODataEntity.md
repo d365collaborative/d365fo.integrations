@@ -14,8 +14,9 @@ Update a Data Entity in Dynamics 365 Finance & Operations
 
 ```
 Update-D365ODataEntity [-EntityName] <String> [-Key] <String> [-Payload] <String> [[-PayloadCharset] <String>]
- [-CrossCompany] [[-ThrottleSeed] <Int32>] [[-Tenant] <String>] [[-Url] <String>] [[-SystemUrl] <String>]
- [[-ClientId] <String>] [[-ClientSecret] <String>] [[-Token] <String>] [-EnableException] [<CommonParameters>]
+ [-CrossCompany] [[-RetryTimeout] <TimeSpan>] [[-ThrottleSeed] <Int32>] [[-Tenant] <String>] [[-Url] <String>]
+ [[-SystemUrl] <String>] [[-ClientId] <String>] [[-ClientSecret] <String>] [[-Token] <String>]
+ [-EnableException] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -65,6 +66,34 @@ The EntityName used for the update is "CustomersV3".
 It will use the "dataAreaId='DAT',CustomerAccount='123456789'" as key to identify the unique Customer record.
 The Payload is a valid json string, containing the needed properties that we want to update.
 It will make sure to search across all legal entities / companies inside the D365FO environment.
+
+It will use the default OData configuration details that are stored in the configuration store.
+
+### EXAMPLE 4
+```
+Update-D365ODataEntity -EntityName "CustomersV3" -Key "dataAreaId='DAT',CustomerAccount='123456789'" -Payload '{"NameAlias": "CustomerA"}' -CrossCompany -RetryTimeout "00:01:00"
+```
+
+This will update a Data Entity in Dynamics 365 Finance & Operations using the OData endpoint, and try for 1 minute to handle 429.
+The EntityName used for the update is "CustomersV3".
+It will use the "dataAreaId='DAT',CustomerAccount='123456789'" as key to identify the unique Customer record.
+The Payload is a valid json string, containing the needed properties that we want to update.
+It will make sure to search across all legal entities / companies inside the D365FO environment.
+It will only try to handle 429 retries for 1 minute, before failing.
+
+It will use the default OData configuration details that are stored in the configuration store.
+
+### EXAMPLE 5
+```
+Update-D365ODataEntity -EntityName "CustomersV3" -Key "dataAreaId='DAT',CustomerAccount='123456789'" -Payload '{"NameAlias": "CustomerA"}' -CrossCompany -ThrottleSeed 2
+```
+
+This will update a Data Entity in Dynamics 365 Finance & Operations using the OData endpoint, and sleep/pause between 1 and 2 seconds.
+The EntityName used for the update is "CustomersV3".
+It will use the "dataAreaId='DAT',CustomerAccount='123456789'" as key to identify the unique Customer record.
+The Payload is a valid json string, containing the needed properties that we want to update.
+It will make sure to search across all legal entities / companies inside the D365FO environment.
+It will use the ThrottleSeed 2 to sleep/pause the execution, to mitigate the 429 pushback from the endpoint.
 
 It will use the default OData configuration details that are stored in the configuration store.
 
@@ -162,6 +191,35 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -RetryTimeout
+The retry timeout, before the cmdlet should quit retrying based on the 429 status code
+
+Needs to be provided in the timspan notation:
+"hh:mm:ss"
+
+hh is the number of hours, numerical notation only
+mm is the number of minutes
+ss is the numbers of seconds
+
+Each section of the timeout has to valid, e.g.
+hh can maximum be 23
+mm can maximum be 59
+ss can maximum be 59
+
+Not setting this parameter will result in the cmdlet to try for ever to handle the 429 push back from the endpoint
+
+```yaml
+Type: TimeSpan
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 5
+Default value: 00:00:00
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -ThrottleSeed
 Instruct the cmdlet to invoke a thread sleep between 1 and ThrottleSeed value
 
@@ -175,7 +233,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 5
+Position: 6
 Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -190,7 +248,7 @@ Parameter Sets: (All)
 Aliases: $AadGuid
 
 Required: False
-Position: 6
+Position: 7
 Default value: $Script:ODataTenant
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -209,7 +267,7 @@ Parameter Sets: (All)
 Aliases: Uri
 
 Required: False
-Position: 7
+Position: 8
 Default value: $Script:ODataUrl
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -228,7 +286,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 8
+Position: 9
 Default value: $Script:ODataSystemUrl
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -243,7 +301,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 9
+Position: 10
 Default value: $Script:ODataClientId
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -258,7 +316,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 10
+Position: 11
 Default value: $Script:ODataClientSecret
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -275,7 +333,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 11
+Position: 12
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

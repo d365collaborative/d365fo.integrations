@@ -59,6 +59,25 @@ It will get a fresh token, saved it into the token variable and pass it to the c
 The EntityName used for the import is ExchangeRates.
 The Payload is an array containing valid json strings, each containing all the needed properties.
 
+### EXAMPLE 4
+```
+Import-D365ODataEntityBatchMode -EntityName "ExchangeRates" -Payload '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}','{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-04T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}'
+```
+
+This will import a set of Data Entities into Dynamics 365 Finance & Operations using the OData endpoint.
+The EntityName used for the import is ExchangeRates.
+The Payload is an array containing valid json strings, each containing all the needed properties.
+
+### EXAMPLE 5
+```
+Import-D365ODataEntityBatchMode -EntityName "ExchangeRates" -Payload '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}','{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-04T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}' -ThrottleSeed 2
+```
+
+This will import a set of Data Entities into Dynamics 365 Finance & Operations using the OData endpoint, and sleep/pause between 1 and 2 seconds.
+The EntityName used for the import is ExchangeRates.
+The Payload is an array containing valid json strings, each containing all the needed properties.
+It will use the ThrottleSeed 2 to sleep/pause the execution, to mitigate the 429 pushback from the endpoint.
+
 ## PARAMETERS
 
 ### -EntityName
