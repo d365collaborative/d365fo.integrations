@@ -108,6 +108,16 @@
         It will use the ExchangeRate entity, and its EntitySetName / CollectionName "ExchangeRates".
         It will use the "RateTypeName='TEST',FromCurrency='DKK',ToCurrency='EUR',StartDate=2019-01-13T12:00:00Z" as the unique key for the entity.
         It will only try to handle 429 retries for 1 minute, before failing.
+
+        It will use the default OData configuration details that are stored in the configuration store.
+        
+    .EXAMPLE
+        PS C:\> Remove-D365ODataEntity -EntityName ExchangeRates -Key "RateTypeName='TEST',FromCurrency='DKK',ToCurrency='EUR',StartDate=2019-01-13T12:00:00Z" -ThrottleSeed 2
+        
+        This will remove a Data Entity from the D365FO environment through OData, and sleep/pause between 1 and 2 seconds.
+        It will use the ExchangeRate entity, and its EntitySetName / CollectionName "ExchangeRates".
+        It will use the "RateTypeName='TEST',FromCurrency='DKK',ToCurrency='EUR',StartDate=2019-01-13T12:00:00Z" as the unique key for the entity.
+        It will use the ThrottleSeed 2 to sleep/pause the execution, to mitigate the 429 pushback from the endpoint.
         
         It will use the default OData configuration details that are stored in the configuration store.
 

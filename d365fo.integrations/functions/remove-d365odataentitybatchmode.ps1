@@ -89,6 +89,16 @@
         
         It will use the default OData configuration details that are stored in the configuration store.
         
+    .EXAMPLE
+        PS C:\> Remove-D365ODataEntityBatchMode -EntityName "CustomersV3" -Key "dataAreaId='USMF',CustomerAccount='Customer1'","dataAreaId='USMF',CustomerAccount='Customer2'" -ThrottleSeed 2
+        
+        This will delete both customers, in a single request, from the Dynamics 365 Finance & Operations using the OData endpoint, and sleep/pause between 1 and 2 seconds.
+        The EntityName used for the deletion is CustomersV3.
+        The Key is an array containing valid keys, each containing referencing a single entity.
+        It will use the ThrottleSeed 2 to sleep/pause the execution, to mitigate the 429 pushback from the endpoint.
+        
+        It will use the default OData configuration details that are stored in the configuration store.
+
     .NOTES
         Tags: OData, Data, Entity, Delete, Remove, Batch
         

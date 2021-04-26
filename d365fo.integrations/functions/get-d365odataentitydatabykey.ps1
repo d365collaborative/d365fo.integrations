@@ -137,6 +137,17 @@
         It will use the "dataAreaId='DAT',CustomerAccount='123456789'" as key to identify the unique Customer record.
         It will NOT look across companies.
         It will only try to handle 429 retries for 1 minute, before failing.
+
+        It will use the default OData configuration details that are stored in the configuration store.
+
+    .EXAMPLE
+        PS C:\> Get-D365ODataEntityDataByKey -EntityName CustomersV3 -Key "dataAreaId='DAT',CustomerAccount='123456789'" -ThrottleSeed 2
+        
+        This will get the specific Customer from the OData endpoint, and sleep/pause between 1 and 2 seconds.
+        It will use the "CustomerV3" entity, and its EntitySetName / CollectionName "CustomersV3".
+        It will use the "dataAreaId='DAT',CustomerAccount='123456789'" as key to identify the unique Customer record.
+        It will NOT look across companies.
+        It will use the ThrottleSeed 2 to sleep/pause the execution, to mitigate the 429 pushback from the endpoint.
         
         It will use the default OData configuration details that are stored in the configuration store.
 

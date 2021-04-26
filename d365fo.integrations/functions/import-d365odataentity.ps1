@@ -121,6 +121,14 @@
         The Payload is a valid json string, containing all the needed properties.
         It will only try to handle 429 retries for 1 minute, before failing.
 
+    .EXAMPLE
+        PS C:\> Import-D365ODataEntity -EntityName "ExchangeRates" -Payload '{"@odata.type" :"Microsoft.Dynamics.DataEntities.ExchangeRate", "RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}' -ThrottleSeed 2
+        
+        This will import a Data Entity into Dynamics 365 Finance & Operations using the OData endpoint, and sleep/pause between 1 and 2 seconds.
+        The EntityName used for the import is ExchangeRates.
+        The Payload is a valid json string, containing all the needed properties.
+        It will use the ThrottleSeed 2 to sleep/pause the execution, to mitigate the 429 pushback from the endpoint.
+
     .NOTES
         Tags: OData, Data, Entity, Import, Upload
         

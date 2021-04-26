@@ -139,6 +139,18 @@
         The Payload is a valid json string, containing the needed properties that we want to update.
         It will make sure to search across all legal entities / companies inside the D365FO environment.
         It will only try to handle 429 retries for 1 minute, before failing.
+
+        It will use the default OData configuration details that are stored in the configuration store.
+
+    .EXAMPLE
+        PS C:\> Update-D365ODataEntity -EntityName "CustomersV3" -Key "dataAreaId='DAT',CustomerAccount='123456789'" -Payload '{"NameAlias": "CustomerA"}' -CrossCompany -ThrottleSeed 2
+        
+        This will update a Data Entity in Dynamics 365 Finance & Operations using the OData endpoint, and sleep/pause between 1 and 2 seconds.
+        The EntityName used for the update is "CustomersV3".
+        It will use the "dataAreaId='DAT',CustomerAccount='123456789'" as key to identify the unique Customer record.
+        The Payload is a valid json string, containing the needed properties that we want to update.
+        It will make sure to search across all legal entities / companies inside the D365FO environment.
+        It will use the ThrottleSeed 2 to sleep/pause the execution, to mitigate the 429 pushback from the endpoint.
         
         It will use the default OData configuration details that are stored in the configuration store.
 

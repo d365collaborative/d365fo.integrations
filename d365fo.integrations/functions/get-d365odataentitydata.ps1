@@ -169,6 +169,16 @@
         It will use the default OData configuration details that are stored in the configuration store.
         
     .EXAMPLE
+        PS C:\> Get-D365ODataEntityData -EntityName CustomersV3 -TraverseNextLink -ThrottleSeed 2
+        
+        This will get Customers from the OData endpoint, and sleep/pause between 1 and 2 seconds.
+        It will use the CustomerV3 entity, and its EntitySetName / CollectionName "CustomersV3".
+        It will traverse all NextLink that will occur while fetching data from the OData endpoint.
+        It will use the ThrottleSeed 2 to sleep/pause the execution, to mitigate the 429 pushback from the endpoint.
+
+        It will use the default OData configuration details that are stored in the configuration store.
+
+    .EXAMPLE
         PS C:\> $token = Get-D365ODataToken
         PS C:\> Get-D365ODataEntityData -EntityName CustomersV3 -ODataQuery '$top=1' -Token $token
         
