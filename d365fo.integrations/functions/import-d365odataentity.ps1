@@ -132,6 +132,8 @@ function Import-D365ODataEntity {
 
         [switch] $CrossCompany,
 
+        [Timespan] $RetryTimeout = "00:00:00",
+        
         [int] $ThrottleSeed,
 
         [Alias('$AadGuid')]
