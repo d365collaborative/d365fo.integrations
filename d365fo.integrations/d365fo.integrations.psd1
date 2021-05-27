@@ -3,7 +3,7 @@
     RootModule   = 'd365fo.integrations.psm1'
 	
     # Version number of this module.
-    ModuleVersion     = '0.4.31'
+    ModuleVersion     = '0.4.32'
 	
     # ID used to uniquely identify this module
     GUID              = 'd2667b62-1436-42b3-a840-ab6b4a0e5aa0'
