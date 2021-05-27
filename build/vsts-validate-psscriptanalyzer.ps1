@@ -27,4 +27,4 @@ foreach ($item in $modules) {
 
 Import-Module "Pester" -MaximumVersion 4.99.99 -Force
 
-& "$PSScriptRoot\..\d365fo.tools\tests\pester-PSScriptAnalyzer.ps1" -TestPublic $TestPublic -TestInternal $TestInternal
+& "$PSScriptRoot\..\d365fo.integrations\tests\pester-PSScriptAnalyzer.ps1" -TestPublic $TestPublic -TestInternal $TestInternal
