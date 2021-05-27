@@ -13,7 +13,8 @@ Get mandatory field(s) from Data Entity
 ## SYNTAX
 
 ```
-Get-D365ODataEntityMandatoryField [-Name] <String> [-Properties] <PSObject> [<CommonParameters>]
+Get-D365ODataEntityMandatoryField [-Name] <String> [-Properties] <PSObject> [-OutputSample]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -31,6 +32,16 @@ The "CustomersV3" value is used to get the desired Data Entity.
 The output from Get-D365ODataPublicEntity is piped into Get-D365ODataEntityMandatoryFields.
 All mandatory fields will be extracted and displayed.
 The output will be formatted as a list.
+
+### EXAMPLE 2
+```
+Get-D365ODataPublicEntity -EntityName CustomersV3 | Get-D365ODataEntityMandatoryField -OutputSample
+```
+
+This will extract all the relevant mandatory fields from the Data Entity.
+The "CustomersV3" value is used to get the desired Data Entity.
+The output from Get-D365ODataPublicEntity is piped into Get-D365ODataEntityMandatoryFields.
+All mandatory fields will be extracted and displayed as a JSON sample.
 
 ## PARAMETERS
 
@@ -61,6 +72,21 @@ Required: True
 Position: 2
 Default value: None
 Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -OutputSample
+Instruct the cmdlet to output a sample of the mandatory fields/properties
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
