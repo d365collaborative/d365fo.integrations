@@ -59,6 +59,7 @@
         ,	'Get-D365ODataPublicEntity'
         ,   'Get-D365ODataPublicEnum'
         ,   'Get-D365ODataToken'
+        ,   'Get-D365ODataTokenInteractive'
         
         ,   'Get-D365RestServiceGroup'
         ,   'Get-D365RestService'
@@ -77,6 +78,7 @@
         ,   'Remove-D365ODataEntityBatchMode'
         
         ,	'Set-D365ActiveODataConfig'
+        ,   'Set-D365ODataTokenInSession'
         ,   'Update-D365ODataEntity'
         ,   'Update-D365ODataEntityBatchMode'
     )
