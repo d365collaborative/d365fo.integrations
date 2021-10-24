@@ -5,9 +5,9 @@
         
     .DESCRIPTION
         Get an OAuth 2.0 bearer token to be used against the OData or Custom Service endpoints of the Dynamics 365 Finance & Operations
-
+        
         It will be running as an interactive sign-in flow, based on what is know as the device authentication flow
-
+        
         Your clipboard will be set with a device code, and your default browser will navigate to "https://microsoft.com/devicelogin"
         You will have to paste in the device code, and complete an ordinary sign-in with your credentials
         When your sign-in is complete, it will pick up the OAuth 2.0 bearer token from the Azure AD
@@ -24,11 +24,11 @@
         
     .PARAMETER Timeout
         Instruct the cmdlet how long time you need to be able to complete the interactive logon
-
+        
         The default value is: 300 seconds
-
+        
         Note: The parameter doesn't show up in the intellisense when tabbing through all available parameters, as it shouldn't be necessary to change the value
-
+        
     .PARAMETER EnableException
         This parameters disables user-friendly warnings and enables the throwing of exceptions
         This is less user friendly, but allows catching exceptions in calling scripts
@@ -44,7 +44,7 @@
         It will copy the device code into your clipboard.
         It will start the default browser and nagivate to "https://microsoft.com/devicelogin".
         It will wait the default amount of seconds for you to complete the interactive sign-in.
-
+        
         The output will be a formal formatted bearer token, ready to be used right away.
         
         It will use the default OData configuration details that are stored in the configuration store.
@@ -57,7 +57,7 @@
         It will copy the device code into your clipboard.
         It will start the default browser and nagivate to "https://microsoft.com/devicelogin".
         It will wait the default amount of seconds for you to complete the interactive sign-in.
-
+        
         It will output all properties of the token.
         
         It will use the default OData configuration details that are stored in the configuration store.
@@ -70,17 +70,17 @@
         It will copy the device code into your clipboard.
         It will start the default browser and nagivate to "https://microsoft.com/devicelogin".
         It will wait 100 seconds for you to complete the interactive sign-in.
-
+        
         The output will be a formal formatted bearer token, ready to be used right away.
         
         It will use the default OData configuration details that are stored in the configuration store.
-
+        
     .EXAMPLE
         PS C:\> Get-D365ODataTokenInteractive | Set-D365ODataTokenInSession
         
         This sets the Token parameter value for all cmdlets, for the remaining of the session.
         It gets a token from the Get-D365ODataTokenInteractive cmdlet and pipes it into Set-D365ODataTokenInSession.
-
+        
     .LINK
         Add-D365ODataConfig
         
@@ -94,7 +94,7 @@
         Tags: OData, OAuth, Token, JWT, DeviceAuth, Device, DeviceCode
         
         Inspiration: https://blog.simonw.se/getting-an-access-token-for-azuread-using-powershell-and-device-login-flow/
-
+        
         Author: Mötz Jensen (@Splaxi)
         
 #>
