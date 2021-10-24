@@ -13,8 +13,8 @@ Get OAuth 2.0 token to be used against OData or Custom Service
 ## SYNTAX
 
 ```
-Get-D365ODataToken [[-Tenant] <String>] [[-Url] <String>] [[-SystemUrl] <String>] [[-ClientId] <String>]
- [[-ClientSecret] <String>] [-EnableException] [-RawOutput] [<CommonParameters>]
+Get-D365ODataToken [[-Tenant] <String>] [[-Url] <String>] [[-ClientId] <String>] [[-ClientSecret] <String>]
+ [-EnableException] [-RawOutput] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -69,30 +69,11 @@ If you are working against a D365 Talent / HR instance, this will have to be "ht
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: Uri
+Aliases: Resource, Uri
 
 Required: False
 Position: 2
 Default value: $Script:ODataUrl
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -SystemUrl
-URL / URI for the D365FO instance you want to be working against
-
-If you are working against a D365FO instance, it will be the URL / URI for the instance itself, which is the same as the Url parameter value
-
-If you are working against a D365 Talent / HR instance, this will to be full instance URL / URI like "https://aos-rts-sf-b1b468164ee-prod-northeurope.hr.talent.dynamics.com/namespaces/0ab49d18-6325-4597-97b3-c7f2321aa80c"
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 3
-Default value: $Script:ODataSystemUrl
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -106,7 +87,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 4
+Position: 3
 Default value: $Script:ODataClientId
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -121,7 +102,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 5
+Position: 4
 Default value: $Script:ODataClientSecret
 Accept pipeline input: False
 Accept wildcard characters: False
