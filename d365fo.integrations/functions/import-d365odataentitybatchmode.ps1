@@ -184,7 +184,7 @@ function Import-D365ODataEntityBatchMode {
         }
         
         $headerParms = @{
-            URL         = $Url
+            URL         = $SystemUrl
             BearerToken = $bearer
         }
 

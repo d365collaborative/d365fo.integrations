@@ -127,7 +127,7 @@ function Invoke-D365RestEndpoint {
         }
         
         $headerParms = @{
-            URL         = $Url
+            URL         = $SystemUrl
             BearerToken = $bearer
         }
 

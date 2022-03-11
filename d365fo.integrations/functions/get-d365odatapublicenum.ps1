@@ -225,7 +225,7 @@ function Get-D365ODataPublicEnum {
         }
         
         $headerParms = @{
-            URL         = $Url
+            URL         = $SystemUrl
             BearerToken = $bearer
         }
 

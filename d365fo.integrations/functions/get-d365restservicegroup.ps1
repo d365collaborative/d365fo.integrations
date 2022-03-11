@@ -158,7 +158,7 @@ function Get-D365RestServiceGroup {
         }
         
         $headerParms = @{
-            URL         = $Url
+            URL         = $SystemUrl
             BearerToken = $bearer
         }
 

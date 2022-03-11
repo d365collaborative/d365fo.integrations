@@ -195,7 +195,7 @@ function Get-D365RestServiceOperationDetails {
         }
         
         $headerParms = @{
-            URL         = $Url
+            URL         = $SystemUrl
             BearerToken = $bearer
         }
 
