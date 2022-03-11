@@ -224,7 +224,7 @@ function Get-D365ODataPublicEntity {
         }
         
         $headerParms = @{
-            URL         = $Url
+            URL         = $SystemUrl
             BearerToken = $bearer
         }
 

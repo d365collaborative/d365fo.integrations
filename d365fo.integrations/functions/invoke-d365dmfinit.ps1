@@ -102,7 +102,7 @@ function Invoke-D365DmfInit {
         }
         
         $headerParms = @{
-            URL         = $Url
+            URL         = $SystemUrl
             BearerToken = $bearer
         }
 

@@ -209,7 +209,7 @@ function Import-D365ODataEntity {
         }
         
         $headerParms = @{
-            URL         = $Url
+            URL         = $SystemUrl
             BearerToken = $bearer
         }
 

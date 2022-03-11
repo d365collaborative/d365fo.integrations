@@ -253,7 +253,7 @@ function Get-D365ODataEntityDataByKey {
         }
         
         $headerParms = @{
-            URL         = $Url
+            URL         = $SystemUrl
             BearerToken = $bearer
         }
 

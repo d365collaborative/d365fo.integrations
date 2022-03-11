@@ -213,7 +213,7 @@ function Get-D365DmfDataEntity {
         }
         
         $headerParms = @{
-            URL         = $Url
+            URL         = $SystemUrl
             BearerToken = $bearer
         }
 
