@@ -37,6 +37,19 @@
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
 		}
+		It 'Should have the expected parameter SystemUrl' {
+			$parameter = (Get-Command Invoke-D365DmfInit).Parameters['SystemUrl']
+			$parameter.Name | Should -Be 'SystemUrl'
+			$parameter.ParameterType.ToString() | Should -Be System.String
+			$parameter.IsDynamic | Should -Be $False
+			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
+			$parameter.ParameterSets.Keys | Should -Contain '__AllParameterSets'
+			$parameter.ParameterSets['__AllParameterSets'].IsMandatory | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 2
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipeline | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
+		}
 		It 'Should have the expected parameter ClientId' {
 			$parameter = (Get-Command Invoke-D365DmfInit).Parameters['ClientId']
 			$parameter.Name | Should -Be 'ClientId'
@@ -45,7 +58,7 @@
 			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
 			$parameter.ParameterSets.Keys | Should -Contain '__AllParameterSets'
 			$parameter.ParameterSets['__AllParameterSets'].IsMandatory | Should -Be $False
-			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 2
+			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 3
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipeline | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
@@ -58,7 +71,7 @@
 			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
 			$parameter.ParameterSets.Keys | Should -Contain '__AllParameterSets'
 			$parameter.ParameterSets['__AllParameterSets'].IsMandatory | Should -Be $False
-			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 3
+			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 4
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipeline | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
@@ -71,7 +84,7 @@
 			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
 			$parameter.ParameterSets.Keys | Should -Contain '__AllParameterSets'
 			$parameter.ParameterSets['__AllParameterSets'].IsMandatory | Should -Be $False
-			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 4
+			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 5
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipeline | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
@@ -94,7 +107,7 @@
 	Describe "Testing parameterset __AllParameterSets" {
 		<#
 		__AllParameterSets -
-		__AllParameterSets -Tenant -Url -ClientId -ClientSecret -Token -EnableException
+		__AllParameterSets -Tenant -Url -SystemUrl -ClientId -ClientSecret -Token -EnableException
 		#>
 	}
 
