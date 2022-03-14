@@ -222,7 +222,7 @@ function Get-D365RestServiceOperation {
         }
         
         $headerParms = @{
-            URL         = $Url
+            URL         = $SystemUrl
             BearerToken = $bearer
         }
 

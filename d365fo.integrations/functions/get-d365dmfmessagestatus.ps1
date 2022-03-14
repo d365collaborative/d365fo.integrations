@@ -119,7 +119,7 @@ function Get-D365DmfMessageStatus {
         }
         
         $headerParms = @{
-            URL         = $Url
+            URL         = $SystemUrl
             BearerToken = $bearer
         }
 

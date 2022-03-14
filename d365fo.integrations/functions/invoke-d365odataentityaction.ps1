@@ -181,7 +181,7 @@ function Invoke-D365ODataEntityAction {
         }
         
         $headerParms = @{
-            URL         = $Url
+            URL         = $SystemUrl
             BearerToken = $bearer
         }
 
