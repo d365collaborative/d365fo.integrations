@@ -13,9 +13,9 @@ Invoke a REST Endpoint in Dynamics 365 Finance & Operations
 ## SYNTAX
 
 ```
-Invoke-D365RestEndpoint [-ServiceName] <String> [[-Payload] <String>] [[-Tenant] <String>] [[-URL] <String>]
- [[-ClientId] <String>] [[-ClientSecret] <String>] [[-Token] <String>] [-EnableException]
- [[-TimeoutSec] <Int32>] [<CommonParameters>]
+Invoke-D365RestEndpoint [-ServiceName] <String> [[-Payload] <String>] [[-PayloadCharset] <String>]
+ [[-Tenant] <String>] [[-Url] <String>] [[-SystemUrl] <String>] [[-ClientId] <String>]
+ [[-ClientSecret] <String>] [[-Token] <String>] [-EnableException] [[-TimeoutSec] <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -102,32 +102,70 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -PayloadCharset
+The charset / encoding that you want the cmdlet to use while invoking the odata entity action
+
+The default value is: "UTF8"
+
+The charset has to be a valid http charset like: ASCII, ANSI, ISO-8859-1, UTF-8
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 3
+Default value: UTF-8
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Tenant
 Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is connected to, that you want to access through REST endpoint
 
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: $AADGuid
+Aliases: $AadGuid
 
 Required: False
-Position: 3
+Position: 4
 Default value: $Script:ODataTenant
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -URL
+### -Url
 URL / URI for the D365FO environment you want to access through REST endpoint
 
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: URI
+Aliases: Uri
 
 Required: False
-Position: 4
+Position: 5
 Default value: $Script:ODataUrl
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SystemUrl
+URL / URI for the D365FO instance where the OData endpoint is available
+
+If you are working against a D365FO instance, it will be the URL / URI for the instance itself, which is the same as the Url parameter value
+
+If you are working against a D365 Talent / HR instance, this will to be full instance URL / URI like "https://aos-rts-sf-b1b468164ee-prod-northeurope.hr.talent.dynamics.com/namespaces/0ab49d18-6325-4597-97b3-c7f2321aa80c"
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 6
+Default value: $Script:ODataSystemUrl
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -141,7 +179,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 5
+Position: 7
 Default value: $Script:ODataClientId
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -156,7 +194,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 6
+Position: 8
 Default value: $Script:ODataClientSecret
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -173,7 +211,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 7
+Position: 9
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -208,7 +246,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 8
+Position: 10
 Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False

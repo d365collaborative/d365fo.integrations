@@ -13,8 +13,8 @@ Invoke DMF Initialize, which will refresh all Data Management Entities
 ## SYNTAX
 
 ```
-Invoke-D365DmfInit [[-Tenant] <String>] [[-Url] <String>] [[-ClientId] <String>] [[-ClientSecret] <String>]
- [[-Token] <String>] [-EnableException] [<CommonParameters>]
+Invoke-D365DmfInit [[-Tenant] <String>] [[-Url] <String>] [[-SystemUrl] <String>] [[-ClientId] <String>]
+ [[-ClientSecret] <String>] [[-Token] <String>] [-EnableException] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -62,7 +62,7 @@ Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is con
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: $AADGuid
+Aliases: $AadGuid
 
 Required: False
 Position: 1
@@ -77,11 +77,30 @@ URL / URI for the D365FO environment you want to access through DMF
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: URI
+Aliases: Uri
 
 Required: False
 Position: 2
 Default value: $Script:ODataUrl
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SystemUrl
+URL / URI for the D365FO instance where the OData endpoint is available
+
+If you are working against a D365FO instance, it will be the URL / URI for the instance itself, which is the same as the Url parameter value
+
+If you are working against a D365 Talent / HR instance, this will to be full instance URL / URI like "https://aos-rts-sf-b1b468164ee-prod-northeurope.hr.talent.dynamics.com/namespaces/0ab49d18-6325-4597-97b3-c7f2321aa80c"
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 3
+Default value: $Script:ODataSystemUrl
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -95,7 +114,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 3
+Position: 4
 Default value: $Script:ODataClientId
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -110,7 +129,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 4
+Position: 5
 Default value: $Script:ODataClientSecret
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -127,7 +146,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 5
+Position: 6
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
