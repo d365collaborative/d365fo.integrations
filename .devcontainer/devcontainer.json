@@ -9,7 +9,8 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"ms-vscode.powershell"
+				"ms-vscode.powershell",
+				"ms-dotnettools.dotnet-interactive-vscode"
 			]
 		}
 	}
