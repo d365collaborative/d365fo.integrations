@@ -27,8 +27,6 @@
     # this module
     RequiredModules   = @(
         @{ ModuleName = 'PSFramework'; ModuleVersion = '1.0.13' }
-        , @{ ModuleName = 'Azure.Storage'; ModuleVersion = '4.4.0' }
-        ,	@{ ModuleName = 'PSNotification'; ModuleVersion = '0.5.3' }
         ,	@{ ModuleName = 'PSOAuthHelper'; ModuleVersion = '0.3.0' }
     )
 	
