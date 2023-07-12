@@ -1,0 +1,16 @@
+{
+	"image": "mcr.microsoft.com/powershell:latest",
+	"features": {
+		"ghcr.io/devcontainers/features/git:1": {},
+		"ghcr.io/natescherer/devcontainers-custom-features/powershell-resources": {
+			"resources": "PSFramework,PSOAuthHelper"
+		}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-vscode.powershell"
+			]
+		}
+	}
+}

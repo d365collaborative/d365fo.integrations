@@ -1,0 +1,17 @@
+# Used to define the dependencies of the d365fo.integrations PowerShell module
+# in a way that can be evaluated for the GitHub dependency graph.
+# See https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/about-the-dependency-graph
+# The actual dependencies are defined in https://github.com/d365collaborative/d365fo.integrations/blob/master/d365fo.integrations/d365fo.integrations.psd1#L26-L31
+
+name: Dependencies
+
+on:
+  workflow_dispatch:
+  
+jobs:
+  dependencies:
+    steps:
+      - name: PSFramework
+        uses: PowershellFrameworkCollective/psframework@4f5687528ea7a74a62b6177d94eb86567a5e6f0b # version 1.0.13
+      - name: PSOAuthHelper
+        uses: Splaxi/PSOAuthHelper@837a2da63bf76e86f339a4e43e38df5a3b82affe # version 0.3.0
