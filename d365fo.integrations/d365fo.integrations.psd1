@@ -54,6 +54,7 @@
         ,   'Get-D365ODataEntityKey'
         ,   'Get-D365ODataEntityMandatoryField'
         ,   'Get-D365ODataEntityUrl'
+        ,   'Get-D365ODataMetadata'
         ,	'Get-D365ODataPublicEntity'
         ,   'Get-D365ODataPublicEnum'
         ,   'Get-D365ODataToken'
