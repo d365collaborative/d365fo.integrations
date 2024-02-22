@@ -50,6 +50,32 @@
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
 		}
+		It 'Should have the expected parameter RetryTimeout' {
+			$parameter = (Get-Command Invoke-D365RestEndpoint).Parameters['RetryTimeout']
+			$parameter.Name | Should -Be 'RetryTimeout'
+			$parameter.ParameterType.ToString() | Should -Be System.TimeSpan
+			$parameter.IsDynamic | Should -Be $False
+			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
+			$parameter.ParameterSets.Keys | Should -Contain '__AllParameterSets'
+			$parameter.ParameterSets['__AllParameterSets'].IsMandatory | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 3
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipeline | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
+		}
+		It 'Should have the expected parameter ThrottleSeed' {
+			$parameter = (Get-Command Invoke-D365RestEndpoint).Parameters['ThrottleSeed']
+			$parameter.Name | Should -Be 'ThrottleSeed'
+			$parameter.ParameterType.ToString() | Should -Be System.Int32
+			$parameter.IsDynamic | Should -Be $False
+			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
+			$parameter.ParameterSets.Keys | Should -Contain '__AllParameterSets'
+			$parameter.ParameterSets['__AllParameterSets'].IsMandatory | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 4
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipeline | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
+			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
+		}
 		It 'Should have the expected parameter Tenant' {
 			$parameter = (Get-Command Invoke-D365RestEndpoint).Parameters['Tenant']
 			$parameter.Name | Should -Be 'Tenant'
@@ -58,7 +84,7 @@
 			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
 			$parameter.ParameterSets.Keys | Should -Contain '__AllParameterSets'
 			$parameter.ParameterSets['__AllParameterSets'].IsMandatory | Should -Be $False
-			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 3
+			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 5
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipeline | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
@@ -71,7 +97,7 @@
 			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
 			$parameter.ParameterSets.Keys | Should -Contain '__AllParameterSets'
 			$parameter.ParameterSets['__AllParameterSets'].IsMandatory | Should -Be $False
-			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 4
+			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 6
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipeline | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
@@ -84,7 +110,7 @@
 			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
 			$parameter.ParameterSets.Keys | Should -Contain '__AllParameterSets'
 			$parameter.ParameterSets['__AllParameterSets'].IsMandatory | Should -Be $False
-			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 5
+			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 7
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipeline | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
@@ -97,7 +123,7 @@
 			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
 			$parameter.ParameterSets.Keys | Should -Contain '__AllParameterSets'
 			$parameter.ParameterSets['__AllParameterSets'].IsMandatory | Should -Be $False
-			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 6
+			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 8
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipeline | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
@@ -110,7 +136,7 @@
 			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
 			$parameter.ParameterSets.Keys | Should -Contain '__AllParameterSets'
 			$parameter.ParameterSets['__AllParameterSets'].IsMandatory | Should -Be $False
-			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 7
+			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 9
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipeline | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
@@ -123,7 +149,7 @@
 			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
 			$parameter.ParameterSets.Keys | Should -Contain '__AllParameterSets'
 			$parameter.ParameterSets['__AllParameterSets'].IsMandatory | Should -Be $False
-			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 8
+			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 10
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipeline | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
@@ -149,7 +175,7 @@
 			$parameter.ParameterSets.Keys | Should -Be '__AllParameterSets'
 			$parameter.ParameterSets.Keys | Should -Contain '__AllParameterSets'
 			$parameter.ParameterSets['__AllParameterSets'].IsMandatory | Should -Be $False
-			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 9
+			$parameter.ParameterSets['__AllParameterSets'].Position | Should -Be 11
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipeline | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromPipelineByPropertyName | Should -Be $False
 			$parameter.ParameterSets['__AllParameterSets'].ValueFromRemainingArguments | Should -Be $False
@@ -159,7 +185,7 @@
 	Describe "Testing parameterset __AllParameterSets" {
 		<#
 		__AllParameterSets -ServiceName
-		__AllParameterSets -ServiceName -Payload -PayloadCharset -Tenant -Url -SystemUrl -ClientId -ClientSecret -Token -EnableException -TimeoutSec
+		__AllParameterSets -ServiceName -Payload -PayloadCharset -RetryTimeout -ThrottleSeed -Tenant -Url -SystemUrl -ClientId -ClientSecret -Token -EnableException -TimeoutSec
 		#>
 	}
 
