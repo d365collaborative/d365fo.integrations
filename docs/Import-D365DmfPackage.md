@@ -84,7 +84,7 @@ Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is con
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: $AADGuid
+Aliases: $AadGuid
 
 Required: False
 Position: 3
@@ -99,7 +99,7 @@ URL / URI for the D365FO environment you want to access through DMF
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: URI
+Aliases: Uri
 
 Required: False
 Position: 4

@@ -1,9 +1,10 @@
+# Installs the modules required for the automatic text generation.
+# See also https://github.com/d365collaborative/d365fo.tools/wiki/Building-tools
+
 Write-Host "Working on the machine named: $($env:computername)"
 Write-Host "The user running is: $($env:UserName)"
 
-$modules = @("PSFramework", "PSScriptAnalyzer", "PSOAuthHelper", "PowerShellGet", "PackageManagement")
-
-Install-Module "Pester" -MaximumVersion 4.99.99 -Force -Confirm:$false -Scope CurrentUser -AllowClobber -SkipPublisherCheck
+$modules = @("PSModuleDevelopment", "platyPS")
 
 foreach ($item in $modules) {
     
