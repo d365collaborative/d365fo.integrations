@@ -41,6 +41,17 @@ Update-Module -name d365fo.integrations
 ```
 Update-Module -name d365fo.integrations -Force
 ```
+
+## Learn interactively
+
+We have implemented a **Jupyter Notebook** to help you learn interactively about the different cmdlets / functions available in the module. The notebook is located inside the **'notebooks'** folder in this repository. Click this link [**notebooks**](/notebooks/Get-Started.ipynb) to jump straight inside.
+
+While the notebook is already helpful in itself, its interactive nature will help you learn on another level. To do that, open the notebook in Visual Studio Code with the [Polyglot](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.dotnet-interactive-vscode) extension installed.
+
+The repository also contains a [devcontainer](.devcontainer/devcontainer.json) that has everything installed to run the notebook. The easiest way to get started is to use GitHub Codespaces. Click the button below to start a new Codespace with the repository.
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/d365collaborative/d365fo.integrations)
+
 ## **Getting help**
 
 Since the project started we have adopted and extended the comment based help inside each cmdlet / function.
