@@ -4,6 +4,9 @@
 		"ghcr.io/devcontainers/features/git:1": {},
 		"ghcr.io/natescherer/devcontainers-custom-features/powershell-resources": {
 			"resources": "PSFramework,PSOAuthHelper"
+		},
+		"ghcr.io/devcontainers/features/dotnet:2": {
+			"version": "8.0"
 		}
 	},
 	"customizations": {
