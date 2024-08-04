@@ -1,6 +1,6 @@
 # About the notebooks
 
-This folder contains [Jupyter](https://jupyter.org/) notebooks to learn in an interactive way how to use the d365bap.tools PowerShell module.
+This folder contains [Jupyter](https://jupyter.org/) notebooks to learn in an interactive way how to use the d365fo.integrations PowerShell module.
 
 The notebooks can be viewed directly on GitHub or other clients that support viewing the Jupyter notebook format. It is however recommended to run them interactively. The easiest way to do so is to use the preconfigured GitHub Codespaces environment: 
 
