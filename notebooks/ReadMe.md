@@ -13,3 +13,6 @@ To run the notebooks locally, open them in Visual Studio Code with the [Polyglot
 ### Getting started
 - [Get started](get-started.ipynb) - Learn how to install the module and get started with the different cmdlets / functions available in the module.
 - [Learn commands](learn-commands.ipynb) - Learn about the different cmdlets / functions available in the module.
+
+### Scenarios
+- [Managing users](Manage-Users.ipynb) - Learn how to list, create, update, and delete users in Dynamics 365 Finance and Operations.
