@@ -6,14 +6,14 @@
 			"resources": "PSFramework,PSOAuthHelper"
 		},
 		"ghcr.io/devcontainers/features/dotnet:2": {
-			"version": "8.0"
+			"version": "9.0"
 		}
 	},
 	"customizations": {
 		"vscode": {
 			"extensions": [
 				"ms-vscode.powershell",
-				"ms-dotnettools.dotnet-interactive-vscode"
+				"ms-dotnettools.dotnet-interactive-vscode@1.0.6160010"
 			]
 		}
 	}
