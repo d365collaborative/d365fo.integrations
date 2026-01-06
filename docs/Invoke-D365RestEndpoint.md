@@ -14,8 +14,9 @@ Invoke a REST Endpoint in Dynamics 365 Finance & Operations
 
 ```
 Invoke-D365RestEndpoint [-ServiceName] <String> [[-Payload] <String>] [[-PayloadCharset] <String>]
- [[-Tenant] <String>] [[-Url] <String>] [[-SystemUrl] <String>] [[-ClientId] <String>]
- [[-ClientSecret] <String>] [[-Token] <String>] [-EnableException] [[-TimeoutSec] <Int32>] [<CommonParameters>]
+ [[-RetryTimeout] <TimeSpan>] [[-ThrottleSeed] <Int32>] [[-Tenant] <String>] [[-Url] <String>]
+ [[-SystemUrl] <String>] [[-ClientId] <String>] [[-ClientSecret] <String>] [[-Token] <String>]
+ [-EnableException] [[-TimeoutSec] <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -57,6 +58,32 @@ This will invoke the REST endpoint in the  Dynamics 365 Finance & Operations env
 It will get a fresh token, saved it into the token variable and pass it to the cmdlet.
 The ServiceName used for the import is "UserSessionService/AifUserSessionService/GetUserSessionInfo".
 The Payload is a valid json string, containing all the needed properties.
+
+### EXAMPLE 4
+```
+$Payload = '{"RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}'
+```
+
+PS C:\\\> Invoke-D365RestEndpoint -ServiceName "UserSessionService/AifUserSessionService/GetUserSessionInfo" -Payload $Payload  -RetryTimeout "00:01:00"
+
+This will invoke the REST endpoint in the  Dynamics 365 Finance & Operations environment, and try for 1 minute to handle 429.
+First the desired json data is put into the $Payload variable.
+The ServiceName used for the import is "UserSessionService/AifUserSessionService/GetUserSessionInfo".
+The $Payload variable is passed to the cmdlet.
+It will only try to handle 429 retries for 1 minute, before failing.
+
+### EXAMPLE 5
+```
+$Payload = '{"RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}'
+```
+
+PS C:\\\> Invoke-D365RestEndpoint -ServiceName "UserSessionService/AifUserSessionService/GetUserSessionInfo" -Payload $Payload -ThrottleSeed 2
+
+This will invoke the REST endpoint in the  Dynamics 365 Finance & Operations environment, and sleep/pause between 1 and 2 seconds.
+First the desired json data is put into the $Payload variable.
+The ServiceName used for the import is "UserSessionService/AifUserSessionService/GetUserSessionInfo".
+The $Payload variable is passed to the cmdlet.
+It will use the ThrottleSeed 2 to sleep/pause the execution, to mitigate the 429 pushback from the endpoint.
 
 ## PARAMETERS
 
@@ -121,6 +148,54 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -RetryTimeout
+The retry timeout, before the cmdlet should quit retrying based on the 429 status code
+
+Needs to be provided in the timspan notation:
+"hh:mm:ss"
+
+hh is the number of hours, numerical notation only
+mm is the number of minutes
+ss is the numbers of seconds
+
+Each section of the timeout has to valid, e.g.
+hh can maximum be 23
+mm can maximum be 59
+ss can maximum be 59
+
+Not setting this parameter will result in the cmdlet to try for ever to handle the 429 push back from the endpoint
+
+```yaml
+Type: TimeSpan
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 4
+Default value: 00:00:00
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ThrottleSeed
+Instruct the cmdlet to invoke a thread sleep between 1 and ThrottleSeed value
+
+This is to help to mitigate the 429 retry throttling on the OData / Custom Service endpoints
+
+It makes most sense if you are running things a outer loop, where you will hit the OData / Custom Service endpoints with a burst of calls in a short time
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 5
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Tenant
 Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is connected to, that you want to access through REST endpoint
 
@@ -130,7 +205,7 @@ Parameter Sets: (All)
 Aliases: $AadGuid
 
 Required: False
-Position: 4
+Position: 6
 Default value: $Script:ODataTenant
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -145,7 +220,7 @@ Parameter Sets: (All)
 Aliases: Uri
 
 Required: False
-Position: 5
+Position: 7
 Default value: $Script:ODataUrl
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -164,7 +239,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 6
+Position: 8
 Default value: $Script:ODataSystemUrl
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -179,7 +254,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 7
+Position: 9
 Default value: $Script:ODataClientId
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -194,7 +269,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 8
+Position: 10
 Default value: $Script:ODataClientSecret
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -211,7 +286,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 9
+Position: 11
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -246,7 +321,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 10
+Position: 12
 Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False

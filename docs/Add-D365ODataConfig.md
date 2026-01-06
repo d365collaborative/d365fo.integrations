@@ -193,16 +193,3 @@ Tags: Integrations, Integration, Bearer Token, Token, OData, Configuration
 Author: Mötz Jensen (@Splaxi)
 
 ## RELATED LINKS
-
-[Clear-D365ActiveBroadcastMessageConfig]()
-
-[Get-D365ActiveBroadcastMessageConfig]()
-
-[Get-D365BroadcastMessageConfig]()
-
-[Remove-D365BroadcastMessageConfig]()
-
-[Send-D365BroadcastMessage]()
-
-[Set-D365ActiveBroadcastMessageConfig]()
-

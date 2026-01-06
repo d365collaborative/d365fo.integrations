@@ -32,6 +32,30 @@
         
         The charset has to be a valid http charset like: ASCII, ANSI, ISO-8859-1, UTF-8
         
+    .PARAMETER RetryTimeout
+        The retry timeout, before the cmdlet should quit retrying based on the 429 status code
+        
+        Needs to be provided in the timspan notation:
+        "hh:mm:ss"
+        
+        hh is the number of hours, numerical notation only
+        mm is the number of minutes
+        ss is the numbers of seconds
+        
+        Each section of the timeout has to valid, e.g.
+        hh can maximum be 23
+        mm can maximum be 59
+        ss can maximum be 59
+        
+        Not setting this parameter will result in the cmdlet to try for ever to handle the 429 push back from the endpoint
+        
+    .PARAMETER ThrottleSeed
+        Instruct the cmdlet to invoke a thread sleep between 1 and ThrottleSeed value
+        
+        This is to help to mitigate the 429 retry throttling on the OData / Custom Service endpoints
+        
+        It makes most sense if you are running things a outer loop, where you will hit the OData / Custom Service endpoints with a burst of calls in a short time
+        
     .PARAMETER Tenant
         Azure Active Directory (AAD) tenant id (Guid) that the D365FO environment is connected to, that you want to access through REST endpoint
         
@@ -89,6 +113,26 @@
         The ServiceName used for the import is "UserSessionService/AifUserSessionService/GetUserSessionInfo".
         The Payload is a valid json string, containing all the needed properties.
         
+    .EXAMPLE
+        PS C:\> $Payload = '{"RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}'
+        PS C:\> Invoke-D365RestEndpoint -ServiceName "UserSessionService/AifUserSessionService/GetUserSessionInfo" -Payload $Payload  -RetryTimeout "00:01:00"
+        
+        This will invoke the REST endpoint in the  Dynamics 365 Finance & Operations environment, and try for 1 minute to handle 429.
+        First the desired json data is put into the $Payload variable.
+        The ServiceName used for the import is "UserSessionService/AifUserSessionService/GetUserSessionInfo".
+        The $Payload variable is passed to the cmdlet.
+        It will only try to handle 429 retries for 1 minute, before failing.
+        
+    .EXAMPLE
+        PS C:\> $Payload = '{"RateTypeName": "TEST", "FromCurrency": "DKK", "ToCurrency": "EUR", "StartDate": "2019-01-03T00:00:00Z", "Rate": 745.10, "ConversionFactor": "Hundred", "RateTypeDescription": "TEST"}'
+        PS C:\> Invoke-D365RestEndpoint -ServiceName "UserSessionService/AifUserSessionService/GetUserSessionInfo" -Payload $Payload -ThrottleSeed 2
+        
+        This will invoke the REST endpoint in the  Dynamics 365 Finance & Operations environment, and sleep/pause between 1 and 2 seconds.
+        First the desired json data is put into the $Payload variable.
+        The ServiceName used for the import is "UserSessionService/AifUserSessionService/GetUserSessionInfo".
+        The $Payload variable is passed to the cmdlet.
+        It will use the ThrottleSeed 2 to sleep/pause the execution, to mitigate the 429 pushback from the endpoint.
+        
     .NOTES
         Tags: REST, Endpoint, Custom Service, Services
         
@@ -106,6 +150,10 @@ function Invoke-D365RestEndpoint {
         [string] $Payload,
 
         [string] $PayloadCharset = "UTF-8",
+
+        [Timespan] $RetryTimeout = "00:00:00",
+        
+        [int] $ThrottleSeed,
 
         [Alias('$AadGuid')]
         [string] $Tenant = $Script:ODataTenant,
@@ -130,6 +178,28 @@ function Invoke-D365RestEndpoint {
     )
 
     begin {
+        if ([System.String]::IsNullOrEmpty($SystemUrl)) {
+            Write-PSFMessage -Level Verbose -Message "The SystemUrl parameter was empty, using the Url parameter as the OData endpoint base address." -Target $SystemUrl
+            $SystemUrl = $Url
+        }
+        
+        if ([System.String]::IsNullOrEmpty($Url) -or [System.String]::IsNullOrEmpty($SystemUrl)) {
+            $messageString = "It seems that you didn't supply a valid value for the Url parameter. You need specify the Url parameter or add a configuration with the <c='em'>Add-D365ODataConfig</c> cmdlet."
+            Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $entityName
+            Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>', ''))) -ErrorRecord $_
+            return
+        }
+        
+        if ($Url.Substring($Url.Length - 1) -eq "/") {
+            Write-PSFMessage -Level Verbose -Message "The Url parameter had a tailing slash, which shouldn't be there. Removing the tailling slash." -Target $Url
+            $Url = $Url.Substring(0, $Url.Length - 1)
+        }
+    
+        if ($SystemUrl.Substring($SystemUrl.Length - 1) -eq "/") {
+            Write-PSFMessage -Level Verbose -Message "The SystemUrl parameter had a tailing slash, which shouldn't be there. Removing the tailling slash." -Target $Url
+            $SystemUrl = $SystemUrl.Substring(0, $SystemUrl.Length - 1)
+        }
+
         if (-not $Token) {
             $bearerParms = @{
                 Url          = $Url
@@ -186,13 +256,19 @@ function Invoke-D365RestEndpoint {
         
         try {
             Write-PSFMessage -Level Verbose -Message "Executing http request against the REST endpoint." -Target $($restEndpoint.Uri.AbsoluteUri)
-            Invoke-RestMethod @params
+            Invoke-RequestHandler -Method POST -Uri $restEndpoint.Uri.AbsoluteUri -Headers $headers -ContentType "application/json;charset=$PayloadCharset" -Payload $Payload -RetryTimeout $RetryTimeout
+
+            if (Test-PSFFunctionInterrupt) { return }
         }
         catch {
             $messageString = "Something went wrong while importing data through the REST endpoint for the entity: $ServiceName"
             Write-PSFMessage -Level Host -Message $messageString -Exception $PSItem.Exception -Target $ServiceName
             Stop-PSFFunction -Message "Stopping because of errors." -Exception $([System.Exception]::new($($messageString -replace '<[^>]+>', ''))) -ErrorRecord $_
             return
+        }
+
+        if ($ThrottleSeed) {
+            Start-Sleep -Seconds $(Get-Random -Minimum 1 -Maximum $ThrottleSeed)
         }
 
         Invoke-TimeSignal -End
